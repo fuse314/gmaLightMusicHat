@@ -1,0 +1,26 @@
+
+void CheckButton(int debounceTime) {
+  uint8_t buttonState = digitalRead(BUTTON_PIN);
+  if(buttonState == HIGH) {  // wait debounceTime milliseconds and check again
+    delay(debounceTime);
+    buttonState = digitalRead(BUTTON_PIN);
+    if(buttonState == HIGH) {
+      ChangeMode(1);  // button is still pressed, execute.
+    }
+  }
+}
+
+void ChangeMode(uint8_t modeUp) {
+  if(modeUp == 0) {
+    currMode--;
+    if(currMode == 0) {
+      currMode = MAX_MODE;
+    }
+  } else {
+    currMode++;
+    if(currMode > MAX_MODE) {
+      currMode = 1;
+    }
+  }
+  currFrame = 0;
+}
