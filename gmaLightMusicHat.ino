@@ -46,8 +46,8 @@ struct CRGB currEQColor;
 
 
 //MSGEQ7 stuff
-#define EQ7STROBE_PIN 2
-#define EQ7RESET_PIN 3
+#define EQ7STROBE_PIN 7
+#define EQ7RESET_PIN 8
 #define EQ7IN_PIN A1
 #define NOISE_LVL 100     // noise cutoff value
 
@@ -57,7 +57,15 @@ uint16_t eq7Values[7];
 
 
 //button stuff
-#define BUTTON_PIN 5
+
+#define DEBOUNCE_TIME 20
+#define UPBUTTON_PIN 2  //interrupt 0
+volatile uint8_t upButtonPressed = 0;
+volatile uint32_t lastUpButtonPressed = 0;
+
+#define FINDMEBUTTON_PIN 3  //interrupt 1
+volatile uint8_t findMeButtonPressed = 0;
+volatile uint32_t lastFindMeButtonPressed = 0;
 
 //loop stuff
 uint16_t currFrame = 0;
@@ -65,7 +73,7 @@ uint16_t currFrame = 0;
 uint8_t currMode = 1;
 uint8_t currDelay = 20;
 uint8_t todoDelay = 0;
-
+uint8_t findMeMode = 0;
 
 void setup()
 {
@@ -87,7 +95,10 @@ void setup()
   InitEQ7();
   
   //button stuff
-  pinMode(buttonPin, INPUT);
+  pinMode(UPBUTTON_PIN, INPUT);
+  attachInterrupt(0, UpButtonInterruptHandler, FALLING);
+  pinMode(FINDMEBUTTON_PIN, INPUT);
+  attachInterrupt(1, FindMeButtonInterruptHandler, CHANGE);
   
   //mode stuff
   InitCurrMode();

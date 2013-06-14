@@ -20,6 +20,11 @@ struct CRGB Wheel(uint16_t WheelPos)
       ret.b=255 - WheelPos % 256;
       break; 
   }
+  
+  ret.r = map(ret.r, 0, 255, 0, NORMBRIGHT);  // limit brightness
+  ret.g = map(ret.g, 0, 255, 0, NORMBRIGHT);
+  ret.b = map(ret.b, 0, 255, 0, NORMBRIGHT);
+  
   return(ret);
 }
 

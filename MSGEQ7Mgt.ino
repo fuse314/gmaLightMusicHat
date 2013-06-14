@@ -27,18 +27,18 @@ void GetEQ7() {
   if(spectrumValue <= NOISE_LVL) {
     currEQColor.b = 0;
   } else {
-    currEQColor.b = map(spectrumValue, NOISE_LVL, 1024, 1, 255);
+    currEQColor.b = map(spectrumValue, NOISE_LVL, 1024, 1, NORMBRIGHT);
   }
   spectrumValue = max(eq7Values[4], eq7Values[3]);    // mid tones = green
   if(spectrumValue <= NOISE_LVL) {
     currEQColor.g = 0;
   } else {
-    currEQColor.g = map(spectrumValue, NOISE_LVL, 1024, 1, 255);
+    currEQColor.g = map(spectrumValue, NOISE_LVL, 1024, 1, NORMBRIGHT);
   }
   spectrumValue = max(eq7Values[2], eq7Values[1], eq7Values[0]);   // low tones = red
   if(spectrumValue <= NOISE_LVL) {
     currEQColor.r = 0;
   } else {
-    currEQColor.r = map(spectrumValue, NOISE_LVL, 1024, 1, 255);
+    currEQColor.r = map(spectrumValue, NOISE_LVL, 1024, 1, NORMBRIGHT);
   }
 }

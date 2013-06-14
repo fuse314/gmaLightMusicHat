@@ -1,13 +1,30 @@
 
-void CheckButton(int debounceTime) {
-  uint8_t buttonState = digitalRead(BUTTON_PIN);
-  if(buttonState == HIGH) {  // wait debounceTime milliseconds and check again
-    delay(debounceTime);
-    buttonState = digitalRead(BUTTON_PIN);
-    if(buttonState == HIGH) {
-      ChangeMode(1);  // button is still pressed, execute.
+void CheckButton() {
+  if(upButtonPressed == 1) {
+    ChangeMode(1);
+    upButtonPressed = 0;
+  }
+  if(findMeButtonPressed == 1) {
+    if(digitalRead(FINDMEBUTTON_PIN) == HIGH) {
+      findMeMode = 1;
+    } else {
+      findMeMode = 0;
     }
   }
+}
+
+void UpButtonInterruptHandler() {
+  if(millis() - lastUpButtonPressed >= DEBOUNCE_TIME) {
+    upButtonPressed = 1;
+    lastUpButtonPressed = millis();
+  }
+}
+
+void FindMeButtonInterruptHandler() {
+  //if(millis() - lastFindMeButtonPressed >= DEBOUNCE_TIME) {   //no debounce for CHANGE interrupt
+    findMeButtonPressed = 1;
+  //  lastFindMeButtonPressed = millis();
+  //}
 }
 
 void ChangeMode(uint8_t modeUp) {
@@ -44,17 +61,21 @@ void InitCurrMode() {
 }
 
 void LoopCurrMode() {
-  switch(currMode) {
-    case 0: // simple sound
-    case 1: // rainbow sound
-    case 2: // solid color sound
-      loopSound();
-      break;
-    case 3: // rainbow
-      loopRainbow();
-      break;
-    case 4: // find me
-      loopFindMe();
-      break;
+  if ( findMeMode == 0 ) {
+    switch(currMode) {
+      case 0: // simple sound
+      case 1: // rainbow sound
+      case 2: // solid color sound
+        loopSound();
+        break;
+      case 3: // rainbow
+        loopRainbow();
+        break;
+      case 4: // find me
+        loopFindMe();
+        break;
+    }
+  } else {
+    loopFindMe();
   }
 }
