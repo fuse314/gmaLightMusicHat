@@ -23,4 +23,38 @@ void ChangeMode(uint8_t modeUp) {
     }
   }
   currFrame = 0;
+  InitCurrMode();
+}
+
+
+void InitCurrMode() {
+  switch(currMode) {
+    case 0: // simple sound
+    case 1: // rainbow sound
+    case 2: // solid color sound
+      initSound(currMode);
+      break;
+    case 3: // rainbow
+      initRainbow();
+      break;
+    case 4: // find me
+      initFindMe();
+      break;
+  }
+}
+
+void LoopCurrMode() {
+  switch(currMode) {
+    case 0: // simple sound
+    case 1: // rainbow sound
+    case 2: // solid color sound
+      loopSound();
+      break;
+    case 3: // rainbow
+      loopRainbow();
+      break;
+    case 4: // find me
+      loopFindMe();
+      break;
+  }
 }

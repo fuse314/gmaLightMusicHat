@@ -43,8 +43,7 @@ void showMirrored( uint8_t row, struct CRGB* halfleds ) {
     row = NUM_ROWS-1;
   uint16_t startindex = NUM_LEDSPERROW * row;
   uint16_t endindex = startindex + NUM_LEDSPERROW - 1
-  uint8_t halfrow = NUM_LEDSPERROW/2;
-  for(uint8_t i=0; i<halfrow; i++) {
+  for(uint8_t i=0; i<NUM_LEDSPERHALFROW; i++) {
     leds[startindex+i] = halfleds[i];
     leds[endindex-i] = halfleds[i];
   }
