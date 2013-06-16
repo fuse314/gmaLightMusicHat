@@ -1,7 +1,14 @@
 
 struct CRGB Wheel(uint16_t WheelPos)
 {
+  CHSV rainbowcolor;
+  rainbowcolor.hue = WheelPos % 256;
+  rainbowcolor.saturation = 187;
+  rainbowcolor.value = 255;
   struct CRGB ret;
+  hsv2rgb_rainbow( rainbowcolor, ret);
+  
+  /*
   switch(WheelPos >> 8)
   {
     case 0:      // red to green
@@ -20,14 +27,11 @@ struct CRGB Wheel(uint16_t WheelPos)
       ret.b=255 - WheelPos % 256;
       break; 
   }
-  
-  ret.r = map(ret.r, 0, 255, 0, NORMBRIGHT);  // limit brightness
-  ret.g = map(ret.g, 0, 255, 0, NORMBRIGHT);
-  ret.b = map(ret.b, 0, 255, 0, NORMBRIGHT);
-  
+  */
   return(ret);
 }
 
+/*
 struct CRGB GetColor(uint8_t r, uint8_t g, uint8_t b) {
   struct CRGB ret;
   ret.r = r;
@@ -35,22 +39,25 @@ struct CRGB GetColor(uint8_t r, uint8_t g, uint8_t b) {
   ret.b = b;
   return(ret);
 }
+*/
 
+/*
 void SetSolidColor(CRGB color) {
   for (int i=0; i < NUM_LEDS; i++) {
     leds[i] = color;
   }
 }
+*/
 
 void showMirrored( uint8_t row, struct CRGB* halfleds ) {
   //paint 19 leds mirrored to row (0,1,2)
   if(row >= NUM_ROWS)
     row = NUM_ROWS-1;
   uint16_t startindex = NUM_LEDSPERROW * row;
-  uint16_t endindex = startindex + NUM_LEDSPERROW - 1
+  uint16_t endindex = startindex + NUM_LEDSPERROW - 1;
   for(uint8_t i=0; i<NUM_LEDSPERHALFROW; i++) {
-    leds[startindex+i] = halfleds[i];
-    leds[endindex-i] = halfleds[i];
+    leds[startindex+i] = halfleds[NUM_LEDSPERHALFROW-1-i];
+    leds[endindex-i] = halfleds[NUM_LEDSPERHALFROW-1-i];
   }
 }
 
@@ -58,11 +65,11 @@ void paintAllRows( struct CRGB* rowleds ) {
   // paint all rows with rowleds
   for(uint8_t i=0; i<NUM_ROWS; i++) {
     uint16_t startindex = NUM_LEDSPERROW * i;
-    if(i % 2 == 0) {
-      memcpy(leds[startindex], rowleds, NUM_LEDSPERROW*3);
-    } else {
-      for(uint16_t j=0; j<NUM_LEDSPERROW; j++) {
-        led[startindex+j] = rowleds[NUM_LEDSPERROW-j-1];
+    for(uint16_t j=0; j<NUM_LEDSPERROW; j++) {
+      if(i % 2 == 0) {
+        leds[startindex+j] = rowleds[j];
+      } else {
+        leds[startindex+j] = rowleds[NUM_LEDSPERROW-j-1];
       }
     }
   }

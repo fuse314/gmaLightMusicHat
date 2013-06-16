@@ -3,24 +3,25 @@
 //mode 2: solid color sound
 uint8_t sound_Mode;
 
-void setupSolid(uint8_t _mode) {
+void initSound(uint8_t _mode) {
   sound_Mode = _mode;
+  LEDS.setBrightness(NORMBRIGHT);
 }
 
-void loopSolid() {
+void loopSound() {
   GetEQ7();
+  uint16_t howLoud = max(eq7Values[5], max(eq7Values[4], max(eq7Values[3], eq7Values[2])));
   switch (sound_Mode) {
     case 0:
     case 1:
-      uint16_t howLoud = max(eq7Values[5], eq7Values[4], eq7Values[3], eq7Values[2]);
       memset(ledsrow, 0, NUM_LEDSPERHALFROW * 3);
       if(howLoud > NOISE_LVL) {
         uint8_t soundlvl = map(howLoud, NOISE_LVL, 1024, 1, NUM_LEDSPERHALFROW);
         for(uint8_t i=0; i<soundlvl; i++) {
           if(sound_Mode == 0) {
-            ledsrow[i] = currEQColor;
+            ledsrow[i] = getEQColor();
           } else {
-            ledsrow[i] = Wheel(currFrame % 768);
+            ledsrow[i] = Wheel(currFrame % 256);
           }
         }
       }
@@ -29,7 +30,7 @@ void loopSolid() {
       showMirrored(2,ledsrow);
       break;
     case 2:
-      SetSolidColor(currEQColor);
+      LEDS.showColor(getEQColor());
       break;
   }
 }

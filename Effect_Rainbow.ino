@@ -1,11 +1,13 @@
 // rainbow effect, all three rows show the same
 
 void initRainbow() {
-  //fadeCurrStep = 0; // stop any fading
-  //fadeSteps = FADE_SLOW;
+  LEDS.setBrightness(NORMBRIGHT);
 }
 
 void loopRainbow() {
+  fill_rainbow( &(ledsrow[0]), NUM_LEDSPERROW, currFrame % 256);
+  paintAllRows(ledsrow);
+  /*
   for (uint16_t i=0; i < NUM_LEDSPERROW; i++) {
     ledsrow[i] = Wheel((i+currFrame) % 768);
     
@@ -14,4 +16,5 @@ void loopRainbow() {
     
   }
   paintAllRows(ledsrow);
+  */
 }

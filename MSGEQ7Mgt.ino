@@ -22,23 +22,27 @@ void GetEQ7() {
   digitalWrite(EQ7RESET_PIN, LOW);
   digitalWrite(EQ7STROBE_PIN, HIGH);
   
-  
-  uint16_t spectrumValue = max(eq7Values[6], eq7Values[5]);   // high tones = blue
-  if(spectrumValue <= NOISE_LVL) {
-    currEQColor.b = 0;
+  eq7Volumes[0] = max(eq7Values[0], max(eq7Values[1], eq7Values[2]));
+  eq7Volumes[1] = max(eq7Values[3], eq7Values[4]);
+  eq7Volumes[2] = max(eq7Values[5], max(eq7Values[6], eq7Values[7]));
+}
+
+struct CRGB getEQColor() {
+  struct CRGB ret;
+  if(eq7Volumes[0] <= NOISE_LVL) {
+    ret.r = 0;
   } else {
-    currEQColor.b = map(spectrumValue, NOISE_LVL, 1024, 1, NORMBRIGHT);
+    ret.r = map(eq7Volumes[0], NOISE_LVL, 1024, 1, 255);
   }
-  spectrumValue = max(eq7Values[4], eq7Values[3]);    // mid tones = green
-  if(spectrumValue <= NOISE_LVL) {
-    currEQColor.g = 0;
+  if(eq7Volumes[1] <= NOISE_LVL) {
+    ret.g = 0;
   } else {
-    currEQColor.g = map(spectrumValue, NOISE_LVL, 1024, 1, NORMBRIGHT);
+    ret.g = map(eq7Volumes[1], NOISE_LVL, 1024, 1, 255);
   }
-  spectrumValue = max(eq7Values[2], eq7Values[1], eq7Values[0]);   // low tones = red
-  if(spectrumValue <= NOISE_LVL) {
-    currEQColor.r = 0;
+  if(eq7Volumes[2] <= NOISE_LVL) {
+    ret.b = 0;
   } else {
-    currEQColor.r = map(spectrumValue, NOISE_LVL, 1024, 1, NORMBRIGHT);
+    ret.b = map(eq7Volumes[2], NOISE_LVL, 1024, 1, 255);
   }
+  return ret;
 }

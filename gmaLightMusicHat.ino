@@ -3,7 +3,7 @@
   using MSGEQ7 chip and microphone to react to music
   (c) 2013 by Gottfried Mayer www.gma.name
   
-  Uses FastSPI to control WS2811 controller chips
+  Uses FastSPI_LED2 (rc1) to control WS2811 controller chips
   
   Inspiration from here:
   http://www.macetech.com/blog/node/118
@@ -21,7 +21,7 @@
 #endif
 
 // LED stuff
-#include <FastSPI_LED.h>
+#include <FastSPI_LED2.h>
 
 // 38 LEDs * 3
 // configuration:
@@ -34,12 +34,10 @@
 #define NUM_LEDSPERROW 38
 uint8_t NUM_LEDSPERHALFROW = NUM_LEDSPERROW / 2;
 
-struct CRGB { unsigned char g; unsigned char r; unsigned char b; };
-// struct CRGB { unsigned char r; unsigned char g; unsigned char b; };
-struct CRGB *leds;
-struct CRGB *ledsrow;  // used for mirrored effects and one-row-for-all effects
-struct CRGB currEQColor;
-#define LED_PIN 4
+//struct CRGB { unsigned char g; unsigned char r; unsigned char b; };
+struct CRGB leds[NUM_LEDS];
+struct CRGB ledsrow[NUM_LEDSPERROW];  // used for mirrored effects and one-row-for-all effects
+#define LED_PIN 11
 
 #define NORMBRIGHT 60  // maximum brightness of leds (0-255)
 #define MAXBRIGHT 120  // used for "find me" mode
@@ -54,7 +52,8 @@ struct CRGB currEQColor;
 uint16_t eq7Values[7];
 // [0], [1], [2],  [3],  [4],  [5],   [6]
 //  63, 160, 400, 1000, 2500, 6250, 16000 Hz
-
+uint16_t eq7Volumes[3];
+// 0 = low tones, 1 = mid tones, 3 = high tones
 
 //button stuff
 
@@ -69,36 +68,32 @@ volatile uint32_t lastFindMeButtonPressed = 0;
 
 //loop stuff
 uint16_t currFrame = 0;
-#define MAX_MODE 3       // maximum number of modes
-uint8_t currMode = 1;
-uint8_t currDelay = 20;
+#define MAX_MODE 5       // maximum number of modes
+uint8_t currMode = 0;
+uint8_t currDelay = 6;
 uint8_t todoDelay = 0;
 uint8_t findMeMode = 0;
 
 void setup()
 {
-  FastSPI_LED.setCPUPercentage(50);  // if the stand starts flickering, up this value
-  FastSPI_LED.setLeds(NUM_LEDS);
-  FastSPI_LED.setChipset(CFastSPI_LED::SPI_WS2811);
+  //New FastSPI_LED2 library
+  //LEDS.setBrightness(NORMBRIGHT);
+  LEDS.addLeds<WS2811, LED_PIN, GRB>(leds, NUM_LEDS);
 
-  FastSPI_LED.setPin(LED_PIN);
+  memset(leds, 0, NUM_LEDS * sizeof(struct CRGB));  // clear memory (set to black)
+  memset(ledsrow, 0, NUM_LEDSPERROW * sizeof(struct CRGB));  // clear memory (set to black)
   
-  FastSPI_LED.init();
-  FastSPI_LED.start();
-
-  leds = (struct CRGB*)FastSPI_LED.getRGBData();  // allocate memory for all leds
-  memset(leds, 0, NUM_LEDS * 3);  // clear memory (set to black)
-  ledsrow = (struct CRGB*)malloc(NUM_LEDSPERROW * 3); // allocate memory for one line of leds
-  memset(ledsrow, 0, NUM_LEDSPERROW * 3);  // clear memory (set to black)
-  FastSPI_LED.show();
+  LEDS.show();
   
   InitEQ7();
   
   //button stuff
   pinMode(UPBUTTON_PIN, INPUT);
+  digitalWrite(UPBUTTON_PIN, HIGH);  // pullup resistor
   attachInterrupt(0, UpButtonInterruptHandler, FALLING);
   pinMode(FINDMEBUTTON_PIN, INPUT);
-  attachInterrupt(1, FindMeButtonInterruptHandler, CHANGE);
+  digitalWrite(FINDMEBUTTON_PIN, HIGH);  // pullup resistor
+  //attachInterrupt(1, FindMeButtonInterruptHandler, CHANGE);
   
   //mode stuff
   InitCurrMode();
@@ -110,6 +105,7 @@ void setup()
 }
 
 void loop() {
+  
   if(todoDelay > 0) {
     todoDelay--;
     delay(1);
@@ -118,7 +114,7 @@ void loop() {
     
     LoopCurrMode();
     currFrame++;
-    FastSPI_LED.show();
+    LEDS.show();
     
     CheckButton();  // only check button every "currDelay" microseconds
   }
