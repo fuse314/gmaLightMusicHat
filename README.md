@@ -10,10 +10,10 @@ copied top part of https://hackadaycom.files.wordpress.com/2012/09/discoplanetsc
 
 ##Hardware
 3 x 5050 LED Strips with WS2811 controller chip built in
-The strips are mounted around a hat, because the strips are removable they are wired in an "S" form
-2. row 2: ==>  76 77 78 . . . 111 112 113
-1. row 1: <==  75 74 73 . . .  40  39  38
-0. row 0: ==>   0  1  2 . . .  35  36  37
+The strips are mounted around a hat, because the strips are removable they are wired in an "S" form   
+row 2: ==>  76 77 78 . . . 111 112 113   
+row 1: <==  75 74 73 . . .  40  39  38   
+row 0: ==>   0  1  2 . . .  35  36  37   
 scrolling horizontally poses a problem in this configuration because in rows 0 and 2 the index increases, but in row 1 the index decreases.
 
 ##Prerequisites
