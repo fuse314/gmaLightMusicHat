@@ -3,6 +3,7 @@
 //mode 2: solid color sound
 //mode 3: simple sound with rainbow underlay
 //mode 4: rotating sound graph
+//---mode 5: fixed sound graph with rotating
 uint8_t sound_Mode;
 
 void initSound(uint8_t _mode) {

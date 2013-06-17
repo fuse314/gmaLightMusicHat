@@ -5,7 +5,7 @@ void CheckButton() {
     upButtonPressed = 0;
   }
   if(findMeMode == 1 && millis() - lastFindMeButtonPressed >= 2000) { // check every 2 seconds if we missed a interrupt event and have to disable find me mode...
-    if(digitalRead(FINDMEBUTTON_PIN) == LOW) {
+    if(digitalRead(FINDMEBUTTON_PIN) == HIGH) {  // active = low
       InitCurrMode();
       findMeMode = 0;
       findMeButtonPressed = 0;
@@ -13,7 +13,7 @@ void CheckButton() {
     lastFindMeButtonPressed = millis();
   } else {
     if(findMeButtonPressed == 1) {
-      if(digitalRead(FINDMEBUTTON_PIN) == HIGH) {
+      if(digitalRead(FINDMEBUTTON_PIN) == LOW) {  // active = low
         initFindMe();
         findMeMode = 1;
       } else {
@@ -33,10 +33,10 @@ void UpButtonInterruptHandler() {
 }
 
 void FindMeButtonInterruptHandler() {
-  //if(millis() - lastFindMeButtonPressed >= DEBOUNCE_TIME) {   //no debounce for CHANGE interrupt
+  if(millis() - lastFindMeButtonPressed >= DEBOUNCE_TIME) {
     findMeButtonPressed = 1;
     lastFindMeButtonPressed = millis();
-  //}
+  }
 }
 
 void ChangeMode(uint8_t modeUp) {

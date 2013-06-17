@@ -29,17 +29,17 @@ void GetEQ7() {
 
 struct CRGB getEQColor() {
   struct CRGB ret;
-  if(eq7Volumes[0] <= NOISE_LVL) {
-    ret.r = 0;
-  } else {
-    ret.r = map(eq7Volumes[0], NOISE_LVL, 1024, 1, 255);
-  }
-  if(eq7Volumes[1] <= NOISE_LVL) {
+  if(eq7Volumes[0] <= NOISE_LVL) {   // low tones are green
     ret.g = 0;
   } else {
-    ret.g = map(eq7Volumes[1], NOISE_LVL, 1024, 1, 255);
+    ret.g = map(eq7Volumes[0], NOISE_LVL, 1024, 1, 255);
   }
-  if(eq7Volumes[2] <= NOISE_LVL) {
+  if(eq7Volumes[1] <= NOISE_LVL) {   // mid tones are red
+    ret.r = 0;
+  } else {
+    ret.r = map(eq7Volumes[1], NOISE_LVL, 1024, 1, 255);
+  }
+  if(eq7Volumes[2] <= NOISE_LVL) {   // high tones are blue
     ret.b = 0;
   } else {
     ret.b = map(eq7Volumes[2], NOISE_LVL, 1024, 1, 255);

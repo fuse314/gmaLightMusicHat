@@ -94,7 +94,7 @@ void setup()
   attachInterrupt(0, UpButtonInterruptHandler, FALLING);
   pinMode(FINDMEBUTTON_PIN, INPUT);
   digitalWrite(FINDMEBUTTON_PIN, HIGH);  // pullup resistor
-  //attachInterrupt(1, FindMeButtonInterruptHandler, CHANGE);
+  attachInterrupt(1, FindMeButtonInterruptHandler, FALLING);
   
   //mode stuff
   InitCurrMode();
@@ -117,7 +117,7 @@ void loop() {
     currFrame++;
     LEDS.show();
     
-    CheckButton();  // only check button every "currDelay" microseconds
+    CheckButton();  // only check button every "currDelay" milliseconds
   }
   
 }

@@ -31,23 +31,6 @@ struct CRGB Wheel(uint16_t WheelPos)
   return(ret);
 }
 
-/*
-struct CRGB GetColor(uint8_t r, uint8_t g, uint8_t b) {
-  struct CRGB ret;
-  ret.r = r;
-  ret.g = g;
-  ret.b = b;
-  return(ret);
-}
-*/
-
-/*
-void SetSolidColor(CRGB color) {
-  for (int i=0; i < NUM_LEDS; i++) {
-    leds[i] = color;
-  }
-}
-*/
 
 void showMirrored( uint8_t row, struct CRGB* halfleds, uint8_t merge ) {
   //paint 19 leds mirrored to row (0,1,2)
@@ -75,6 +58,47 @@ void paintAllRows( struct CRGB* rowleds ) {
         leds[startindex+j] = rowleds[j];
       } else {
         leds[startindex+j] = rowleds[NUM_LEDSPERROW-j-1];
+      }
+    }
+  }
+}
+
+void shiftLEDs( int8_t distance ) {
+  if(distance == 0) { return; }  // shift by zero: do nothing.
+  for(uint8_t i=0; i<NUM_ROWS; i++) {
+    uint16_t startindex = NUM_LEDSPERROW * i;
+    uint16_t endindex = NUM_LEDSPERROW * (i+1);
+    if(distance > 0) {
+      // shift forward
+      for(uint16_t j=NUM_LEDSPERROW-distance-1; j>=0; j--) {
+        if(i % 2 == 0) {
+          leds[j+distance] = leds[j];// leds in "normal" order
+        } else {
+          leds[endindex-j-distance] = leds[endindex-j];
+        }
+      }
+      for(uint16_t j=0; j<distance; j++) {  // clear leftover leds
+        if(i % 2 == 0) {
+          leds[j] = CRGB(0,0,0);
+        } else {
+          leds[NUM_LEDSPERROW-1-j] = CRGB(0,0,0);
+        }
+      }
+    } else {
+      // shift backward
+      for(uint16_t j=0; j<NUM_LEDSPERROW+distance; j++) { // distance is negative, add to get smaller number...
+        if(i % 2 == 0) {
+          leds[startindex+j] = leds[startindex+j-distance]; // again, negative number, so have to substract - leds in "normal" order
+        } else {
+          leds[endindex-j] = leds[endindex-j+distance];  // negative number, - leds in "inversed" order
+        }
+      }
+      for(uint16_t j=0; j<distance; j++) {  // clear leftover leds
+        if(i % 2 == 0) {
+          leds[NUM_LEDSPERROW-1-j] = CRGB(0,0,0);
+        } else {
+          leds[j] = CRGB(0,0,0);
+        }
       }
     }
   }
