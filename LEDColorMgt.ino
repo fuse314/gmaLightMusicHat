@@ -49,15 +49,20 @@ void SetSolidColor(CRGB color) {
 }
 */
 
-void showMirrored( uint8_t row, struct CRGB* halfleds ) {
+void showMirrored( uint8_t row, struct CRGB* halfleds, uint8_t merge ) {
   //paint 19 leds mirrored to row (0,1,2)
   if(row >= NUM_ROWS)
     row = NUM_ROWS-1;
   uint16_t startindex = NUM_LEDSPERROW * row;
   uint16_t endindex = startindex + NUM_LEDSPERROW - 1;
   for(uint8_t i=0; i<NUM_LEDSPERHALFROW; i++) {
-    leds[startindex+i] = halfleds[NUM_LEDSPERHALFROW-1-i];
-    leds[endindex-i] = halfleds[NUM_LEDSPERHALFROW-1-i];
+    if(merge == 1) {
+      leds[startindex+i] += halfleds[NUM_LEDSPERHALFROW-1-i];
+      leds[endindex-i] += halfleds[NUM_LEDSPERHALFROW-1-i];
+    } else {
+      leds[startindex+i] = halfleds[NUM_LEDSPERHALFROW-1-i];
+      leds[endindex-i] = halfleds[NUM_LEDSPERHALFROW-1-i];
+    }
   }
 }
 
@@ -74,3 +79,22 @@ void paintAllRows( struct CRGB* rowleds ) {
     }
   }
 }
+
+uint16_t getLedIndex( uint8_t row, uint16_t rowindex) {
+  uint16_t ret = rowindex % NUM_LEDSPERROW;
+  if(row % 2 == 0) {
+    ret += row * NUM_LEDSPERROW;
+  } else {
+    ret = (row+1) * NUM_LEDSPERROW - 1 - ret;
+  }
+  return ret;
+}
+
+void dimLeds() {
+  for(uint16_t i=0; i<NUM_LEDS; i++) {
+    if(leds[i].r > DIMSPEED) { leds[i].r -= leds[i].r / DIMSPEED; } else { if(leds[i].r > 0) leds[i].r--; }
+    if(leds[i].g > DIMSPEED) { leds[i].g -= leds[i].g / DIMSPEED; } else { if(leds[i].g > 0) leds[i].g--; }
+    if(leds[i].b > DIMSPEED) { leds[i].b -= leds[i].b / DIMSPEED; } else { if(leds[i].b > 0) leds[i].b--; }
+  }
+}
+
