@@ -1,17 +1,23 @@
 // rainbow effect, all three rows show the same
+uint8_t rainbowMode = 0;
 
-void initRainbow() {
+void initRainbow(uint8_t _mode) {
+  rainbowMode = _mode;
   LEDS.setBrightness(NORMBRIGHT);
+  memset(leds, 0, NUM_LEDS * sizeof(struct CRGB));  // clear all leds
 }
 
-void loopRainbow(uint8_t theMode) {
-  switch(theMode) {
+void loopRainbow() {
+  switch(rainbowMode) {
     case 0:
       fill_rainbow( &(ledsrow[0]), NUM_LEDSPERROW, currFrame % 256);
       paintAllRows(ledsrow);
       break;
     case 1:
       LEDS.showColor(Wheel(currFrame));
+      break;
+    case 2:
+      fill_rainbow( &(leds[0]), NUM_LEDS, currFrame % 256);
       break;
   }
   /*

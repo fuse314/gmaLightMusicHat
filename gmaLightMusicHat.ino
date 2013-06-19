@@ -39,7 +39,7 @@ struct CRGB leds[NUM_LEDS];
 struct CRGB ledsrow[NUM_LEDSPERROW];  // used for mirrored effects and one-row-for-all effects
 #define LED_PIN 11
 
-#define NORMBRIGHT 60  // maximum brightness of leds (0-255)
+#define NORMBRIGHT 45  // maximum brightness of leds (0-255)
 #define MAXBRIGHT 120  // used for "find me" mode
 
 #define DIMSPEED 15    // the higher the slower...

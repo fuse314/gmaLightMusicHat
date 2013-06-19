@@ -1,6 +1,6 @@
 // Find Me Effect (spinning white light), all three rows show the same
 
-uint8_t iFindMeWidth = 4;
+uint8_t iFindMeWidth = 1;
 
 void initFindMe() {
   memset(leds, 0, NUM_LEDS * sizeof(struct CRGB));  // clear all leds
