@@ -25,21 +25,21 @@ void CheckButton() {
   }
 }
 
-void UpButtonInterruptHandler() {
+void UpButtonInterruptHandler() {   // interrupt handler function
   if(millis() - lastUpButtonPressed >= DEBOUNCE_TIME) {
     upButtonPressed = 1;
     lastUpButtonPressed = millis();
   }
 }
 
-void FindMeButtonInterruptHandler() {
+void FindMeButtonInterruptHandler() {   // interrupt handler function
   if(millis() - lastFindMeButtonPressed >= DEBOUNCE_TIME) {
     findMeButtonPressed = 1;
     lastFindMeButtonPressed = millis();
   }
 }
 
-void ChangeMode(uint8_t modeUp) {
+void ChangeMode(uint8_t modeUp) {  // change mode up or down, never go to mode 0 (find me), has its own button
   if(modeUp == 0) {
     currMode--;
     if(currMode == 0) {
@@ -56,20 +56,24 @@ void ChangeMode(uint8_t modeUp) {
 }
 
 
+#define MAX_MODE 8       // maximum number of modes
+
 void InitCurrMode() {
   switch(currMode) {
-    case 0: // simple sound
-    case 1: // rainbow sound
-    case 2: // solid color sound
-    case 3: // simple sound with rainbow underlaid
-    case 4: // rotating sound graph
+    case 0: // find me
+      initFindMe();
+      break;
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
       initSound(currMode);
       break;
-    case 5: // rainbow
+    case 7:
+    case 8:
       initRainbow();
-      break;
-    case 6: // find me
-      initFindMe();
       break;
   }
 }
@@ -77,18 +81,22 @@ void InitCurrMode() {
 void LoopCurrMode() {
   if ( findMeMode == 0 ) {
     switch(currMode) {
-      case 0: // simple sound
-      case 1: // rainbow sound
-      case 2: // solid color sound
-      case 3: // simple sound with rainbow underlaid
-      case 4: // rotaing sound graph
+      case 0: // find me
+        loopFindMe();
+        break;
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
         loopSound();
         break;
-      case 5: // rainbow
-        loopRainbow();
+      case 7:
+        loopRainbow(0);
         break;
-      case 6: // find me
-        loopFindMe();
+      case 8:
+        loopRainbow(1);
         break;
     }
   } else {

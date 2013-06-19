@@ -4,9 +4,16 @@ void initRainbow() {
   LEDS.setBrightness(NORMBRIGHT);
 }
 
-void loopRainbow() {
-  fill_rainbow( &(ledsrow[0]), NUM_LEDSPERROW, currFrame % 256);
-  paintAllRows(ledsrow);
+void loopRainbow(uint8_t theMode) {
+  switch(theMode) {
+    case 0:
+      fill_rainbow( &(ledsrow[0]), NUM_LEDSPERROW, currFrame % 256);
+      paintAllRows(ledsrow);
+      break;
+    case 1:
+      LEDS.showColor(Wheel(currFrame));
+      break;
+  }
   /*
   for (uint16_t i=0; i < NUM_LEDSPERROW; i++) {
     ledsrow[i] = Wheel((i+currFrame) % 768);

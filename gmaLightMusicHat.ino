@@ -58,7 +58,7 @@ uint16_t eq7Volumes[3];
 
 //button stuff
 
-#define DEBOUNCE_TIME 100
+#define DEBOUNCE_TIME 80
 #define UPBUTTON_PIN 2  //interrupt 0
 volatile uint8_t upButtonPressed = 0;
 volatile uint32_t lastUpButtonPressed = 0;
@@ -69,9 +69,8 @@ volatile uint32_t lastFindMeButtonPressed = 0;
 
 //loop stuff
 uint16_t currFrame = 0;
-#define MAX_MODE 6       // maximum number of modes
-uint8_t currMode = 4;
-uint8_t currDelay = 6;
+uint8_t currMode = 1;   // start with 1
+uint8_t currDelay = 7;
 uint8_t todoDelay = 0;
 uint8_t findMeMode = 0;
 
