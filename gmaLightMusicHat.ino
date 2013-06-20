@@ -70,7 +70,11 @@ volatile uint32_t lastFindMeButtonPressed = 0;
 //loop stuff
 uint16_t currFrame = 0;
 uint8_t currMode = 1;   // start with 1
-uint8_t currDelay = 7;
+
+#define DELAY_NORMAL 7
+#define DELAY_FAST 4
+#define DELAY_SLOW 18
+uint8_t currDelay = DELAY_NORMAL;
 uint8_t todoDelay = 0;
 uint8_t findMeMode = 0;
 

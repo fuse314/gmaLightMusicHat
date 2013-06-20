@@ -3,6 +3,7 @@
 uint8_t iFindMeWidth = 1;
 
 void initFindMe() {
+  currDelay = DELAY_NORMAL;
   memset(leds, 0, NUM_LEDS * sizeof(struct CRGB));  // clear all leds
   LEDS.setBrightness(MAXBRIGHT);
 }

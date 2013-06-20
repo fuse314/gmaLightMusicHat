@@ -8,6 +8,7 @@ uint8_t sound_Mode;
 
 void initSound(uint8_t _mode) {
   sound_Mode = _mode;
+  currDelay = DELAY_NORMAL;
   LEDS.setBrightness(NORMBRIGHT);
   if(sound_Mode == 5) {
     memset(leds, 0, NUM_LEDS * sizeof(struct CRGB));  // clear all leds
@@ -34,9 +35,9 @@ void loopSound() {
           uint8_t soundlvl = map(eq7Volumes[i], NOISE_LVL, 1024, 1, NUM_LEDSPERHALFROW);
           for(uint8_t j=0; j<soundlvl; j++) {
             if(sound_Mode == 2) {
-              ledsrow[j] = Wheel(currFrame % 256);
+              ledsrow[j] = Wheel(currFrame);
             } else {
-              ledsrow[j] = getEQColor();
+              ledsrow[j] = getEQColor();  // idea: dim lights from the middle in higher volumes... something with .nscale8(0-255);
             }
           }
         }
@@ -55,6 +56,13 @@ void loopSound() {
       dimLeds();
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         leds[getLedIndex(i,currFrame)] = theColor;
+      }
+      break;
+    case 6:
+      struct CRGB theColor = getEQColor();
+      shiftLEDs(1);
+      for(uint8_t i=0; i<NUM_ROWS; i++) {
+        leds[getLedIndex(i,0)] = theColor;
       }
       break;
   }

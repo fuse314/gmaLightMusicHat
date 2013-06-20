@@ -1,14 +1,17 @@
 
 struct CRGB Wheel(uint16_t WheelPos)
 {
+
+  //only has 256 hues... very choppy animation especially with all leds in the same color
+  /*
   CHSV rainbowcolor;
   rainbowcolor.hue = WheelPos % 256;
   rainbowcolor.saturation = 187;
   rainbowcolor.value = 255;
   struct CRGB ret;
   hsv2rgb_rainbow( rainbowcolor, ret);
-  
-  /*
+  */
+  WheelPos = WheelPos % 768;
   switch(WheelPos >> 8)
   {
     case 0:      // red to green
@@ -27,7 +30,7 @@ struct CRGB Wheel(uint16_t WheelPos)
       ret.b=255 - WheelPos % 256;
       break; 
   }
-  */
+  
   return(ret);
 }
 

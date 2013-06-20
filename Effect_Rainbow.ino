@@ -3,6 +3,7 @@ uint8_t rainbowMode = 0;
 
 void initRainbow(uint8_t _mode) {
   rainbowMode = _mode;
+  currDelay = DELAY_FAST;
   LEDS.setBrightness(NORMBRIGHT);
   memset(leds, 0, NUM_LEDS * sizeof(struct CRGB));  // clear all leds
 }
