@@ -12,6 +12,7 @@ struct CRGB Wheel(uint16_t WheelPos)
   hsv2rgb_rainbow( rainbowcolor, ret);
   */
   WheelPos = WheelPos % 768;
+  struct CRGB ret;
   switch(WheelPos >> 8)
   {
     case 0:      // red to green
