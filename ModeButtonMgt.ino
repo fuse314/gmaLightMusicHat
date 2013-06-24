@@ -68,14 +68,19 @@ void InitCurrMode() {
     case 4:
     case 5:
     case 6:
-      initSound(currMode);
-      break;
     case 7:
     case 8:
     case 9:
-      initRainbow(currMode-7);
-      break;
     case 10:
+    case 11:
+      initSound(currMode);
+      break;
+    case 12:
+    case 13:
+    case 14:
+      initRainbow(currMode-12);
+      break;
+    case 15:
       initRandom();
       break;
   }
@@ -93,14 +98,19 @@ void LoopCurrMode() {
       case 4:
       case 5:
       case 6:
-        loopSound();
-        break;
       case 7:
       case 8:
       case 9:
+      case 10:
+      case 11:
+        loopSound();
+        break;
+      case 12:
+      case 13:
+      case 14:
         loopRainbow();
         break;
-      case 10:
+      case 15:
         loopRandom();
         break;
     }

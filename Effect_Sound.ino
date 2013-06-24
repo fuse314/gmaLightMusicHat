@@ -102,10 +102,7 @@ void loopSound() {
         } else {
           theColor = CRGB(0,0,0);
         }
-        uint16_t endIndex = (i+1)*NUM_LEDSPERROW;
-        for(uint16_t j=i*NUM_LEDSPERROW; j<endIndex; j++) {
-          led[j] = theColor;
-        }
+        solidColorRow(theColor, i);
       }
       break;
   }

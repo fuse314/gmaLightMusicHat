@@ -73,6 +73,15 @@ void solidColor( struct CRGB _color ) {
   }
 }
 
+void solidColorRow( struct CRGB _color, uint8_t _row ) {
+  if(_row >= NUM_ROWS)
+    _row = NUM_ROWS-1;
+  uint16_t endIndex = (_row+1)*NUM_LEDSPERROW;
+  for(uint16_t i=_row*NUM_LEDSPERROW; i<endIndex; i++) {
+    leds[i] = _color;
+  }
+}
+
 void shiftLEDs( int8_t distance ) {
   if(distance == 0) { return; }  // shift by zero: do nothing.
   for(uint8_t i=0; i<NUM_ROWS; i++) {
