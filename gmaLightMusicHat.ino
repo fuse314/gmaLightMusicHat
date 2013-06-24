@@ -58,7 +58,7 @@ uint16_t eq7Volumes[3];
 
 //button stuff
 
-#define DEBOUNCE_TIME 80
+#define DEBOUNCE_TIME 120
 #define UPBUTTON_PIN 2  //interrupt 0
 volatile uint8_t upButtonPressed = 0;
 volatile uint32_t lastUpButtonPressed = 0;

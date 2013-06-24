@@ -10,7 +10,7 @@ void initSound(uint8_t _mode) {
   sound_Mode = _mode;
   currDelay = DELAY_NORMAL;
   LEDS.setBrightness(NORMBRIGHT);
-  if(sound_Mode == 5) {
+  if(sound_Mode == 5 || sound_Mode == 3) {
     memset(leds, 0, NUM_LEDS * sizeof(struct CRGB));  // clear all leds
   }
 }
@@ -33,7 +33,7 @@ void loopSound() {
       theColor = getEQColor();
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         if(eq7Volumes[i] > NOISE_LVL) {
-          uint8_t soundlvl = map(eq7Volumes[i], NOISE_LVL, 1024, 1, NUM_LEDSPERHALFROW);
+          uint8_t soundlvl = map(eq7Volumes[i], NOISE_LVL, 1023, 1, NUM_LEDSPERHALFROW);
           for(uint8_t j=0; j<soundlvl; j++) {
             if(sound_Mode == 2) {
               ledsrow[j] = Wheel(currFrame);
@@ -50,7 +50,8 @@ void loopSound() {
       }
       break;
     case 3:
-      LEDS.showColor(getEQColor());
+      //LEDS.showColor(getEQColor());
+      solidColor(getEQColor());
       break;
     case 5:
       theColor = getEQColor();
@@ -63,7 +64,7 @@ void loopSound() {
       theColor = getEQColor();
       shiftLEDs(1);
       for(uint8_t i=0; i<NUM_ROWS; i++) {
-        leds[getLedIndex(i,0)] = theColor;
+        leds[getLedIndex(i,NUM_LEDSPERROW-1)] = theColor;
       }
       break;
   }

@@ -15,7 +15,8 @@ void loopRainbow() {
       paintAllRows(ledsrow);
       break;
     case 1:
-      LEDS.showColor(Wheel(currFrame));
+      //LEDS.showColor(Wheel(currFrame));
+      solidColor(Wheel(currFrame));
       break;
     case 2:
       fill_rainbow( &(leds[0]), NUM_LEDS, currFrame % 256);

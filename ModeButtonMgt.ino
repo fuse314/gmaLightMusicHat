@@ -39,7 +39,7 @@ void FindMeButtonInterruptHandler() {   // interrupt handler function
   }
 }
 
-#define MAX_MODE 9       // maximum number of modes
+#define MAX_MODE 10       // maximum number of modes
 
 void ChangeMode(uint8_t modeUp) {  // change mode up or down, never go to mode 0 (find me), has its own button
   if(modeUp == 0) {
@@ -75,6 +75,9 @@ void InitCurrMode() {
     case 9:
       initRainbow(currMode-7);
       break;
+    case 10:
+      initRandom();
+      break;
   }
 }
 
@@ -96,6 +99,9 @@ void LoopCurrMode() {
       case 8:
       case 9:
         loopRainbow();
+        break;
+      case 10:
+        loopRandom();
         break;
     }
   } else {
