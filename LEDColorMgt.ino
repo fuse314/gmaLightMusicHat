@@ -15,17 +15,17 @@ struct CRGB Wheel(uint16_t WheelPos)
   struct CRGB ret;
   switch(WheelPos >> 8)
   {
-    case 0:      // red to green
+    case 0:      // 0 - 255 = red to green
       ret.r=255 - WheelPos % 256;
       ret.g=WheelPos % 256;
       ret.b=0;
       break; 
-    case 1:      //green to blue
+    case 1:      // 256 - 511 = green to blue
       ret.r=0;
       ret.g=255 - WheelPos % 256;
       ret.b=WheelPos % 256;
       break; 
-    case 2:       //blue to red
+    case 2:       // 512 - 767 = blue to red
       ret.r=WheelPos % 256;
       ret.g=0;
       ret.b=255 - WheelPos % 256;

@@ -48,6 +48,10 @@ void loopSound() {
         theColor = CRGB(255,0,0); // red bar
       }
       for(uint8_t i=0; i<NUM_ROWS; i++) {
+<<<<<<< HEAD
+        if(eq7Volumes[i] > NOISE_LVL) {
+          uint8_t soundlvl = map(eq7Volumes[i], NOISE_LVL, 1023, 1, NUM_LEDSPERHALFROW);
+=======
         if(eq7Volumes[i] >= NOISE_LVL) {
           if(sound_Mode == 7) {  // color depending on volume from blue(512) to red(767)
             theColor = Wheel(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 512, 767));
@@ -56,6 +60,7 @@ void loopSound() {
             theColor = Wheel(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 256, 511));
           }
           uint8_t soundlvl = map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 1, NUM_LEDSPERHALFROW);
+>>>>>>> b9ed86bac1c5c8a016467e35778f51c869b03eee
           for(uint8_t j=0; j<soundlvl; j++) {
             if(sound_Mode == 2) {
               ledsrow[j] = Wheel(currFrame);
@@ -72,6 +77,10 @@ void loopSound() {
       }
       break;
     case 3:
+<<<<<<< HEAD
+      //LEDS.showColor(getEQColor());
+=======
+>>>>>>> b9ed86bac1c5c8a016467e35778f51c869b03eee
       solidColor(getEQColor());
       break;
     case 5:
