@@ -49,6 +49,7 @@ struct CRGB ledsrow[NUM_LEDSPERROW];  // used for mirrored effects and one-row-f
 #define EQ7RESET_PIN 8
 #define EQ7IN_PIN A1
 #define NOISE_LVL 100     // noise cutoff value
+#define MAX_LVL 1023      // maximum volume value
 
 uint16_t eq7Values[7];
 // [0], [1], [2],  [3],  [4],  [5],   [6]
