@@ -37,7 +37,7 @@ struct CRGB Wheel(uint16_t WheelPos)
 
 
 void showMirrored( uint8_t row, struct CRGB* halfleds, uint8_t merge ) {
-  //paint 19 leds mirrored to row (0,1,2)
+  //paint 19 leds mirrored to one row (0,1,2)
   if(row >= NUM_ROWS)
     row = NUM_ROWS-1;
   uint16_t startindex = NUM_LEDSPERROW * row;
@@ -68,12 +68,14 @@ void paintAllRows( struct CRGB* rowleds ) {
 }
 
 void solidColor( struct CRGB _color ) {
+  // set all leds to _color
   for(uint16_t i=0; i<NUM_LEDS; i++) {
     leds[i] = _color;
   }
 }
 
 void solidColorRow( struct CRGB _color, uint8_t _row ) {
+  // set one row of leds to _color
   if(_row >= NUM_ROWS)
     _row = NUM_ROWS-1;
   uint16_t endIndex = (_row+1)*NUM_LEDSPERROW;
@@ -83,6 +85,7 @@ void solidColorRow( struct CRGB _color, uint8_t _row ) {
 }
 
 void shiftLEDs( int8_t distance ) {
+  // shift content of leds per row in one direction or other (positive / negative number), clear leftover leds
   if(distance == 0) { return; }  // shift by zero: do nothing.
   for(uint8_t i=0; i<NUM_ROWS; i++) {
     if(distance > 0) {
@@ -103,17 +106,30 @@ void shiftLEDs( int8_t distance ) {
   }
 }
 
-uint16_t getLedIndex( uint8_t row, uint16_t rowindex) {
-  uint16_t ret = rowindex % NUM_LEDSPERROW;
-  if(row % 2 == 0) {
-    ret += row * NUM_LEDSPERROW;
+uint16_t getLedIndex( uint8_t _row, uint16_t _rowindex) {
+  // function to get LED index per row
+  uint16_t ret = _rowindex%NUM_LEDSPERROW;
+  if(_row % 2 == 0) {
+    ret += _row*NUM_LEDSPERROW;
   } else {
-    ret = (row+1) * NUM_LEDSPERROW - 1 - ret;
+    ret = (_row+1)*NUM_LEDSPERROW-1-ret;
   }
   return ret;
 }
 
+uint16_t getKRLedIndex( uint8_t _row, uint16_t _rowindex, uint8_t _width) {
+  // function to get Knight Rider LED index per row
+  uint8_t newledsperrow = NUM_LEDSPERROW-_width;
+  uint16_t ret = rowindex % (newledsperrow * 2);
+  if(ret >= newledsperrow) {
+    ret -= newledsperrow;
+    ret = newledsperrow-1-ret;
+  }
+  return getLedIndex(_row, ret);
+}
+
 void dimLeds() {
+  // dim contents of all leds by DIMSPEED
   for(uint16_t i=0; i<NUM_LEDS; i++) {
     if(leds[i].r > DIMSPEED) { leds[i].r -= leds[i].r / DIMSPEED; } else { if(leds[i].r > 0) leds[i].r--; }
     if(leds[i].g > DIMSPEED) { leds[i].g -= leds[i].g / DIMSPEED; } else { if(leds[i].g > 0) leds[i].g--; }
@@ -121,3 +137,10 @@ void dimLeds() {
   }
 }
 
+void clearAllLeds() {
+  memset(leds, 0, NUM_LEDS * sizeof(struct CRGB));  // clear all leds
+}
+
+void clearRowLeds() {
+  memset(ledsrow, 0, NUM_LEDSPERROW * sizeof(struct CRGB));  // clear work row leds
+}

@@ -32,12 +32,5 @@ http://hackaday.com/2012/09/11/disco-planet-a-massive-rgbw-led-array-in-a-6-glob
 (mostly taken from macetech's video)
 
 general effects  
-- rotating random color (3-4 wide, one complete cycle per color)  
 - knight rider in random color (or red...)  
-- color sweep (fill with one color, fill with next)  
 - "sine" effect  
-  
-sound effects  
-- blue base color, red bars  
-- similar to solid sound effect, but brightness per line (low/mid/high tones) - in green, red, blue, ...  
-  

@@ -37,6 +37,7 @@ uint8_t NUM_LEDSPERHALFROW = NUM_LEDSPERROW / 2;
 //struct CRGB { unsigned char g; unsigned char r; unsigned char b; };
 struct CRGB leds[NUM_LEDS];
 struct CRGB ledsrow[NUM_LEDSPERROW];  // used for mirrored effects and one-row-for-all effects
+struct CRGB currColor;
 #define LED_PIN 11
 
 #define NORMBRIGHT 45  // maximum brightness of leds (0-255)
@@ -71,6 +72,7 @@ volatile uint32_t lastFindMeButtonPressed = 0;
 //loop stuff
 uint16_t currFrame = 0;
 uint8_t currMode = 1;   // start with 1
+uint8_t effectMode = 1; // used in effects
 
 #define DELAY_NORMAL 7
 #define DELAY_FAST 4
@@ -85,8 +87,8 @@ void setup()
   //LEDS.setBrightness(NORMBRIGHT);
   LEDS.addLeds<WS2811, LED_PIN, GRB>(leds, NUM_LEDS);
 
-  memset(leds, 0, NUM_LEDS * sizeof(struct CRGB));  // clear memory (set to black)
-  memset(ledsrow, 0, NUM_LEDSPERROW * sizeof(struct CRGB));  // clear memory (set to black)
+  clearAllLeds();
+  clearRowLeds();
   
   LEDS.show();
   
