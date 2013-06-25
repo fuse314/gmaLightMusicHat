@@ -1,5 +1,5 @@
 
-struct CRGB Wheel(uint16_t WheelPos)
+struct CRGB Wheel(uint16_t _wheelPos)
 {
 
   //only has 256 hues... very choppy animation especially with all leds in the same color
@@ -11,24 +11,24 @@ struct CRGB Wheel(uint16_t WheelPos)
   struct CRGB ret;
   hsv2rgb_rainbow( rainbowcolor, ret);
   */
-  WheelPos = WheelPos % 768;
+  _wheelPos = _wheelPos % 768;
   struct CRGB ret;
-  switch(WheelPos >> 8)
+  switch(_wheelPos >> 8)
   {
     case 0:      // 0 - 255 = red to green
-      ret.r=255 - WheelPos % 256;
-      ret.g=WheelPos % 256;
+      ret.r=255 - _wheelPos % 256;
+      ret.g=_wheelPos % 256;
       ret.b=0;
       break; 
     case 1:      // 256 - 511 = green to blue
       ret.r=0;
-      ret.g=255 - WheelPos % 256;
-      ret.b=WheelPos % 256;
+      ret.g=255 - _wheelPos % 256;
+      ret.b=_wheelPos % 256;
       break; 
     case 2:       // 512 - 767 = blue to red
-      ret.r=WheelPos % 256;
+      ret.r=_wheelPos % 256;
       ret.g=0;
-      ret.b=255 - WheelPos % 256;
+      ret.b=255 - _wheelPos % 256;
       break; 
   }
   
@@ -36,41 +36,46 @@ struct CRGB Wheel(uint16_t WheelPos)
 }
 
 
-void showMirrored( uint8_t row, struct CRGB* halfleds, uint8_t merge ) {
+void showMirrored( uint8_t _row, struct CRGB* _halfleds, uint8_t _merge ) {
   //paint 19 leds mirrored to one row (0,1,2)
-  if(row >= NUM_ROWS)
-    row = NUM_ROWS-1;
-  uint16_t startindex = NUM_LEDSPERROW * row;
+  if(_row >= NUM_ROWS)
+    _row = NUM_ROWS-1;
+  uint16_t startindex = NUM_LEDSPERROW * _row;
   uint16_t endindex = startindex + NUM_LEDSPERROW - 1;
   for(uint8_t i=0; i<NUM_LEDSPERHALFROW; i++) {
-    if(merge == 1) {
-      leds[startindex+i] += halfleds[NUM_LEDSPERHALFROW-1-i];
-      leds[endindex-i] += halfleds[NUM_LEDSPERHALFROW-1-i];
+    if(_merge == 1) {
+      leds[startindex+i] += _halfleds[NUM_LEDSPERHALFROW-1-i];
+      leds[endindex-i] += _halfleds[NUM_LEDSPERHALFROW-1-i];
     } else {
-      leds[startindex+i] = halfleds[NUM_LEDSPERHALFROW-1-i];
-      leds[endindex-i] = halfleds[NUM_LEDSPERHALFROW-1-i];
+      leds[startindex+i] = _halfleds[NUM_LEDSPERHALFROW-1-i];
+      leds[endindex-i] = _halfleds[NUM_LEDSPERHALFROW-1-i];
     }
   }
 }
 
-void paintAllRows( struct CRGB* rowleds ) {
+void paintAllRows( struct CRGB* _rowleds ) {
   // paint all rows with rowleds
   for(uint8_t i=0; i<NUM_ROWS; i++) {
     uint16_t startindex = NUM_LEDSPERROW * i;
     for(uint16_t j=0; j<NUM_LEDSPERROW; j++) {
       if(i % 2 == 0) {
-        leds[startindex+j] = rowleds[j];
+        leds[startindex+j] = _rowleds[j];
       } else {
-        leds[startindex+j] = rowleds[NUM_LEDSPERROW-j-1];
+        leds[startindex+j] = _rowleds[NUM_LEDSPERROW-j-1];
       }
     }
   }
 }
 
-void solidColor( struct CRGB _color ) {
+void solidColor( struct CRGB _color) {
   // set all leds to _color
   for(uint16_t i=0; i<NUM_LEDS; i++) {
     leds[i] = _color;
+  }
+}
+void solidColorLedsRow( struct CRGB _color) {
+  for(uint16_t i=0; i<NUM_LEDSPERROW; i++) {
+    ledsrow[i] = _color;
   }
 }
 
@@ -84,22 +89,22 @@ void solidColorRow( struct CRGB _color, uint8_t _row ) {
   }
 }
 
-void shiftLEDs( int8_t distance ) {
+void shiftLEDs( int8_t _distance ) {
   // shift content of leds per row in one direction or other (positive / negative number), clear leftover leds
-  if(distance == 0) { return; }  // shift by zero: do nothing.
+  if(_distance == 0) { return; }  // shift by zero: do nothing.
   for(uint8_t i=0; i<NUM_ROWS; i++) {
-    if(distance > 0) {
-      for(uint16_t j=0; j<NUM_LEDSPERROW-distance; j++) {
-        leds[getLedIndex(i,j)] = leds[getLedIndex(i,j+distance)];  // higher index to lower index, iterate upwards
+    if(_distance > 0) {
+      for(uint16_t j=0; j<NUM_LEDSPERROW-_distance; j++) {
+        leds[getLedIndex(i,j)] = leds[getLedIndex(i,j+_distance)];  // higher index to lower index, iterate upwards
       }
-      for(uint16_t j=NUM_LEDSPERROW-distance; j<NUM_LEDSPERROW; j++) {
+      for(uint16_t j=NUM_LEDSPERROW-_distance; j<NUM_LEDSPERROW; j++) {
         leds[getLedIndex(i,j)] = CRGB(0,0,0);  // clear leftover leds
       }
     } else {
-      for(uint16_t j=NUM_LEDSPERROW+NUM_LEDSPERROW+distance-1; j>=NUM_LEDSPERROW; j--) { // make sure j never goes below 0
-        leds[getLedIndex(i,j)] = leds[getLedIndex(i,j+distance)];  // lower index to higher index, iterate downwards
+      for(uint16_t j=NUM_LEDSPERROW+NUM_LEDSPERROW+_distance-1; j>=NUM_LEDSPERROW; j--) { // make sure j never goes below 0
+        leds[getLedIndex(i,j)] = leds[getLedIndex(i,j+_distance)];  // lower index to higher index, iterate downwards
       }
-      for(uint16_t j=0; j<distance; j++) {
+      for(uint16_t j=0; j<_distance; j++) {
         leds[getLedIndex(i,j)] = CRGB(0,0,0);  // clear leftover leds
       }
     }
@@ -119,10 +124,10 @@ uint16_t getLedIndex( uint8_t _row, uint16_t _rowindex) {
 
 uint16_t getKRLedIndex( uint8_t _row, uint16_t _rowindex, uint8_t _width) {
   // function to get Knight Rider LED index per row
-  uint8_t newledsperrow = NUM_LEDSPERROW-_width;
-  uint16_t ret = rowindex % (newledsperrow * 2);
+  uint8_t newledsperrow = NUM_LEDSPERROW-_width+1;
+  uint16_t ret = _rowindex % (newledsperrow * 2);
   if(ret >= newledsperrow) {
-    ret -= newledsperrow;
+    ret = ret - newledsperrow;
     ret = newledsperrow-1-ret;
   }
   return getLedIndex(_row, ret);

@@ -1,11 +1,11 @@
 //mode 0: red kr effect
 //mode 1: blue kr effect
 //mode 2: green kr effect
-#define iKRWith = 6;
+#define KR_WIDTH 5
 
 void initKR(uint8_t _mode) {
   effectMode = _mode;
-  currDelay = DELAY_NORMAL;
+  currDelay = DELAY_SLOW;
   LEDS.setBrightness(NORMBRIGHT);
   switch(effectMode) {
     case 0:
@@ -21,23 +21,25 @@ void initKR(uint8_t _mode) {
 }
 
 void loopKR() {
-
-  //switch(effectMode) {
-  //  case 0:
-  //  case 1:
-  //  case 2:
-      clearAllLeds();
-      for(uint8_t i=0; i<NUM_ROWS; i++) {
-        uint16_t startIndex = getKRLedIndex(i, currFrame, iKRWidth);
-        uint16_t endIndex = startIndex + iKRWidth;
-        for(uint16_t j=startIndex; j<endIndex; j++) {
-          if((j==startIndex || j==endIndex-1) && i%2==0) { // fade edges for better effect
-            led[j] = currColor.nscale8(128);
-          } else {
-            led[j] = currColor;
-          }
+  clearAllLeds();
+  for(uint8_t i=0; i<NUM_ROWS; i++) {
+    uint16_t startIndex = getKRLedIndex(i, currFrame, KR_WIDTH);
+    uint16_t endIndex;
+    if(i%2==0) {
+      endIndex = startIndex + KR_WIDTH;
+      for(uint16_t j=startIndex; j<endIndex; j++) {
+        if(j==startIndex || j==endIndex-1) { // fade edges for better effect
+          leds[j] = currColor - CRGB(128,128,128);
+        } else {
+          leds[j] = currColor;
         }
       }
-  //  break;
-  //}
+    } else {
+      startIndex += 1;
+      endIndex = startIndex - KR_WIDTH;
+      for(uint16_t j=endIndex; j<startIndex; j++) {
+        leds[j] = currColor;
+      }
+    }
+  }
 }

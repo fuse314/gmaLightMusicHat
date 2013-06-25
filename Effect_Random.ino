@@ -1,11 +1,11 @@
 //mode 0: random pixels effect
 //mode 1: random color block sweep (iRandomWith wide block, one round per color)
 //mode 2: random color solid sweep (fill leds with one color, next color)
-#define iRandomWidth 4  // width of random color bar (mode 1)
+#define RANDOM_WIDTH 4  // width of random color bar (mode 1)
 
 void initRandom(uint8_t _mode) {
   effectMode = _mode;
-  currDelay = DELAY_NORMAL;
+  currDelay = DELAY_SLOW;
   LEDS.setBrightness(NORMBRIGHT);
   randomSeed(analogRead(0));   // initialize random numbers
   if(effectMode == 0) {
@@ -19,7 +19,7 @@ void initRandom(uint8_t _mode) {
 void loopRandom() {
 
   if(effectMode == 1 || effectMode == 2) {
-    if(currFrame % NUM_LEDS == 0) {  // new color on new round
+    if(currFrame % NUM_LEDSPERROW == 0) {  // new color on new round
       currColor = Wheel(random(0,768));
     }
   }
@@ -32,7 +32,7 @@ void loopRandom() {
     case 1:
       clearAllLeds();
       for(uint8_t i=0; i<NUM_ROWS; i++) {
-        for(uint8_t j=0; j<iRandomWidth; j++) {
+        for(uint8_t j=0; j<RANDOM_WIDTH; j++) {
           leds[getLedIndex(i,currFrame+j)] = currColor;
         }
       }

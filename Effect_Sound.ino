@@ -26,9 +26,9 @@ void loopSound() {
     paintAllRows(ledsrow);
   }
   if(effectMode == 9) {
-    solidColor(CRGB(0,0,128)); // blue base color
+    solidColorLedsRow(CRGB(0,0,128)); // blue base color
   }
-  if(effectMode == 1 || effectMode == 2 || effectMode == 4 || effectMode == 7 || effectMode == 10) {
+  if(effectMode == 1 || effectMode == 2 || effectMode == 4 || effectMode == 7 || effectMode == 8) {
     clearRowLeds();
   }
   
@@ -63,7 +63,7 @@ void loopSound() {
             }
           }
         }
-        if(effectMode == 4 || effectMode == 9) {
+        if(effectMode == 4) {
           showMirrored(i, ledsrow, 1);  // merge with current line content
         } else {
           showMirrored(i, ledsrow, 0);  // overwrite with content
@@ -94,8 +94,8 @@ void loopSound() {
           if(effectMode == 10) {
             theColor = CRGB(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 0, 255),0,0);  // red, dependent on volume
           } else {
-            if(effectMode == 11) {            //      from blue(512) to red(767)  , dim from 0-255 depending on volume
-              theColor = Wheel(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 512, 767)).nscale8(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 0, 255));
+            if(effectMode == 11) {            //      from green(256) to blue(511)  , dim from 0-255 depending on volume
+              theColor = Wheel(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 256, 511)).nscale8(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 0, 255));
             }
           }
         } else {
