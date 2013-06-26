@@ -1,11 +1,11 @@
 //mode 0: red kr effect
 //mode 1: blue kr effect
 //mode 2: green kr effect
-#define KR_WIDTH 5
+#define KR_WIDTH 9
 
 void initKR(uint8_t _mode) {
   effectMode = _mode;
-  currDelay = DELAY_SLOW;
+  currDelay = DELAY_KR;
   LEDS.setBrightness(NORMBRIGHT);
   switch(effectMode) {
     case 0:

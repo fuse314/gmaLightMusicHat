@@ -60,7 +60,7 @@ uint16_t eq7Volumes[3];
 
 //button stuff
 
-#define DEBOUNCE_TIME 120
+#define DEBOUNCE_TIME 150
 #define UPBUTTON_PIN 2  //interrupt 0
 volatile uint8_t upButtonPressed = 0;
 volatile uint32_t lastUpButtonPressed = 0;
@@ -77,6 +77,7 @@ uint8_t effectMode = 1; // used in effects
 #define DELAY_NORMAL 7
 #define DELAY_FAST 4
 #define DELAY_SLOW 18
+#define DELAY_KR 25
 uint8_t currDelay = DELAY_NORMAL;
 uint8_t todoDelay = 0;
 uint8_t findMeMode = 0;

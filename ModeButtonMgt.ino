@@ -2,7 +2,7 @@
 void CheckButton() {
   if(upButtonPressed == 1) {
     if(autoModeChange == 1) {  // exit auto mode change on button press
-      autoModeChange == 0;
+      autoModeChange = 0;
     }
     ChangeMode(1);
     upButtonPressed = 0;
@@ -63,7 +63,8 @@ void ChangeMode(uint8_t _modeUp) {
 
 void CheckAutoModeChange() {
   // auto mode change every AUTOMODE_CHANGE milliseconds, choose random mode
-  if(findMeMode == 0 &&  millis() > AUTOMODE_CHANGE && millis() - lastAutoModeChange > AUTOMODE_CHANGE) {
+  if(findMeMode == 0 &&  millis() > AUTOMODE_CHANGE && millis() - lastAutoModeChangeTime > AUTOMODE_CHANGE) {
+    lastAutoModeChangeTime = millis();
     currMode = random(0, MAX_MODE) + 1; // random number including 0, excluding MAX_MODE
     InitCurrMode();
   }
