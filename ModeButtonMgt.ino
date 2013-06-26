@@ -1,6 +1,9 @@
 
 void CheckButton() {
   if(upButtonPressed == 1) {
+    if(autoModeChange == 1) {  // exit auto mode change on button press
+      autoModeChange == 0;
+    }
     ChangeMode(1);
     upButtonPressed = 0;
   }
@@ -41,8 +44,9 @@ void FindMeButtonInterruptHandler() {   // interrupt handler function
 
 #define MAX_MODE 20       // maximum number of modes
 
-void ChangeMode(uint8_t modeUp) {  // change mode up or down, never go to mode 0 (find me), has its own button
-  if(modeUp == 0) {
+void ChangeMode(uint8_t _modeUp) {
+  // change mode up or down, never go to mode 0 (find me), has its own button
+  if(_modeUp == 0) {
     currMode--;
     if(currMode == 0) {
       currMode = MAX_MODE;
@@ -53,11 +57,20 @@ void ChangeMode(uint8_t modeUp) {  // change mode up or down, never go to mode 0
       currMode = 1;
     }
   }
-  currFrame = 0;
+  //currFrame = 0;
   InitCurrMode();
 }
 
+void CheckAutoModeChange() {
+  // auto mode change every AUTOMODE_CHANGE milliseconds, choose random mode
+  if(findMeMode == 0 &&  millis() > AUTOMODE_CHANGE && millis() - lastAutoModeChange > AUTOMODE_CHANGE) {
+    currMode = random(0, MAX_MODE) + 1; // random number including 0, excluding MAX_MODE
+    InitCurrMode();
+  }
+}
+
 void InitCurrMode() {
+  // initialize current mode (called on mode change)
   switch(currMode) {
     case 0: // find me
       initFindMe();
@@ -94,6 +107,7 @@ void InitCurrMode() {
 }
 
 void LoopCurrMode() {
+  // loop current mode (called every frame)
   if ( findMeMode == 0 ) {
     switch(currMode) {
       case 0: // find me

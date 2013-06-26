@@ -81,17 +81,21 @@ uint8_t currDelay = DELAY_NORMAL;
 uint8_t todoDelay = 0;
 uint8_t findMeMode = 0;
 
+//auto mode change stuff
+uint8_t autoModeChange = 1;  // start in auto mode change mode
+#define AUTOMODE_CHANGE 60000  // change every 60 seconds
+uint32_t lastAutoModeChangeTime = 0;
+
+
 void setup()
 {
-  //New FastSPI_LED2 library
-  //LEDS.setBrightness(NORMBRIGHT);
+  //FastSPI_LED2 rc1 library
   LEDS.addLeds<WS2811, LED_PIN, GRB>(leds, NUM_LEDS);
-
   clearAllLeds();
   clearRowLeds();
+  LEDS.show();  // push black
   
-  LEDS.show();
-  
+  //initialize MSGEQ7 chip
   InitEQ7();
   
   //button stuff
@@ -112,19 +116,28 @@ void setup()
 }
 
 void loop() {
-  
   if(todoDelay > 0) {
+    // count down todoDelay until 0
     todoDelay--;
     delay(1);
   } else {
+    // time for the next frame
     todoDelay = currDelay;
     
+    // call effect loop
     LoopCurrMode();
-    currFrame++;
+    // push pixels to led strip
     LEDS.show();
+    // increment currFrame after effect loop - this variable may roll over
+    currFrame++;
     
-    CheckButton();  // only check button every "currDelay" milliseconds
+    // check if any buttons have been pressed
+    CheckButton();
+    
+    // only check random mode change every currDelay*150 milliseconds, default 1050 ms (one second)
+    if(autoModeChange == 1 && currFrame % 150 == 0) {
+      CheckAutoModeChange();
+    }
   }
-  
 }
 
