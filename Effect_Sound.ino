@@ -28,9 +28,6 @@ void loopSound() {
   if(effectMode == 9) {
     solidColorLedsRow(CRGB(0,0,128)); // blue base color
   }
-  if(effectMode == 1 || effectMode == 2 || effectMode == 4 || effectMode == 7 || effectMode == 8) {
-    clearRowLeds();
-  }
   
   struct CRGB theColor;
   switch (effectMode) {
@@ -40,6 +37,9 @@ void loopSound() {
     case 7:
     case 8:
     case 9:
+      if(effectMode != 9) {
+        clearRowLeds();
+      }
       if(effectMode == 1 || effectMode == 2 || effectMode == 4) {
         theColor = getEQColor();
       }

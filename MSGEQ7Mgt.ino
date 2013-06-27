@@ -22,9 +22,9 @@ void GetEQ7() {
   digitalWrite(EQ7RESET_PIN, LOW);
   digitalWrite(EQ7STROBE_PIN, HIGH);
   
-  eq7Volumes[2] = max(eq7Values[0], max(eq7Values[1], eq7Values[2]));
+  eq7Volumes[0] = max(eq7Values[0], max(eq7Values[1], eq7Values[2]));
   eq7Volumes[1] = max(eq7Values[3], eq7Values[4]);
-  eq7Volumes[0] = max(eq7Values[5], max(eq7Values[6], eq7Values[7]));
+  eq7Volumes[2] = max(eq7Values[5], max(eq7Values[6], eq7Values[7]));
 }
 
 struct CRGB getEQColor() {
