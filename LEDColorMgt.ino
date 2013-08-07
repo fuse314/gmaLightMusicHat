@@ -1,5 +1,5 @@
 
-struct CRGB Wheel(uint16_t _wheelPos)
+CRGB Wheel(uint16_t _wheelPos)
 {
 
   //only has 256 hues... very choppy animation especially with all leds in the same color
@@ -12,7 +12,7 @@ struct CRGB Wheel(uint16_t _wheelPos)
   hsv2rgb_rainbow( rainbowcolor, ret);
   */
   _wheelPos = _wheelPos % 768;
-  struct CRGB ret;
+  CRGB ret;
   switch(_wheelPos >> 8)
   {
     case 0:      // 0 - 255 = red to green
@@ -36,7 +36,7 @@ struct CRGB Wheel(uint16_t _wheelPos)
 }
 
 
-void showMirrored( uint8_t _row, struct CRGB* _halfleds, uint8_t _merge ) {
+void showMirrored( uint8_t _row, CRGB* _halfleds, uint8_t _merge ) {
   //paint 19 leds mirrored to one row (0,1,2)
   if(_row >= NUM_ROWS)
     _row = NUM_ROWS-1;
@@ -53,7 +53,7 @@ void showMirrored( uint8_t _row, struct CRGB* _halfleds, uint8_t _merge ) {
   }
 }
 
-void paintAllRows( struct CRGB* _rowleds ) {
+void paintAllRows( CRGB* _rowleds ) {
   // paint all rows with rowleds
   for(uint8_t i=0; i<NUM_ROWS; i++) {
     uint16_t startindex = NUM_LEDSPERROW * i;
@@ -67,19 +67,19 @@ void paintAllRows( struct CRGB* _rowleds ) {
   }
 }
 
-void solidColor( struct CRGB _color) {
+void solidColor( CRGB _color) {
   // set all leds to _color
   for(uint16_t i=0; i<NUM_LEDS; i++) {
     leds[i] = _color;
   }
 }
-void solidColorLedsRow( struct CRGB _color) {
+void solidColorLedsRow( CRGB _color) {
   for(uint16_t i=0; i<NUM_LEDSPERROW; i++) {
     ledsrow[i] = _color;
   }
 }
 
-void solidColorRow( struct CRGB _color, uint8_t _row ) {
+void solidColorRow( CRGB _color, uint8_t _row ) {
   // set one row of leds to _color
   if(_row >= NUM_ROWS)
     _row = NUM_ROWS-1;
@@ -143,9 +143,9 @@ void dimLeds() {
 }
 
 void clearAllLeds() {
-  memset(leds, 0, NUM_LEDS * sizeof(struct CRGB));  // clear all leds
+  memset(leds, 0, NUM_LEDS * sizeof(CRGB));  // clear all leds
 }
 
 void clearRowLeds() {
-  memset(ledsrow, 0, NUM_LEDSPERROW * sizeof(struct CRGB));  // clear work row leds
+  memset(ledsrow, 0, NUM_LEDSPERROW * sizeof(CRGB));  // clear work row leds
 }

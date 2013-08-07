@@ -27,8 +27,8 @@ void GetEQ7() {
   eq7Volumes[2] = max(eq7Values[5], max(eq7Values[6], eq7Values[7]));
 }
 
-struct CRGB getEQColor() {
-  struct CRGB ret;
+CRGB getEQColor() {
+  CRGB ret;
   if(eq7Volumes[2] <= NOISE_LVL) {   // low tones are green
     ret.g = 0;
   } else {

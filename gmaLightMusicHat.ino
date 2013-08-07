@@ -35,9 +35,9 @@
 uint8_t NUM_LEDSPERHALFROW = NUM_LEDSPERROW / 2;
 
 //struct CRGB { unsigned char g; unsigned char r; unsigned char b; };
-struct CRGB leds[NUM_LEDS];
-struct CRGB ledsrow[NUM_LEDSPERROW];  // used for mirrored effects and one-row-for-all effects
-struct CRGB currColor;
+CRGB leds[NUM_LEDS];
+CRGB ledsrow[NUM_LEDSPERROW];  // used for mirrored effects and one-row-for-all effects
+CRGB currColor;
 #define LED_PIN 11
 
 #define NORMBRIGHT 40  // maximum brightness of leds (0-255)

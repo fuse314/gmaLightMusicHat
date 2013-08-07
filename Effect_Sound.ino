@@ -29,7 +29,7 @@ void loopSound() {
     solidColorLedsRow(CRGB(0,0,128)); // blue base color
   }
   
-  struct CRGB theColor;
+  CRGB theColor;
   switch (effectMode) {
     case 1:
     case 2:
