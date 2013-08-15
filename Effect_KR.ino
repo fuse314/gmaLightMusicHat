@@ -1,6 +1,7 @@
 //mode 0: red kr effect
 //mode 1: blue kr effect
 //mode 2: green kr effect
+//mode 3: rainbow kr effect 
 #define KR_WIDTH 9
 
 void initKR(uint8_t _mode) {
@@ -22,6 +23,9 @@ void initKR(uint8_t _mode) {
 
 void loopKR() {
   clearAllLeds();
+  if(effectMode = 3) {
+    currColor = Wheel(currFrame);
+  }
   for(uint8_t i=0; i<NUM_ROWS; i++) {
     uint16_t startIndex = getKRLedIndex(i, currFrame, KR_WIDTH);
     uint16_t endIndex;
