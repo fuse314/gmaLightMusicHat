@@ -118,6 +118,7 @@ void setup()
   #ifdef SerialDebug
   Serial.begin(9600);
   Serial << "Setup done" << endl;
+  Serial << "ram " << freeRam() << endl;
   #endif
 }
 
@@ -141,6 +142,12 @@ void loop() {
     // check if any buttons have been pressed
     CheckButton();
     
+    #ifdef SerialDebug
+      if(currFrame % 200 == 0) {
+        Serial << "m=" << currMode << " r=" << freeRam << endl;
+      }
+    #endif
+    
     // only check random mode change every currDelay*150 milliseconds, default 1050 ms (one second)
     if(autoModeChange == 1 && currFrame % 150 == 0) {
       CheckAutoModeChange();
@@ -148,3 +155,13 @@ void loop() {
   }
 }
 
+
+#ifdef SerialDebug
+int freeRam ()  // function returns distance between stack and heap (available ram)
+{
+  extern int __heap_start, *__brkval;
+  int v;
+  return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+}
+
+#endif
