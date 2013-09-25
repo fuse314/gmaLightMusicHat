@@ -1,15 +1,16 @@
 // Find Me Effect (spinning white light), all three rows show the same
 
-#define FINDME_WIDTH 2
+#include "zEffectClass.h"
+#include "Effect_FindMe.h"
 
-void initFindMe() {
+EffectFindMe::EffectFindMe(uint8_t _mode) : EffectClass(_mode) {
   currDelay = DELAY_SLOW;
   clearAllLeds();
   LEDS.setBrightness(MAXBRIGHT);
   currColor = CRGB(255,255,255);
 }
 
-void loopFindMe() {
+void EffectFindMe::step() {
   clearAllLeds();
   for(uint8_t i=0; i<NUM_ROWS; i++) {
     for(uint8_t j=0; j<FINDME_WIDTH; j++) {

@@ -3,7 +3,7 @@
   using MSGEQ7 chip and microphone to react to music
   (c) 2013 by Gottfried Mayer www.gma.name
   
-  Uses FastSPI_LED2 (rc1) to control WS2811 controller chips
+  Uses FastSPI_LED2 (rc3) to control WS2811 controller chips
   
   Inspiration from here:
   http://www.macetech.com/blog/node/118
@@ -69,16 +69,20 @@ volatile uint32_t lastUpButtonPressed = 0;
 volatile uint8_t findMeButtonPressed = 0;
 volatile uint32_t lastFindMeButtonPressed = 0;
 
-//loop stuff
+//effect stuff
+#include "zEffectClass.h"
+#include "Effect_Random.h"  // only include first effect for setup()
+EffectClass *currEffect;
+uint8_t currMode;
 uint16_t currFrame = 0;
-uint8_t currMode = 15;   // start with 15  (random)
-uint8_t effectMode = 1; // used in effects
+uint8_t effectMode; // used in effects
+
 
 #define DELAY_NORMAL 7
 #define DELAY_FAST 4
 #define DELAY_SLOW 18
 #define DELAY_KR 25
-uint8_t currDelay = DELAY_NORMAL;
+uint8_t currDelay;
 uint8_t todoDelay = 0;
 uint8_t findMeMode = 0;
 
@@ -108,6 +112,7 @@ void setup()
   attachInterrupt(1, FindMeButtonInterruptHandler, FALLING);
   
   //mode stuff
+  currMode = 15 // start with random effect 0
   InitCurrMode();
   
   #ifdef SerialDebug
@@ -126,7 +131,8 @@ void loop() {
     todoDelay = currDelay;
     
     // call effect loop
-    LoopCurrMode();
+    currEffect->step();
+    //LoopCurrMode();
     // push pixels to led strip
     LEDS.show();
     // increment currFrame after effect loop - this variable may roll over

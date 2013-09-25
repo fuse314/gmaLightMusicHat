@@ -4,10 +4,9 @@
 class EffectClass {
   public:
     // constructor
-    EffectClass(uint8_t _mode);
-    // initialize effect animation
-    virtual void init(uint8_t _mode) { /* not implemented */ }
+    EffectClass(uint8_t _mode = 0);
     // step function is called from loop
-    virtual void step() { /* not implemented */ } 
+    virtual void step() = 0; 
 };
+
 #endif
