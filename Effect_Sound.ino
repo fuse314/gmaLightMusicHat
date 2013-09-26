@@ -10,18 +10,16 @@
 //mode 10: volume dependent brightness, red solid color per row
 //mode 11: volume dependent brightness, volume dependent color green to blue per row
 
-#include "zEffectClass.h"
-#include "Effect_Sound.h"
-
-EffectSound::EffectSound(uint8_t _mode) : EffectClass(_mode) {
+void initSound(uint8_t _mode) {
+  effectMode = _mode;
   currDelay = DELAY_NORMAL;
   LEDS.setBrightness(NORMBRIGHT);
-  if(effectMode == 3 || effectMode == 5) {
+  if(effectMode == 5 || effectMode == 3) {
     clearAllLeds();
   }
 }
 
-void EffectSound::step() {
+void loopSound() {
   GetEQ7();
   if(effectMode == 4) {
     fill_rainbow( &(ledsrow[0]), NUM_LEDSPERROW, currFrame % 256);

@@ -2,15 +2,14 @@
 //mode 1: solid color rainbow all leds the same
 //mode 2: rainbow through all leds, results in right-left-right run due to led configuration
 
-#include "EffectRainbow.h"
-
-EffectRainbow::EffectRainbow(uint8_t _mode) : EffectClass(_mode) {
+void initRainbow(uint8_t _mode) {
+  effectMode = _mode;
   currDelay = DELAY_FAST;
   LEDS.setBrightness(NORMBRIGHT);
   clearAllLeds();
 }
 
-void EffectRainbow::step() {
+void loopRainbow() {
   switch(effectMode) {
     case 0:
       fill_rainbow( &(ledsrow[0]), NUM_LEDSPERROW, currFrame % 256);

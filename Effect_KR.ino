@@ -2,11 +2,10 @@
 //mode 1: blue kr effect
 //mode 2: green kr effect
 //mode 3: rainbow kr effect 
+#define KR_WIDTH 9
 
-#include "zEffectClass.h"
-#include "Effect_KR.h"
-
-EffectKR::EffectKR(uint8_t _mode) : EffectClass(_mode) {
+void initKR(uint8_t _mode) {
+  effectMode = _mode;
   currDelay = DELAY_KR;
   LEDS.setBrightness(NORMBRIGHT);
   switch(effectMode) {
@@ -22,7 +21,7 @@ EffectKR::EffectKR(uint8_t _mode) : EffectClass(_mode) {
   }
 }
 
-void EffectKR::step() {
+void loopKR() {
   clearAllLeds();
   if(effectMode = 3) {
     currColor = Wheel(currFrame);
@@ -48,4 +47,3 @@ void EffectKR::step() {
     }
   }
 }
-

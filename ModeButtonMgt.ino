@@ -1,8 +1,3 @@
-#include "Effect_FindMe.h"
-#include "Effect_KR.h"
-#include "Effect_Rainbow.h"
-#include "Effect_Random.h"
-#include "Effect_Sound.h"
 
 void CheckButton() {
   if(upButtonPressed == 1) {
@@ -22,8 +17,7 @@ void CheckButton() {
   } else {
     if(findMeButtonPressed == 1) {
       if(digitalRead(FINDMEBUTTON_PIN) == LOW) {  // active = low
-        delete currEffect;
-        currEffect = new EffectFindMe(0);
+        initFindMe();
         findMeMode = 1;
       } else {
         InitCurrMode();
@@ -80,8 +74,7 @@ void InitCurrMode() {
   // initialize current mode (called on mode change)
   switch(currMode) {
     case 0: // find me
-      delete currEffect;
-      currEffect = new EffectFindMe(0);
+      initFindMe();
       break;
     case 1:
     case 2:
@@ -94,27 +87,65 @@ void InitCurrMode() {
     case 9:
     case 10:
     case 11:
-      delete currEffect;
-      currEffect = new EffectSound(currMode);
+      initSound(currMode);
       break;
     case 12:
     case 13:
     case 14:
-      delete currEffect;
-      currEffect = new EffectRainbow(currMode-12);
+      initRainbow(currMode-12);
       break;
     case 15:
     case 16:
     case 17:
-      delete currEffect;
-      currEffect = new EffectRandom(currMode-15);
+      initRandom(currMode-15);
       break;
     case 18:
     case 19:
     case 20:
     case 21:
-      delete currEffect;
-      currEffect = new EffectKR(currMode-18);
+      initKR(currMode-18);
       break;
+  }
+}
+
+void LoopCurrMode() {
+  // loop current mode (called every frame)
+  if ( findMeMode == 0 ) {
+    switch(currMode) {
+      case 0: // find me
+        loopFindMe();
+        break;
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+      case 10:
+      case 11:
+        loopSound();
+        break;
+      case 12:
+      case 13:
+      case 14:
+        loopRainbow();
+        break;
+      case 15:
+      case 16:
+      case 17:
+        loopRandom();
+        break;
+      case 18:
+      case 19:
+      case 20:
+      case 21:
+        loopKR();
+        break;
+    }
+  } else {
+    loopFindMe();
   }
 }

@@ -1,11 +1,10 @@
 //mode 0: random pixels effect
 //mode 1: random color block sweep (iRandomWith wide block, one round per color)
 //mode 2: random color solid sweep (fill leds with one color, next color)
+#define RANDOM_WIDTH 4  // width of random color bar (mode 1)
 
-#include "zEffectClass.h"
-#include "Effect_Random.h"
-
-EffectRandom::EffectRandom(uint8_t _mode) : EffectClass(_mode) {
+void initRandom(uint8_t _mode) {
+  effectMode = _mode;
   currDelay = DELAY_SLOW;
   LEDS.setBrightness(NORMBRIGHT);
   randomSeed(analogRead(0));   // initialize random numbers
@@ -17,7 +16,7 @@ EffectRandom::EffectRandom(uint8_t _mode) : EffectClass(_mode) {
   }
 }
 
-void EffectRandom::step() {
+void loopRandom() {
 
   if(effectMode == 1 || effectMode == 2) {
     if(currFrame % NUM_LEDSPERROW == 0) {  // new color on new round
