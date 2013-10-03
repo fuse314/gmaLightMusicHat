@@ -12,60 +12,64 @@
 
 #include "zEffectClass.h"
 #include "Effect_Sound.h"
+#include "gmaLightMusicHat.h"
+#include "LEDColorMgt.h"
+#include "MSGEQ7Mgt.h"
+
 
 EffectSound::EffectSound(uint8_t _mode) : EffectClass(_mode) {
   currDelay = DELAY_NORMAL;
   LEDS.setBrightness(NORMBRIGHT);
-  if(effectMode == 3 || effectMode == 5) {
+  if(_effectMode == 3 || _effectMode == 5) {
     clearAllLeds();
   }
 }
 
-void EffectSound::step() {
+void EffectSound::step(uint16_t *_currFrame) {
   GetEQ7();
-  if(effectMode == 4) {
-    fill_rainbow( &(ledsrow[0]), NUM_LEDSPERROW, currFrame % 256);
+  if(_effectMode == 4) {
+    fill_rainbow( &(ledsrow[0]), NUM_LEDSPERROW, *_currFrame % 256);
     paintAllRows(ledsrow);
   }
-  if(effectMode == 9) {
+  if(_effectMode == 9) {
     solidColorLedsRow(CRGB(0,0,128)); // blue base color
   }
   
   CRGB theColor;
-  switch (effectMode) {
+  switch (_effectMode) {
     case 1:
     case 2:
     case 4:
     case 7:
     case 8:
     case 9:
-      if(effectMode != 9) {
+      if(_effectMode != 9) {
         clearRowLeds();
       }
-      if(effectMode == 1 || effectMode == 2 || effectMode == 4) {
-        theColor = getEQColor();
+      if(_effectMode == 1 || _effectMode == 2 || _effectMode == 4) {
+        theColor = GetEQColor();
       }
-      if(effectMode == 9) {
+      if(_effectMode == 9) {
         theColor = CRGB(255,0,0); // red bar
       }
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         if(eq7Volumes[i] >= NOISE_LVL) {
-          if(effectMode == 7) {  // color depending on volume from blue(512) to red(767)
+          if(_effectMode == 7) {  // color depending on volume from blue(512) to red(767)
             theColor = Wheel(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 512, 767));
           }
-          if(effectMode == 8) {  // color depending on volume from green(256) to blue(511)
+          if(_effectMode == 8) {  // color depending on volume from green(256) to blue(511)
             theColor = Wheel(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 256, 511));
           }
           uint8_t soundlvl = map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 1, NUM_LEDSPERHALFROW);
           for(uint8_t j=0; j<soundlvl; j++) {
-            if(effectMode == 2) {
-              ledsrow[j] = Wheel(currFrame);
+            if(_effectMode == 2) {
+              ledsrow[j] = Wheel(*_currFrame);
             } else {
               ledsrow[j] = theColor;  // idea: dim lights from the middle in higher volumes... something with .nscale8(0-255);
             }
           }
         }
-        if(effectMode == 4) {
+        if(_effectMode == 4) {
           showMirrored(i, ledsrow, 1);  // merge with current line content
         } else {
           showMirrored(i, ledsrow, 0);  // overwrite with content
@@ -73,17 +77,17 @@ void EffectSound::step() {
       }
       break;
     case 3:
-      solidColor(getEQColor());
+      solidColor(GetEQColor());
       break;
     case 5:
-      theColor = getEQColor();
+      theColor = GetEQColor();
       dimLeds();
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         leds[getLedIndex(i,currFrame)] = theColor;
       }
       break;
     case 6:
-      theColor = getEQColor();
+      theColor = GetEQColor();
       shiftLEDs(1);
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         leds[getLedIndex(i,NUM_LEDSPERROW-1)] = theColor;
@@ -93,10 +97,10 @@ void EffectSound::step() {
     case 11:
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         if(eq7Volumes[i] >= NOISE_LVL) {
-          if(effectMode == 10) {
+          if(_effectMode == 10) {
             theColor = CRGB(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 0, 255),0,0);  // red, dependent on volume
           } else {
-            if(effectMode == 11) {            //      from green(256) to blue(511)  , dim from 0-255 depending on volume
+            if(_effectMode == 11) {            //      from green(256) to blue(511)  , dim from 0-255 depending on volume
               theColor = Wheel(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 256, 511)).nscale8(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 0, 255));
             }
           }

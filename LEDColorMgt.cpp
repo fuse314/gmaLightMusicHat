@@ -1,3 +1,5 @@
+#include "gmaLightMusicHat.h"
+#include "LEDColorMgt.h"
 
 CRGB Wheel(uint16_t _wheelPos)
 {

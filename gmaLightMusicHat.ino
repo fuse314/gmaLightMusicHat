@@ -13,44 +13,23 @@
   
 */
 
-//uncomment this for debug over serial port
-//#define SerialDebug
+
+#include "gmaLightMusicHat.h"
+#include "LEDColorMgt.h"
+#include "MSGEQ7Mgt.h"
+#include "ModeButtonMgt.h"
+
+// LED stuff
+#include <FastSPI_LED2.h>
 
 #ifdef SerialDebug
 #include <Streaming.h>
 #endif
 
-// LED stuff
-#include <FastSPI_LED2.h>
-
-// 38 LEDs * 3
-// configuration:
-//   ==> 76 77 78 79 .. 112 113
-//   <== 75 74 73 72 ..  39  38
-//   ==>  0  1  2  3 ..  36  37
-// this is due to cabling (shorter wires) and removability (LEDs are mounted with velcro strip)
-#define NUM_LEDS 114
-#define NUM_ROWS 3
-#define NUM_LEDSPERROW 38
-uint8_t NUM_LEDSPERHALFROW = NUM_LEDSPERROW / 2;
-
 //struct CRGB { unsigned char g; unsigned char r; unsigned char b; };
 CRGB leds[NUM_LEDS];
 CRGB ledsrow[NUM_LEDSPERROW];  // used for mirrored effects and one-row-for-all effects
-CRGB currColor;
-#define LED_PIN 11
-
-#define NORMBRIGHT 40  // maximum brightness of leds (0-255)
-#define MAXBRIGHT 120  // used for "find me" mode
-
-#define DIMSPEED 15    // the higher the slower...
-
-//MSGEQ7 stuff
-#define EQ7STROBE_PIN 7
-#define EQ7RESET_PIN 8
-#define EQ7IN_PIN A1
-#define NOISE_LVL 100     // noise cutoff value
-#define MAX_LVL 1023      // maximum volume value
+//CRGB currColor;
 
 uint16_t eq7Values[7];
 // [0], [1], [2],  [3],  [4],  [5],   [6]
@@ -58,38 +37,18 @@ uint16_t eq7Values[7];
 uint16_t eq7Volumes[3];
 // 0 = low tones, 1 = mid tones, 3 = high tones
 
-//button stuff
-
-#define DEBOUNCE_TIME 150
-#define UPBUTTON_PIN 2  //interrupt 0
-volatile uint8_t upButtonPressed = 0;
-volatile uint32_t lastUpButtonPressed = 0;
-
-#define FINDMEBUTTON_PIN 3  //interrupt 1
-volatile uint8_t findMeButtonPressed = 0;
-volatile uint32_t lastFindMeButtonPressed = 0;
-
-//effect stuff
-#include "zEffectClass.h"
-#include "Effect_Random.h"  // only include first effect for setup()
+volatile uint8_t upButtonPressed;
+volatile uint32_t lastUpButtonPressed;
+volatile uint8_t findMeButtonPressed;
+volatile uint32_t lastFindMeButtonPressed;
 EffectClass *currEffect;
 uint8_t currMode;
-uint16_t currFrame = 0;
-uint8_t effectMode; // used in effects
-
-
-#define DELAY_NORMAL 7
-#define DELAY_FAST 4
-#define DELAY_SLOW 18
-#define DELAY_KR 25
+uint16_t currFrame;
 uint8_t currDelay;
-uint8_t todoDelay = 0;
-uint8_t findMeMode = 0;
-
-//auto mode change stuff
-uint8_t autoModeChange = 1;  // start in auto mode change mode
-#define AUTOMODE_CHANGE 60000  // change every 60 seconds
-uint32_t lastAutoModeChangeTime = 0;
+uint8_t todoDelay;
+uint8_t findMeMode;
+uint8_t autoModeChange;
+uint32_t lastAutoModeChangeTime;
 
 
 void setup()
@@ -104,6 +63,11 @@ void setup()
   InitEQ7();
   
   //button stuff
+  upButtonPressed = 0;
+  lastUpButtonPressed = 0;
+  findMeButtonPressed = 0;
+  lastFindMeButtonPressed = 0;
+  
   pinMode(UPBUTTON_PIN, INPUT);
   digitalWrite(UPBUTTON_PIN, HIGH);  // pullup resistor
   attachInterrupt(0, UpButtonInterruptHandler, FALLING);
@@ -112,7 +76,12 @@ void setup()
   attachInterrupt(1, FindMeButtonInterruptHandler, FALLING);
   
   //mode stuff
-  currMode = 15 // start with random effect 0
+  currFrame = 0;
+  todoDelay = 0;
+  findMeMode = 0;
+  autoModeChange = 1;
+  lastAutoModeChangeTime = 0;
+  currMode = 15; // start with random effect 0
   InitCurrMode();
   
   #ifdef SerialDebug
@@ -132,7 +101,7 @@ void loop() {
     todoDelay = currDelay;
     
     // call effect loop
-    currEffect->step();
+    currEffect->step(&currFrame);
     //LoopCurrMode();
     // push pixels to led strip
     LEDS.show();
@@ -144,7 +113,7 @@ void loop() {
     
     #ifdef SerialDebug
       if(currFrame % 200 == 0) {
-        Serial << "m=" << currMode << " r=" << freeRam << endl;
+        Serial << "m=" << currMode << " r=" << freeRam() << endl;
       }
     #endif
     

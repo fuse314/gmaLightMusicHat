@@ -1,3 +1,7 @@
+#include "MSGEQ7Mgt.h"
+#include "gmaLightMusicHat.h"
+
+
 void InitEQ7() {
   pinMode(EQ7IN_PIN, INPUT);
   pinMode(EQ7STROBE_PIN, OUTPUT);
@@ -27,7 +31,7 @@ void GetEQ7() {
   eq7Volumes[2] = max(eq7Values[5], max(eq7Values[6], eq7Values[7]));
 }
 
-CRGB getEQColor() {
+CRGB GetEQColor() {
   CRGB ret;
   if(eq7Volumes[2] <= NOISE_LVL) {   // low tones are green
     ret.g = 0;

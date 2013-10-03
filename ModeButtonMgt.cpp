@@ -1,3 +1,5 @@
+#include "ModeButtonMgt.h"
+#include "gmaLightMusicHat.h"
 #include "Effect_FindMe.h"
 #include "Effect_KR.h"
 #include "Effect_Rainbow.h"
@@ -47,8 +49,6 @@ void FindMeButtonInterruptHandler() {   // interrupt handler function
     lastFindMeButtonPressed = millis();
   }
 }
-
-#define MAX_MODE 21       // maximum number of modes
 
 void ChangeMode(uint8_t _modeUp) {
   // change mode up or down, never go to mode 0 (find me), has its own button
