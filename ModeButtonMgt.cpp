@@ -8,32 +8,36 @@
 
 void CheckButton() {
   if(upButtonPressed == 1) {
+    #ifndef ALWAYSAUTO
     if(autoModeChange == 1) {  // exit auto mode change on button press
       autoModeChange = 0;
     }
+    #endif
     ChangeMode(1);
     upButtonPressed = 0;
   }
-  if(findMeMode == 1 && millis() - lastFindMeButtonPressed >= 2000) { // check every 2 seconds if we missed a interrupt event and have to disable find me mode...
-    if(digitalRead(FINDMEBUTTON_PIN) == HIGH) {  // active = low
-      InitCurrMode();
-      findMeMode = 0;
-      findMeButtonPressed = 0;
-    }
-    lastFindMeButtonPressed = millis();
-  } else {
-    if(findMeButtonPressed == 1) {
-      if(digitalRead(FINDMEBUTTON_PIN) == LOW) {  // active = low
-        delete currEffect;
-        currEffect = new EffectFindMe(0);
-        findMeMode = 1;
-      } else {
+  #ifndef NOFINDME
+    if(findMeMode == 1 && millis() - lastFindMeButtonPressed >= 2000) { // check every 2 seconds if we missed a interrupt event and have to disable find me mode...
+      if(digitalRead(FINDMEBUTTON_PIN) == HIGH) {  // active = low
         InitCurrMode();
         findMeMode = 0;
+        findMeButtonPressed = 0;
       }
-      findMeButtonPressed = 0;
+      lastFindMeButtonPressed = millis();
+    } else {
+      if(findMeButtonPressed == 1) {
+        if(digitalRead(FINDMEBUTTON_PIN) == LOW) {  // active = low
+          delete currEffect;
+          currEffect = new EffectFindMe(0);
+          findMeMode = 1;
+        } else {
+          InitCurrMode();
+          findMeMode = 0;
+        }
+        findMeButtonPressed = 0;
+      }
     }
-  }
+  #endif
 }
 
 void UpButtonInterruptHandler() {   // interrupt handler function
@@ -44,10 +48,12 @@ void UpButtonInterruptHandler() {   // interrupt handler function
 }
 
 void FindMeButtonInterruptHandler() {   // interrupt handler function
-  if(millis() - lastFindMeButtonPressed >= DEBOUNCE_TIME) {
-    findMeButtonPressed = 1;
-    lastFindMeButtonPressed = millis();
-  }
+  #ifndef NOFINDME
+    if(millis() - lastFindMeButtonPressed >= DEBOUNCE_TIME) {
+      findMeButtonPressed = 1;
+      lastFindMeButtonPressed = millis();
+    }
+  #endif
 }
 
 void ChangeMode(uint8_t _modeUp) {

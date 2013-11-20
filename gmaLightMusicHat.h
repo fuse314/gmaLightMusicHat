@@ -48,9 +48,14 @@ extern uint16_t eq7Volumes[3];
 extern volatile uint8_t upButtonPressed;
 extern volatile uint32_t lastUpButtonPressed;
 
-#define FINDMEBUTTON_PIN 3  //interrupt 1
-extern volatile uint8_t findMeButtonPressed;
-extern volatile uint32_t lastFindMeButtonPressed;
+// FINDME or not FINDME
+#define NOFINDME
+
+#ifndef NOFINDME
+  #define FINDMEBUTTON_PIN 3  //interrupt 1
+  extern volatile uint8_t findMeButtonPressed;
+  extern volatile uint32_t lastFindMeButtonPressed;
+#endif
 
 //effect stuff
 #include "zEffectClass.h"
@@ -74,7 +79,8 @@ extern uint8_t findMeMode;
 extern uint8_t autoModeChange;  // start in auto mode change mode
 #define AUTOMODE_CHANGE 60000  // change every 60 seconds
 extern uint32_t lastAutoModeChangeTime;
-
+// next line controls if auto mode change stays always on
+#define ALWAYSAUTO
 
 #ifdef SerialDebug
 int freeRam ();  // function returns distance between stack and heap (available ram)

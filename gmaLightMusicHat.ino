@@ -39,8 +39,10 @@ uint16_t eq7Volumes[3];
 
 volatile uint8_t upButtonPressed;
 volatile uint32_t lastUpButtonPressed;
-volatile uint8_t findMeButtonPressed;
-volatile uint32_t lastFindMeButtonPressed;
+#ifndef NOFINDME
+  volatile uint8_t findMeButtonPressed;
+  volatile uint32_t lastFindMeButtonPressed;
+#endif
 EffectClass *currEffect;
 uint8_t currMode;
 uint16_t currFrame;
@@ -65,16 +67,20 @@ void setup()
   //button stuff
   upButtonPressed = 0;
   lastUpButtonPressed = 0;
-  findMeButtonPressed = 0;
-  lastFindMeButtonPressed = 0;
+  #ifndef NOFINDME
+    findMeButtonPressed = 0;
+    lastFindMeButtonPressed = 0;
+  #endif
   
   pinMode(UPBUTTON_PIN, INPUT);
   digitalWrite(UPBUTTON_PIN, HIGH);  // pullup resistor
   attachInterrupt(0, UpButtonInterruptHandler, FALLING);
-  pinMode(FINDMEBUTTON_PIN, INPUT);
-  digitalWrite(FINDMEBUTTON_PIN, HIGH);  // pullup resistor
-  attachInterrupt(1, FindMeButtonInterruptHandler, FALLING);
-  
+  #ifndef NOFINDME
+    pinMode(FINDMEBUTTON_PIN, INPUT);
+    digitalWrite(FINDMEBUTTON_PIN, HIGH);  // pullup resistor
+    attachInterrupt(1, FindMeButtonInterruptHandler, FALLING);
+  #endif  
+
   //mode stuff
   currFrame = 0;
   todoDelay = 0;
