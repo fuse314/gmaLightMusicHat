@@ -3,7 +3,7 @@
   using MSGEQ7 chip and microphone to react to music
   (c) 2013 by Gottfried Mayer www.gma.name
   
-  Uses FastSPI_LED2 (rc3) to control WS2811 controller chips
+  Uses FastLED to control WS2811 controller chips
   
   Inspiration from here:
   http://www.macetech.com/blog/node/118
@@ -20,7 +20,7 @@
 #include "ModeButtonMgt.h"
 
 // LED stuff
-#include <FastSPI_LED2.h>
+#include <FastLED.h>
 
 #ifdef SerialDebug
 #include <Streaming.h>
@@ -55,7 +55,7 @@ uint32_t lastAutoModeChangeTime;
 
 void setup()
 {
-  //FastSPI_LED2 rc1 library
+  //FastLED library
   LEDS.addLeds<WS2811, LED_PIN, GRB>(leds, NUM_LEDS);
   clearAllLeds();
   clearRowLeds();
