@@ -2,7 +2,7 @@
 #define MYCONFIG_H
 
 #include <Arduino.h>
-#include <FastSPI_LED2.h>
+#include <FastLED.h>
 
 //uncomment this for debug over serial port
 #define SerialDebug

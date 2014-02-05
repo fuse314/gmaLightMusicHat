@@ -1,7 +1,7 @@
 #ifndef EFFECTCLASS_H
 #define EFFECTCLASS_H
 #include <Arduino.h>
-#include <FastSPI_LED2.h>
+#include <FastLED.h>
 
 // abstract class EffectClass to be inherited by different Effects
 class EffectClass {

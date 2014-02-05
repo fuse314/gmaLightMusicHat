@@ -2,7 +2,7 @@
 #define LEDCOLORMGT_H
 
 #include <Arduino.h>
-#include <FastSPI_LED2.h>
+#include <FastLED.h>
 
 CRGB Wheel(uint16_t _wheelPos);
 void showMirrored( uint8_t _row, CRGB* _halfleds, uint8_t _merge );
