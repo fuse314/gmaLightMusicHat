@@ -1,5 +1,5 @@
 #include "MSGEQ7Mgt.h"
-#include "gmaLightMusicHat.h"
+#include "gmaLightCommon.h"
 
 
 void InitEQ7() {
@@ -11,7 +11,7 @@ void InitEQ7() {
   digitalWrite(EQ7STROBE_PIN, HIGH);
 }
 
-void GetEQ7() {
+void GetEQ7(Config_t *_cnf) {
   digitalWrite(EQ7RESET_PIN, HIGH);
   digitalWrite(EQ7RESET_PIN, LOW);
   
@@ -19,34 +19,34 @@ void GetEQ7() {
   {
     digitalWrite(EQ7STROBE_PIN, LOW);
     delayMicroseconds(30); // to allow analog signal to settle
-    eq7Values[i] = analogRead(EQ7IN_PIN); 
+    _cnf->eq7Values[i] = analogRead(EQ7IN_PIN); 
     digitalWrite(EQ7STROBE_PIN, HIGH);
   }
   
   digitalWrite(EQ7RESET_PIN, LOW);
   digitalWrite(EQ7STROBE_PIN, HIGH);
   
-  eq7Volumes[0] = max(eq7Values[0], max(eq7Values[1], eq7Values[2]));
-  eq7Volumes[1] = max(eq7Values[3], eq7Values[4]);
-  eq7Volumes[2] = max(eq7Values[5], max(eq7Values[6], eq7Values[7]));
+  _cnf->eq7Volumes[0] = max(_cnf->eq7Values[0], max(_cnf->eq7Values[1], _cnf->eq7Values[2]));
+  _cnf->eq7Volumes[1] = max(_cnf->eq7Values[3], _cnf->eq7Values[4]);
+  _cnf->eq7Volumes[2] = max(_cnf->eq7Values[5], max(_cnf->eq7Values[6], _cnf->eq7Values[7]));
 }
 
-CRGB GetEQColor() {
+CRGB GetEQColor(Config_t *_cnf) {
   CRGB ret;
-  if(eq7Volumes[2] <= NOISE_LVL) {   // low tones are green
+  if(_cnf->eq7Volumes[2] <= NOISE_LVL) {   // low tones are green
     ret.g = 0;
   } else {
-    ret.g = map(eq7Volumes[2], NOISE_LVL, MAX_LVL, 1, 255);
+    ret.g = map(_cnf->eq7Volumes[2], NOISE_LVL, MAX_LVL, 1, 255);
   }
-  if(eq7Volumes[1] <= NOISE_LVL) {   // mid tones are red
+  if(_cnf->eq7Volumes[1] <= NOISE_LVL) {   // mid tones are red
     ret.r = 0;
   } else {
-    ret.r = map(eq7Volumes[1], NOISE_LVL, MAX_LVL, 1, 255);
+    ret.r = map(_cnf->eq7Volumes[1], NOISE_LVL, MAX_LVL, 1, 255);
   }
-  if(eq7Volumes[0] <= NOISE_LVL) {   // high tones are blue
+  if(_cnf->eq7Volumes[0] <= NOISE_LVL) {   // high tones are blue
     ret.b = 0;
   } else {
-    ret.b = map(eq7Volumes[0], NOISE_LVL, MAX_LVL, 1, 255);
+    ret.b = map(_cnf->eq7Volumes[0], NOISE_LVL, MAX_LVL, 1, 255);
   }
   return ret;
 }

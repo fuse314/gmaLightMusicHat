@@ -14,6 +14,7 @@ void shiftLEDs( int8_t _distance );
 uint16_t getLedIndex( uint8_t _row, uint16_t _rowindex);
 uint16_t getKRLedIndex( uint8_t _row, uint16_t _rowindex, uint8_t _width);
 void dimLeds();
+CRGB HeatColor(uint8_t _temperature);
 void clearAllLeds();
 void clearRowLeds();
 

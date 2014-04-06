@@ -4,25 +4,25 @@
 
 #include "Effect_Rainbow.h"
 #include "LEDColorMgt.h"
-#include "gmaLightMusicHat.h"
+#include "gmaLightCommon.h"
 
-EffectRainbow::EffectRainbow(uint8_t _mode) : EffectClass(_mode) {
-  currDelay = DELAY_FAST;
+EffectRainbow::EffectRainbow(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
+  _cnf->currDelay = DELAY_FAST;
   LEDS.setBrightness(NORMBRIGHT);
   clearAllLeds();
 }
 
-void EffectRainbow::step(uint16_t *_currFrame) {
+void EffectRainbow::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
   switch(_effectMode) {
     case 0:
-      fill_rainbow( &(ledsrow[0]), NUM_LEDSPERROW, *_currFrame % 256);
-      paintAllRows(ledsrow);
+      fill_rainbow( &(_ledsrow[0]), NUM_LEDSPERROW, _cnf->currFrame % 256);
+      paintAllRows(_ledsrow);
       break;
     case 1:
-      solidColor(Wheel(*_currFrame));
+      solidColor(Wheel(_cnf->currFrame));
       break;
     case 2:
-      fill_rainbow( &(leds[0]), NUM_LEDS, *_currFrame % 256);
+      fill_rainbow( &(_leds[0]), NUM_LEDS, _cnf->currFrame % 256);
       break;
   }
 }

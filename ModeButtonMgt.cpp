@@ -5,6 +5,7 @@
 #include "Effect_Rainbow.h"
 #include "Effect_Random.h"
 #include "Effect_Sound.h"
+#include "Effect_Fire.h"
 
 void CheckButton() {
   if(upButtonPressed == 1) {
@@ -77,7 +78,7 @@ void CheckAutoModeChange() {
   // auto mode change every AUTOMODE_CHANGE milliseconds, choose random mode
   if(findMeMode == 0 &&  millis() > AUTOMODE_CHANGE && millis() - lastAutoModeChangeTime > AUTOMODE_CHANGE) {
     lastAutoModeChangeTime = millis();
-    currMode = random(0, MAX_MODE) + 1; // random number including 0, excluding MAX_MODE
+    currMode = random8(MAX_MODE) + 1; // random number including 0, excluding MAX_MODE
     InitCurrMode();
   }
 }
@@ -87,7 +88,7 @@ void InitCurrMode() {
   switch(currMode) {
     case 0: // find me
       delete currEffect;
-      currEffect = new EffectFindMe(0);
+      currEffect = new EffectFindMe(0, &cnf);
       break;
     case 1:
     case 2:
@@ -101,26 +102,31 @@ void InitCurrMode() {
     case 10:
     case 11:
       delete currEffect;
-      currEffect = new EffectSound(currMode);
+      currEffect = new EffectSound(currMode, &cnf);
       break;
     case 12:
     case 13:
     case 14:
       delete currEffect;
-      currEffect = new EffectRainbow(currMode-12);
+      currEffect = new EffectRainbow(currMode-12, &cnf);
       break;
     case 15:
     case 16:
     case 17:
       delete currEffect;
-      currEffect = new EffectRandom(currMode-15);
+      currEffect = new EffectRandom(currMode-15, &cnf);
       break;
     case 18:
     case 19:
     case 20:
     case 21:
       delete currEffect;
-      currEffect = new EffectKR(currMode-18);
+      currEffect = new EffectKR(currMode-18, &cnf);
+      break;
+    case 22:
+    case 23:
+      delete currEffect;
+      currEffect = new EffectFire(currMode-22, &cnf);
       break;
   }
 }

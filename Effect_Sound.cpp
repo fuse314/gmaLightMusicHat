@@ -12,24 +12,24 @@
 
 #include "zEffectClass.h"
 #include "Effect_Sound.h"
-#include "gmaLightMusicHat.h"
+#include "gmaLightCommon.h"
 #include "LEDColorMgt.h"
 #include "MSGEQ7Mgt.h"
 
 
-EffectSound::EffectSound(uint8_t _mode) : EffectClass(_mode) {
-  currDelay = DELAY_NORMAL;
+EffectSound::EffectSound(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
+  _cnf->currDelay = DELAY_NORMAL;
   LEDS.setBrightness(NORMBRIGHT);
   if(_effectMode == 3 || _effectMode == 5) {
     clearAllLeds();
   }
 }
 
-void EffectSound::step(uint16_t *_currFrame) {
-  GetEQ7();
+void EffectSound::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
+  GetEQ7(_cnf);
   if(_effectMode == 4) {
-    fill_rainbow( &(ledsrow[0]), NUM_LEDSPERROW, *_currFrame % 256);
-    paintAllRows(ledsrow);
+    fill_rainbow( &(_ledsrow[0]), NUM_LEDSPERROW, _cnf->currFrame % 256);
+    paintAllRows(_ledsrow);
   }
   if(_effectMode == 9) {
     solidColorLedsRow(CRGB(0,0,128)); // blue base color
@@ -47,61 +47,61 @@ void EffectSound::step(uint16_t *_currFrame) {
         clearRowLeds();
       }
       if(_effectMode == 1 || _effectMode == 2 || _effectMode == 4) {
-        theColor = GetEQColor();
+        theColor = GetEQColor(_cnf);
       }
       if(_effectMode == 9) {
         theColor = CRGB(255,0,0); // red bar
       }
       for(uint8_t i=0; i<NUM_ROWS; i++) {
-        if(eq7Volumes[i] >= NOISE_LVL) {
+        if(_cnf->eq7Volumes[i] >= NOISE_LVL) {
           if(_effectMode == 7) {  // color depending on volume from blue(512) to red(767)
-            theColor = Wheel(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 512, 767));
+            theColor = Wheel(map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 512, 767));
           }
           if(_effectMode == 8) {  // color depending on volume from green(256) to blue(511)
-            theColor = Wheel(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 256, 511));
+            theColor = Wheel(map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 256, 511));
           }
-          uint8_t soundlvl = map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 1, NUM_LEDSPERHALFROW);
+          uint8_t soundlvl = map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 1, NUM_LEDSPERHALFROW);
           for(uint8_t j=0; j<soundlvl; j++) {
             if(_effectMode == 2) {
-              ledsrow[j] = Wheel(*_currFrame);
+              _ledsrow[j] = Wheel(_cnf->currFrame);
             } else {
-              ledsrow[j] = theColor;  // idea: dim lights from the middle in higher volumes... something with .nscale8(0-255);
+              _ledsrow[j] = theColor;  // idea: dim lights from the middle in higher volumes... something with .nscale8(0-255);
             }
           }
         }
         if(_effectMode == 4) {
-          showMirrored(i, ledsrow, 1);  // merge with current line content
+          showMirrored(i, _ledsrow, 1);  // merge with current line content
         } else {
-          showMirrored(i, ledsrow, 0);  // overwrite with content
+          showMirrored(i, _ledsrow, 0);  // overwrite with content
         }
       }
       break;
     case 3:
-      solidColor(GetEQColor());
+      solidColor(GetEQColor(_cnf));
       break;
     case 5:
-      theColor = GetEQColor();
+      theColor = GetEQColor(_cnf);
       dimLeds();
       for(uint8_t i=0; i<NUM_ROWS; i++) {
-        leds[getLedIndex(i,currFrame)] = theColor;
+        _leds[getLedIndex(i,_cnf->currFrame)] = theColor;
       }
       break;
     case 6:
-      theColor = GetEQColor();
+      theColor = GetEQColor(_cnf);
       shiftLEDs(1);
       for(uint8_t i=0; i<NUM_ROWS; i++) {
-        leds[getLedIndex(i,NUM_LEDSPERROW-1)] = theColor;
+        _leds[getLedIndex(i,NUM_LEDSPERROW-1)] = theColor;
       }
       break;
     case 10:
     case 11:
       for(uint8_t i=0; i<NUM_ROWS; i++) {
-        if(eq7Volumes[i] >= NOISE_LVL) {
+        if(_cnf->eq7Volumes[i] >= NOISE_LVL) {
           if(_effectMode == 10) {
-            theColor = CRGB(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 0, 255),0,0);  // red, dependent on volume
+            theColor = CRGB(map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 0, 255),0,0);  // red, dependent on volume
           } else {
             if(_effectMode == 11) {            //      from green(256) to blue(511)  , dim from 0-255 depending on volume
-              theColor = Wheel(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 256, 511)).nscale8(map(eq7Volumes[i], NOISE_LVL, MAX_LVL, 0, 255));
+              theColor = Wheel(map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 256, 511)).nscale8(map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 0, 255));
             }
           }
         } else {

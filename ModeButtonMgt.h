@@ -4,7 +4,7 @@
 void CheckButton();
 void UpButtonInterruptHandler();
 void FindMeButtonInterruptHandler();
-#define MAX_MODE 21       // maximum number of modes
+#define MAX_MODE 23       // maximum number of modes
 void ChangeMode(uint8_t _modeUp);
 void CheckAutoModeChange();
 void InitCurrMode();

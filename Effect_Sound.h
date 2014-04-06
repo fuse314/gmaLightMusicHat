@@ -3,7 +3,7 @@
 
 class EffectSound : public EffectClass {
   public:
-  EffectSound( uint8_t _mode);
-  void step(uint16_t *_currFrame);
+  EffectSound(uint8_t _mode, Config_t *_cnf);
+  void step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow);
 };
 #endif

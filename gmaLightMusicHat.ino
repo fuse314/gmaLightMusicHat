@@ -18,6 +18,7 @@
 #include "LEDColorMgt.h"
 #include "MSGEQ7Mgt.h"
 #include "ModeButtonMgt.h"
+#include "zEffectClass.h"
 
 // LED stuff
 #include <FastLED.h>
@@ -31,11 +32,6 @@ CRGB leds[NUM_LEDS];
 CRGB ledsrow[NUM_LEDSPERROW];  // used for mirrored effects and one-row-for-all effects
 //CRGB currColor;
 
-uint16_t eq7Values[7];
-// [0], [1], [2],  [3],  [4],  [5],   [6]
-//  63, 160, 400, 1000, 2500, 6250, 16000 Hz
-uint16_t eq7Volumes[3];
-// 0 = low tones, 1 = mid tones, 3 = high tones
 
 volatile uint8_t upButtonPressed;
 volatile uint32_t lastUpButtonPressed;
@@ -44,14 +40,13 @@ volatile uint32_t lastUpButtonPressed;
   volatile uint32_t lastFindMeButtonPressed;
 #endif
 EffectClass *currEffect;
+
 uint8_t currMode;
-uint16_t currFrame;
-uint8_t currDelay;
-uint8_t todoDelay;
 uint8_t findMeMode;
 uint8_t autoModeChange;
 uint32_t lastAutoModeChangeTime;
 
+Config_t cnf;
 
 void setup()
 {
@@ -82,12 +77,11 @@ void setup()
   #endif  
 
   //mode stuff
-  currFrame = 0;
-  todoDelay = 0;
+  cnf.currFrame = 0;
   findMeMode = 0;
   autoModeChange = 1;
   lastAutoModeChangeTime = 0;
-  currMode = 15; // start with random effect 0
+  currMode = 22; // fire :)  //15; // start with random effect 0
   InitCurrMode();
   
   #ifdef SerialDebug
@@ -98,36 +92,29 @@ void setup()
 }
 
 void loop() {
-  if(todoDelay > 0) {
-    // count down todoDelay until 0
-    todoDelay--;
-    delay(1);
-  } else {
-    // time for the next frame
-    todoDelay = currDelay;
-    
-    // call effect loop
-    currEffect->step(&currFrame);
-    //LoopCurrMode();
-    // push pixels to led strip
-    LEDS.show();
-    // increment currFrame after effect loop - this variable may roll over
-    currFrame++;
-    
-    // check if any buttons have been pressed
-    CheckButton();
-    
-    #ifdef SerialDebug
-      if(currFrame % 200 == 0) {
-        Serial << "m=" << currMode << " r=" << freeRam() << endl;
-      }
-    #endif
-    
-    // only check random mode change every currDelay*150 milliseconds, default 1050 ms (one second)
-    if(autoModeChange == 1 && currFrame % 150 == 0) {
-      CheckAutoModeChange();
+  
+  // call effect loop
+  currEffect->step(&cnf, leds, ledsrow);
+  //LoopCurrMode();
+  // push pixels to led strip
+  LEDS.show();
+  // increment currFrame after effect loop - this variable may roll over
+  cnf.currFrame++;
+  
+  // check if any buttons have been pressed
+  CheckButton();
+  
+  #ifdef SerialDebug
+    if(cnf.currFrame % 200 == 0) {
+      Serial << "m=" << currMode << " d=" << cnf.currDelay << " r=" << freeRam() << endl;
     }
+  #endif
+  
+  // only check random mode change every currDelay*150 milliseconds, default 1050 ms (one second)
+  if(autoModeChange == 1 && cnf.currFrame % 150 == 0) {
+    CheckAutoModeChange();
   }
+  FastLED.delay(cnf.currDelay);
 }
 
 

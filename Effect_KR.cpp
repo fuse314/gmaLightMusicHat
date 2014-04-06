@@ -5,10 +5,10 @@
 
 #include "Effect_KR.h"
 #include "LEDColorMgt.h"
-#include "gmaLightMusicHat.h"
+#include "gmaLightCommon.h"
 
-EffectKR::EffectKR(uint8_t _mode) : EffectClass(_mode) {
-  currDelay = DELAY_KR;
+EffectKR::EffectKR(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode, _cnf) {
+  _cnf->currDelay = DELAY_KR;
   LEDS.setBrightness(NORMBRIGHT);
   KR_WIDTH = 9;
   switch(_effectMode) {
@@ -24,28 +24,28 @@ EffectKR::EffectKR(uint8_t _mode) : EffectClass(_mode) {
   }
 }
 
-void EffectKR::step(uint16_t *_currFrame) {
+void EffectKR::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
   clearAllLeds();
   if(_effectMode = 3) {
-    _currColor = Wheel(*_currFrame);
+    _currColor = Wheel(_cnf->currFrame);
   }
   for(uint8_t i=0; i<NUM_ROWS; i++) {
-    uint16_t startIndex = getKRLedIndex(i, currFrame, KR_WIDTH);
+    uint16_t startIndex = getKRLedIndex(i, _cnf->currFrame, KR_WIDTH);
     uint16_t endIndex;
     if(i%2==0) {
       endIndex = startIndex + KR_WIDTH;
       for(uint16_t j=startIndex; j<endIndex; j++) {
         if(j==startIndex || j==endIndex-1) { // fade edges for better effect
-          leds[j] = _currColor - CRGB(128,128,128);
+          _leds[j] = _currColor - CRGB(128,128,128);
         } else {
-          leds[j] = _currColor;
+          _leds[j] = _currColor;
         }
       }
     } else {
       startIndex += 1;
       endIndex = startIndex - KR_WIDTH;
       for(uint16_t j=endIndex; j<startIndex; j++) {
-        leds[j] = _currColor;
+        _leds[j] = _currColor;
       }
     }
   }
