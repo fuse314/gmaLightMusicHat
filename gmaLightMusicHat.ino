@@ -101,6 +101,10 @@ void loop() {
   // increment currFrame after effect loop - this variable may roll over
   cnf.currFrame++;
   
+  if(cnf.currFrame % 150 == 0) {
+    random16_add_entropy(analogRead(0));   // re-initialize random numbers
+  }
+  
   // check if any buttons have been pressed
   CheckButton();
   

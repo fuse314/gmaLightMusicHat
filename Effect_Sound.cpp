@@ -81,7 +81,7 @@ void EffectSound::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
       break;
     case 5:
       theColor = GetEQColor(_cnf);
-      dimLeds();
+      dimLeds(DIMSPEED,1);
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         _leds[getLedIndex(i,_cnf->currFrame)] = theColor;
       }

@@ -135,13 +135,16 @@ uint16_t getKRLedIndex( uint8_t _row, uint16_t _rowindex, uint8_t _width) {
   return getLedIndex(_row, ret);
 }
 
-void dimLeds() {
-  // dim contents of all leds by DIMSPEED
-  for(uint16_t i=0; i<NUM_LEDS; i++) {
-    leds[i].fadeToBlackBy(DIMSPEED);
-    //if(leds[i].r > DIMSPEED) { leds[i].r -= leds[i].r / DIMSPEED; } else { if(leds[i].r > 0) leds[i].r--; }
-    //if(leds[i].g > DIMSPEED) { leds[i].g -= leds[i].g / DIMSPEED; } else { if(leds[i].g > 0) leds[i].g--; }
-    //if(leds[i].b > DIMSPEED) { leds[i].b -= leds[i].b / DIMSPEED; } else { if(leds[i].b > 0) leds[i].b--; }
+void dimLeds(uint8_t _dimspeed, uint8_t _random) {
+  // dim contents of all leds by _dimspeed
+  if(_random == 0) {
+    for(uint16_t i=0; i<NUM_LEDS; i++) {
+      leds[i].fadeToBlackBy(_dimspeed);
+    }
+  } else {
+    for(uint16_t i=0; i<NUM_LEDS; i++) {
+      leds[i].fadeToBlackBy(random8(_dimspeed,qadd8(_dimspeed,_dimspeed)));
+    }
   }
 }
 

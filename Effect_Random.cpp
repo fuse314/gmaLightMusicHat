@@ -11,7 +11,6 @@ EffectRandom::EffectRandom(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
   _cnf->currDelay = DELAY_SLOW;
   RANDOM_WIDTH = 4;
   LEDS.setBrightness(NORMBRIGHT);
-  random16_add_entropy(analogRead(0));   // initialize random numbers
   if(_effectMode == 0) {
     clearAllLeds();
   }
@@ -30,7 +29,7 @@ void EffectRandom::step(Config_t *_cnf, CRGB* _leds, CRGB* _rowleds) {
 
   switch(_effectMode) {
     case 0:
-      dimLeds();
+      dimLeds(DIMSPEED);
       _leds[random16(NUM_LEDS)] = Wheel(random16(768));
     break;
     case 1:

@@ -15,8 +15,7 @@ EffectFire::EffectFire(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
   _cnf->currDelay = DELAY_FIRE;
   LEDS.setBrightness(NORMBRIGHT);
   clearAllLeds();
-  random16_add_entropy(analogRead(0));   // initialize random numbers
-  
+
   switch(_effectMode) {
     case 0:
       _cooling = 50;
@@ -30,9 +29,6 @@ EffectFire::EffectFire(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
 }
 
 void EffectFire::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
-  if(_cnf->currFrame % 150 == 0) {
-    random16_add_entropy(analogRead(0));  // randomize every now and again...
-  }
 
   for (uint8_t row = 0; row < NUM_ROWS; row++) {
   // Step 1.  Cool down every cell a little
