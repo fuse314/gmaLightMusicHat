@@ -25,4 +25,18 @@
 #define NOISE_LVL 100     // noise cutoff value
 #define MAX_LVL 1023      // maximum volume value
 
+
+// configuration class to be passed to step() function
+struct Config_t {
+  uint16_t currFrame;
+  uint8_t  currDelay;
+  uint8_t  currMode;
+
+  uint16_t eq7Values[7];
+  // [0], [1], [2],  [3],  [4],  [5],   [6]
+  //  63, 160, 400, 1000, 2500, 6250, 16000 Hz
+  uint16_t eq7Volumes[3];
+  // 0 = low tones, 1 = mid tones, 3 = high tones
+};
+
 #endif

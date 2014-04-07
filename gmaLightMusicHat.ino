@@ -41,7 +41,6 @@ volatile uint32_t lastUpButtonPressed;
 #endif
 EffectClass *currEffect;
 
-uint8_t currMode;
 uint8_t findMeMode;
 uint8_t autoModeChange;
 uint32_t lastAutoModeChangeTime;
@@ -81,7 +80,7 @@ void setup()
   findMeMode = 0;
   autoModeChange = 1;
   lastAutoModeChangeTime = 0;
-  currMode = 15; // start with random effect 0
+  cnf.currMode = 15; // start with random effect 0
   InitCurrMode();
   
   #ifdef SerialDebug
@@ -110,7 +109,7 @@ void loop() {
   
   #ifdef SerialDebug
     if(cnf.currFrame % 200 == 0) {
-      Serial << "m=" << currMode << " d=" << cnf.currDelay << " r=" << freeRam() << endl;
+      Serial << "m=" << cnf.currMode << " d=" << cnf.currDelay << " r=" << freeRam() << endl;
     }
   #endif
   

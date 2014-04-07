@@ -1,5 +1,5 @@
 #include "ModeButtonMgt.h"
-#include "gmaLightMusicHat.h"
+#include "gmaLightCommon.h"
 #include "Effect_FindMe.h"
 #include "Effect_KR.h"
 #include "Effect_Rainbow.h"
@@ -83,12 +83,12 @@ void CheckAutoModeChange() {
   }
 }
 
-void InitCurrMode() {
+void InitCurrMode(Config_t *_cnf) {
   // initialize current mode (called on mode change)
-  switch(currMode) {
+  switch(_cnf->currMode) {
     case 0: // find me
       delete currEffect;
-      currEffect = new EffectFindMe(0, &cnf);
+      currEffect = new EffectFindMe(0, _cnf);
       break;
     case 1:
     case 2:
@@ -102,31 +102,31 @@ void InitCurrMode() {
     case 10:
     case 11:
       delete currEffect;
-      currEffect = new EffectSound(currMode, &cnf);
+      currEffect = new EffectSound(_cnf->currMode, _cnf);
       break;
     case 12:
     case 13:
     case 14:
       delete currEffect;
-      currEffect = new EffectRainbow(currMode-12, &cnf);
+      currEffect = new EffectRainbow(_cnf->currMode-12, _cnf);
       break;
     case 15:
     case 16:
     case 17:
       delete currEffect;
-      currEffect = new EffectRandom(currMode-15, &cnf);
+      currEffect = new EffectRandom(_cnf->currMode-15, _cnf);
       break;
     case 18:
     case 19:
     case 20:
     case 21:
       delete currEffect;
-      currEffect = new EffectKR(currMode-18, &cnf);
+      currEffect = new EffectKR(_cnf->currMode-18, _cnf);
       break;
     case 22:
     case 23:
       delete currEffect;
-      currEffect = new EffectFire(currMode-22, &cnf);
+      currEffect = new EffectFire(_cnf->currMode-22, _cnf);
       break;
   }
 }
