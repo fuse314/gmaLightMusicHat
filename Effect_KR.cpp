@@ -13,10 +13,10 @@ EffectKR::EffectKR(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode, _cnf) {
   KR_WIDTH = 7;
   switch(_effectMode) {
     case 0:
-      _currColor = CRGB(192,32,0); // red
+      _currColor = CRGB(192,6,0); // red
     break;
     case 1:
-      _currColor = CRGB(32,96,192); // blue-ish
+      _currColor = CRGB(5,32,192); // blue-ish
     break;
     case 2:
       _currColor = CRGB(0,192,0); // green
@@ -25,8 +25,8 @@ EffectKR::EffectKR(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode, _cnf) {
 }
 
 void EffectKR::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
-  dimLeds(DIMSPEED , 1);
-  if(_effectMode = 3) {
+  dimLeds(DIMSPEED_KR , 1);
+  if(_effectMode == 3) {
     _currColor = Wheel(_cnf->currFrame);
   }
   for(uint8_t i=0; i<NUM_ROWS; i++) {

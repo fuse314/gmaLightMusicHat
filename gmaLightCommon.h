@@ -15,7 +15,8 @@
 #define NORMBRIGHT 40  // maximum brightness of leds (0-255)
 #define MAXBRIGHT 120  // used for "find me" mode
 
-#define DIMSPEED 16    // the higher the slower...
+#define DIMSPEED 16     // the higher the faster
+#define DIMSPEED_KR 25
 
 //MSGEQ7 stuff
 #define EQ7STROBE_PIN 7

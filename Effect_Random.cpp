@@ -29,11 +29,13 @@ void EffectRandom::step(Config_t *_cnf, CRGB* _leds, CRGB* _rowleds) {
 
   switch(_effectMode) {
     case 0:
-      dimLeds(DIMSPEED);
-      _leds[random16(NUM_LEDS)] = Wheel(random16(768));
+      dimLeds(DIMSPEED/2,1);
+      if(random8() < 96) {  // the bigger the number (up to 255) the better the chances of placing a pixel
+        _leds[random16(NUM_LEDS)] = Wheel(random16(768));
+      }
     break;
     case 1:
-      clearAllLeds();
+      dimLeds(DIMSPEED_KR,1);
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         for(uint8_t j=0; j<RANDOM_WIDTH; j++) {
           _leds[getLedIndex(i,_cnf->currFrame+j)] = _currColor;
@@ -41,6 +43,7 @@ void EffectRandom::step(Config_t *_cnf, CRGB* _leds, CRGB* _rowleds) {
       }
     break;
     case 2:
+      dimLeds(DIMSPEED/4,1);
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         _leds[getLedIndex(i,_cnf->currFrame)] = _currColor;
       }

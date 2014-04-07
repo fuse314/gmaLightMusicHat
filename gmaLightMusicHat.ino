@@ -81,7 +81,7 @@ void setup()
   findMeMode = 0;
   autoModeChange = 1;
   lastAutoModeChangeTime = 0;
-  currMode = 22; // fire :)  //15; // start with random effect 0
+  currMode = 15; // start with random effect 0
   InitCurrMode();
   
   #ifdef SerialDebug

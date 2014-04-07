@@ -18,12 +18,12 @@ EffectFire::EffectFire(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
 
   switch(_effectMode) {
     case 0:
-      _cooling = 50;
-      _sparking = 122;
+      _cooling = 45;
+      _sparking = 120;
       break;
     case 1:
-      _cooling = 80;
-      _sparking = 180;
+      _cooling = 70;
+      _sparking = 170;
       break;
   }
 }
