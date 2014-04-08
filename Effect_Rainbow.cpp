@@ -4,7 +4,7 @@
 
 #include "Effect_Rainbow.h"
 #include "LEDColorMgt.h"
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 
 EffectRainbow::EffectRainbow(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
   _cnf->currDelay = DELAY_FAST;

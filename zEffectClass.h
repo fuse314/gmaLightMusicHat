@@ -2,20 +2,7 @@
 #define EFFECTCLASS_H
 #include <Arduino.h>
 #include <FastLED.h>
-
-// configuration class to be passed to step() function
-struct Config_t {
-  
-  uint16_t currFrame;
-  uint8_t  currDelay;
-
-  uint16_t eq7Values[7];
-  // [0], [1], [2],  [3],  [4],  [5],   [6]
-  //  63, 160, 400, 1000, 2500, 6250, 16000 Hz
-  uint16_t eq7Volumes[3];
-  // 0 = low tones, 1 = mid tones, 3 = high tones
-
-};
+#include "zGlobals.h"
 
 // abstract class EffectClass to be inherited by different Effects
 class EffectClass {

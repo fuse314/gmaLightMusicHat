@@ -13,12 +13,16 @@
   
 */
 
+#include <SPI.h>
+#include <RF24.h>
+#include <gmaRGBLight.h>
 
 #include "gmaLightMusicHat.h"
 #include "LEDColorMgt.h"
 #include "MSGEQ7Mgt.h"
 #include "ModeButtonMgt.h"
 #include "zEffectClass.h"
+#include "nRFMgt.h"
 
 // LED stuff
 #include <FastLED.h>
@@ -41,10 +45,10 @@ volatile uint32_t lastUpButtonPressed;
 #endif
 EffectClass *currEffect;
 
-uint8_t currMode;
 uint8_t findMeMode;
 uint8_t autoModeChange;
 uint32_t lastAutoModeChangeTime;
+uint8_t soundForEveryone;
 
 Config_t cnf;
 
@@ -58,6 +62,12 @@ void setup()
   
   //initialize MSGEQ7 chip
   InitEQ7();
+  
+  soundForEveryone = 0;
+  #ifndef NOWIRELESS
+  //RF24 stuff
+  RF_Init();
+  #endif
   
   //button stuff
   upButtonPressed = 0;
@@ -81,8 +91,8 @@ void setup()
   findMeMode = 0;
   autoModeChange = 1;
   lastAutoModeChangeTime = 0;
-  currMode = 15; // start with random effect 0
-  InitCurrMode();
+  cnf.currMode = 15; // start with random effect 0
+  InitCurrMode(&cnf);
   
   #ifdef SerialDebug
   Serial.begin(9600);
@@ -101,8 +111,13 @@ void loop() {
   // increment currFrame after effect loop - this variable may roll over
   cnf.currFrame++;
   
-  if(cnf.currFrame % 150 == 0) {
+  // random modes every 100 frames, fire mode every 20 frames
+  if(((cnf.currMode > 14) && (cnf.currFrame % 100 == 0)) || ((cnf.currMode >= 22) && (cnf.currFrame % 20 == 0))) {
     random16_add_entropy(analogRead(0));   // re-initialize random numbers
+  }
+  
+  if((soundForEveryone == 1) || (cnf.currMode <= 11/* sound modes */) || (cnf.currMode >= 22/* fire modes */)) {
+    GetEQ7(&cnf);
   }
   
   // check if any buttons have been pressed
@@ -110,8 +125,13 @@ void loop() {
   
   #ifdef SerialDebug
     if(cnf.currFrame % 200 == 0) {
-      Serial << "m=" << currMode << " d=" << cnf.currDelay << " r=" << freeRam() << endl;
+      Serial << "m=" << cnf.currMode << " d=" << cnf.currDelay << " r=" << freeRam() << endl;
     }
+  #endif
+  
+  #ifndef NOWIRELESS
+  //RF24 stuff
+  RF_Read();
   #endif
   
   // only check random mode change every currDelay*150 milliseconds, default 1050 ms (one second)

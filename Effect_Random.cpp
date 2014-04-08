@@ -5,7 +5,7 @@
 #include "zEffectClass.h"
 #include "Effect_Random.h"
 #include "LEDColorMgt.h"
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 
 EffectRandom::EffectRandom(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
   _cnf->currDelay = DELAY_SLOW;

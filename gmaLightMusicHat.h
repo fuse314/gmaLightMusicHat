@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <FastLED.h>
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 #include "zEffectClass.h"
 
 //uncomment this for debug over serial port
@@ -39,8 +39,6 @@ extern volatile uint32_t lastUpButtonPressed;
 #include "zEffectClass.h"
 #include "Effect_Random.h"  // only include first effect for setup()
 extern EffectClass *currEffect;
-extern uint8_t currMode;
-//uint8_t effectMode; // used in effects
 
 extern Config_t cnf;
 

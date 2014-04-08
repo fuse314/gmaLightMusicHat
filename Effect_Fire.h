@@ -2,7 +2,6 @@
 #define EFFECTFIRE_H
 #include <Arduino.h>
 #include "zEffectClass.h"
-#include "gmaLightCommon.h"
 
 class EffectFire : public EffectClass {
   public:

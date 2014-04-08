@@ -1,4 +1,5 @@
 #include "ModeButtonMgt.h"
+#include "zGlobals.h"
 #include "gmaLightMusicHat.h"
 #include "Effect_FindMe.h"
 #include "Effect_KR.h"
@@ -32,7 +33,7 @@ void CheckButton() {
           currEffect = new EffectFindMe(0);
           findMeMode = 1;
         } else {
-          InitCurrMode();
+          InitCurrMode(&cnf);
           findMeMode = 0;
         }
         findMeButtonPressed = 0;
@@ -60,35 +61,35 @@ void FindMeButtonInterruptHandler() {   // interrupt handler function
 void ChangeMode(uint8_t _modeUp) {
   // change mode up or down, never go to mode 0 (find me), has its own button
   if(_modeUp == 0) {
-    currMode--;
-    if(currMode == 0) {
-      currMode = MAX_MODE;
+    cnf.currMode--;
+    if(cnf.currMode == 0) {
+      cnf.currMode = MAX_MODE;
     }
   } else {
-    currMode++;
-    if(currMode > MAX_MODE) {
-      currMode = 1;
+    cnf.currMode++;
+    if(cnf.currMode > MAX_MODE) {
+      cnf.currMode = 1;
     }
   }
   //currFrame = 0;
-  InitCurrMode();
+  InitCurrMode(&cnf);
 }
 
 void CheckAutoModeChange() {
   // auto mode change every AUTOMODE_CHANGE milliseconds, choose random mode
   if(findMeMode == 0 &&  millis() > AUTOMODE_CHANGE && millis() - lastAutoModeChangeTime > AUTOMODE_CHANGE) {
     lastAutoModeChangeTime = millis();
-    currMode = random8(MAX_MODE) + 1; // random number including 0, excluding MAX_MODE
-    InitCurrMode();
+    cnf.currMode = random8(MAX_MODE) + 1; // random number including 0, excluding MAX_MODE
+    InitCurrMode(&cnf);
   }
 }
 
-void InitCurrMode() {
+void InitCurrMode(Config_t *_cnf) {
   // initialize current mode (called on mode change)
-  switch(currMode) {
+  switch(_cnf->currMode) {
     case 0: // find me
       delete currEffect;
-      currEffect = new EffectFindMe(0, &cnf);
+      currEffect = new EffectFindMe(0, _cnf);
       break;
     case 1:
     case 2:
@@ -102,31 +103,32 @@ void InitCurrMode() {
     case 10:
     case 11:
       delete currEffect;
-      currEffect = new EffectSound(currMode, &cnf);
+      currEffect = new EffectSound(_cnf->currMode, _cnf);
       break;
     case 12:
     case 13:
     case 14:
       delete currEffect;
-      currEffect = new EffectRainbow(currMode-12, &cnf);
+      currEffect = new EffectRainbow(_cnf->currMode-12, _cnf);
       break;
     case 15:
     case 16:
     case 17:
       delete currEffect;
-      currEffect = new EffectRandom(currMode-15, &cnf);
+      currEffect = new EffectRandom(_cnf->currMode-15, _cnf);
       break;
     case 18:
     case 19:
     case 20:
     case 21:
       delete currEffect;
-      currEffect = new EffectKR(currMode-18, &cnf);
+      currEffect = new EffectKR(_cnf->currMode-18, _cnf);
       break;
     case 22:
     case 23:
+    case 24:
       delete currEffect;
-      currEffect = new EffectFire(currMode-22, &cnf);
+      currEffect = new EffectFire(_cnf->currMode-22, _cnf);
       break;
   }
 }
