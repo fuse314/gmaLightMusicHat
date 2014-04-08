@@ -2,7 +2,7 @@
 #define EFFECTCLASS_H
 #include <Arduino.h>
 #include <FastLED.h>
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 
 // abstract class EffectClass to be inherited by different Effects
 class EffectClass {

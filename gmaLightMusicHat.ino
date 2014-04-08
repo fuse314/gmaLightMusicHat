@@ -48,6 +48,7 @@ EffectClass *currEffect;
 uint8_t findMeMode;
 uint8_t autoModeChange;
 uint32_t lastAutoModeChangeTime;
+uint8_t soundForEveryone;
 
 Config_t cnf;
 
@@ -62,8 +63,11 @@ void setup()
   //initialize MSGEQ7 chip
   InitEQ7();
   
+  soundForEveryone = 0;
+  #ifndef NOWIRELESS
   //RF24 stuff
   RF_Init();
+  #endif
   
   //button stuff
   upButtonPressed = 0;
@@ -107,8 +111,13 @@ void loop() {
   // increment currFrame after effect loop - this variable may roll over
   cnf.currFrame++;
   
-  if((cnf.currMode > 14) && (cnf.currFrame % 100 == 0)) {
+  // random modes every 100 frames, fire mode every 20 frames
+  if(((cnf.currMode > 14) && (cnf.currFrame % 100 == 0)) || ((cnf.currMode >= 22) && (cnf.currFrame % 20 == 0))) {
     random16_add_entropy(analogRead(0));   // re-initialize random numbers
+  }
+  
+  if((soundForEveryone == 1) || (cnf.currMode <= 11/* sound modes */) || (cnf.currMode >= 22/* fire modes */)) {
+    GetEQ7(&cnf);
   }
   
   // check if any buttons have been pressed
@@ -120,9 +129,10 @@ void loop() {
     }
   #endif
   
+  #ifndef NOWIRELESS
   //RF24 stuff
   RF_Read();
-  
+  #endif
   
   // only check random mode change every currDelay*150 milliseconds, default 1050 ms (one second)
   if(autoModeChange == 1 && cnf.currFrame % 150 == 0) {

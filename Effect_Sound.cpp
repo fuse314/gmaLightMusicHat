@@ -12,7 +12,7 @@
 
 #include "zEffectClass.h"
 #include "Effect_Sound.h"
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 #include "LEDColorMgt.h"
 #include "MSGEQ7Mgt.h"
 
@@ -26,7 +26,6 @@ EffectSound::EffectSound(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
 }
 
 void EffectSound::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
-  GetEQ7(_cnf);
   if(_effectMode == 4) {
     fill_rainbow( &(_ledsrow[0]), NUM_LEDSPERROW, _cnf->currFrame % 256);
     paintAllRows(_ledsrow);

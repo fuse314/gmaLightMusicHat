@@ -2,10 +2,9 @@
 // copied from http://pastebin.com/wmy3gt1P
 
 
-//mode 0: red kr effect
-//mode 1: blue kr effect
-//mode 2: green kr effect
-//mode 3: rainbow kr effect 
+//mode 0: fire 1
+//mode 1: fire 2
+//mode 2: sound fire
 
 #include "Effect_Fire.h"
 #include "LEDColorMgt.h"
@@ -30,6 +29,10 @@ EffectFire::EffectFire(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
 
 void EffectFire::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
 
+  if(_effectMode == 2) {
+    _cooling = map(_cnf->eq7Vol[1],0,255, 40,90);
+    _sparking = map(_cnf->eq7Vol[1],0,255, 32,100);
+  }
   for (uint8_t row = 0; row < NUM_ROWS; row++) {
   // Step 1.  Cool down every cell a little
     for(uint8_t i = 0; i < NUM_LEDSPERHALFROW; i++) {

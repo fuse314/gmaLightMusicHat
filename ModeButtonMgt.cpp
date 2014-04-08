@@ -126,6 +126,7 @@ void InitCurrMode(Config_t *_cnf) {
       break;
     case 22:
     case 23:
+    case 24:
       delete currEffect;
       currEffect = new EffectFire(_cnf->currMode-22, _cnf);
       break;

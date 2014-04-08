@@ -29,4 +29,9 @@ struct Config_t {
   uint8_t eq7Vol[3];  // low(<=400), mid(1k-2.5k), high(>=6.25k)
 };
 
+extern uint8_t soundForEveryone;
+
+// comment out to get RF24 module working
+#define NOWIRELESS
+
 #endif

@@ -31,6 +31,7 @@ to get all variables:
 //#include "zEffectClass.h"
 #include "nRFMgt.h"
 
+#ifndef NOWIRELESS
 RF24 radio(9,10);
 
 void RF_Init() {
@@ -124,3 +125,4 @@ void RF_RgbLightCommand(rf_hat_payload_t *_command) {
     */
   }
 }
+#endif
