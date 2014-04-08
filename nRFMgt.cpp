@@ -31,6 +31,8 @@ to get all variables:
 #include "zEffectClass.h"
 #include "nRFMgt.h"
 
+RF24 radio(9,10);
+
 void RF_Init() {
   radio.begin();
   radio.setDataRate(RF24_1MBPS);  // RF24_250KBPS
@@ -51,9 +53,9 @@ void RF_SoundForEveryone(Config_t *_cnf) {
   rf_hat_payload_t payload;
   payload.command = 1;
   payload.mode = 0;
-  payload.vol[0] = _cnf->eq7Volumes[0];
-  payload.vol[1] = _cnf->eq7Volumes[1];
-  payload.vol[2] = _cnf->eq7Volumes[2];
+  payload.volLow = _cnf->eq7Volumes[0];
+  payload.volMid = _cnf->eq7Volumes[1];
+  payload.volHigh = _cnf->eq7Volumes[2];
   //do not need --radio.stopListening();
   radio.write( &payload, sizeof(payload));
   radio.startListening();
@@ -81,9 +83,10 @@ void RF_RgbLightCommand(rf_hat_payload_t *_command) {
     
     // enable music broadcast? always enabled?
     
+    case 2:
+    break;
     
-    
-  
+  /*
     case 2: // speed down
       ChangeDelay(0);
       _command->value = s.currDelay;
@@ -118,6 +121,6 @@ void RF_RgbLightCommand(rf_hat_payload_t *_command) {
       SetBrightness(_command->value);
       _command->value = s.currBrightness;
     break;
-    
+    */
   }
 }

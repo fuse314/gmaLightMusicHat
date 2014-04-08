@@ -1,5 +1,6 @@
 #include "ModeButtonMgt.h"
 #include "gmaLightCommon.h"
+#include "gmaLightMusicHat.h"
 #include "Effect_FindMe.h"
 #include "Effect_KR.h"
 #include "Effect_Rainbow.h"
@@ -32,7 +33,7 @@ void CheckButton() {
           currEffect = new EffectFindMe(0);
           findMeMode = 1;
         } else {
-          InitCurrMode();
+          InitCurrMode(&cnf);
           findMeMode = 0;
         }
         findMeButtonPressed = 0;
@@ -60,26 +61,26 @@ void FindMeButtonInterruptHandler() {   // interrupt handler function
 void ChangeMode(uint8_t _modeUp) {
   // change mode up or down, never go to mode 0 (find me), has its own button
   if(_modeUp == 0) {
-    currMode--;
-    if(currMode == 0) {
-      currMode = MAX_MODE;
+    cnf.currMode--;
+    if(cnf.currMode == 0) {
+      cnf.currMode = MAX_MODE;
     }
   } else {
-    currMode++;
-    if(currMode > MAX_MODE) {
-      currMode = 1;
+    cnf.currMode++;
+    if(cnf.currMode > MAX_MODE) {
+      cnf.currMode = 1;
     }
   }
   //currFrame = 0;
-  InitCurrMode();
+  InitCurrMode(&cnf);
 }
 
 void CheckAutoModeChange() {
   // auto mode change every AUTOMODE_CHANGE milliseconds, choose random mode
   if(findMeMode == 0 &&  millis() > AUTOMODE_CHANGE && millis() - lastAutoModeChangeTime > AUTOMODE_CHANGE) {
     lastAutoModeChangeTime = millis();
-    currMode = random8(MAX_MODE) + 1; // random number including 0, excluding MAX_MODE
-    InitCurrMode();
+    cnf.currMode = random8(MAX_MODE) + 1; // random number including 0, excluding MAX_MODE
+    InitCurrMode(&cnf);
   }
 }
 

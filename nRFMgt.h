@@ -1,17 +1,17 @@
 #ifndef GMANRFMGT_H
 #define GMANRFMGT_H
 
-#include <SPI.h>
-#include <RF24.h>
 #include "gmaLightCommon.h"
 
 struct rf_hat_payload_t {
   uint8_t command;
   uint8_t mode;
-  uint16_t[3] vol;
+  uint16_t volLow;
+  uint16_t volMid;
+  uint16_t volHigh;
 };
 
-RF24 radio(9,10);
+//extern RF24 radio;
 
 void RF_Init();
 

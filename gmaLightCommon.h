@@ -1,5 +1,6 @@
 #ifndef GMALIGHTCOMMON_H
 #define GMALIGHTCOMMON_H
+#include <Arduino.h>
 
 #define NUM_LEDS 114
 #define NUM_ROWS 3

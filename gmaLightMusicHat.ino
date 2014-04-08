@@ -13,12 +13,16 @@
   
 */
 
+#include <SPI.h>
+#include <RF24.h>
+#include <gmaRGBLight.h>
 
 #include "gmaLightMusicHat.h"
 #include "LEDColorMgt.h"
 #include "MSGEQ7Mgt.h"
 #include "ModeButtonMgt.h"
 #include "zEffectClass.h"
+#include "nRFMgt.h"
 
 // LED stuff
 #include <FastLED.h>
@@ -58,6 +62,9 @@ void setup()
   //initialize MSGEQ7 chip
   InitEQ7();
   
+  //RF24 stuff
+  RF_Init();
+  
   //button stuff
   upButtonPressed = 0;
   lastUpButtonPressed = 0;
@@ -81,7 +88,7 @@ void setup()
   autoModeChange = 1;
   lastAutoModeChangeTime = 0;
   cnf.currMode = 15; // start with random effect 0
-  InitCurrMode();
+  InitCurrMode(&cnf);
   
   #ifdef SerialDebug
   Serial.begin(9600);
@@ -100,7 +107,7 @@ void loop() {
   // increment currFrame after effect loop - this variable may roll over
   cnf.currFrame++;
   
-  if(cnf.currFrame % 150 == 0) {
+  if((cnf.currMode > 14) && (cnf.currFrame % 100 == 0)) {
     random16_add_entropy(analogRead(0));   // re-initialize random numbers
   }
   
@@ -112,6 +119,10 @@ void loop() {
       Serial << "m=" << cnf.currMode << " d=" << cnf.currDelay << " r=" << freeRam() << endl;
     }
   #endif
+  
+  //RF24 stuff
+  RF_Read();
+  
   
   // only check random mode change every currDelay*150 milliseconds, default 1050 ms (one second)
   if(autoModeChange == 1 && cnf.currFrame % 150 == 0) {
