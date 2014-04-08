@@ -1,7 +1,8 @@
 #ifndef MODEBUTTONMGT_H
 #define MODEBUTTONMGT_H
 #include <Arduino.h>
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
+
 void CheckButton();
 void UpButtonInterruptHandler();
 void FindMeButtonInterruptHandler();

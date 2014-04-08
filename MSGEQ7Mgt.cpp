@@ -1,5 +1,5 @@
 #include "MSGEQ7Mgt.h"
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 
 
 void InitEQ7() {
@@ -19,34 +19,22 @@ void GetEQ7(Config_t *_cnf) {
   {
     digitalWrite(EQ7STROBE_PIN, LOW);
     delayMicroseconds(30); // to allow analog signal to settle
-    _cnf->eq7Values[i] = analogRead(EQ7IN_PIN); 
+    _cnf->eq7Band[i] = map(constrain(analogRead(EQ7IN_PIN),NOISE_LVL,MAX_LVL),NOISE_LVL,MAX_LVL,0,255);
     digitalWrite(EQ7STROBE_PIN, HIGH);
   }
   
   digitalWrite(EQ7RESET_PIN, LOW);
   digitalWrite(EQ7STROBE_PIN, HIGH);
   
-  _cnf->eq7Volumes[0] = max(_cnf->eq7Values[0], max(_cnf->eq7Values[1], _cnf->eq7Values[2]));
-  _cnf->eq7Volumes[1] = max(_cnf->eq7Values[3], _cnf->eq7Values[4]);
-  _cnf->eq7Volumes[2] = max(_cnf->eq7Values[5], max(_cnf->eq7Values[6], _cnf->eq7Values[7]));
+  _cnf->eq7Vol[0] = (_cnf->eq7Band[0] + _cnf->eq7Band[1] + _cnf->eq7Band[2] + _cnf->eq7Band[2]) / 4;  // low tones
+  _cnf->eq7Vol[1] = (_cnf->eq7Band[3] + _cnf->eq7Band[4]) / 2;                                        // mid tones
+  _cnf->eq7Vol[2] = (_cnf->eq7Band[5] + _cnf->eq7Band[6] + _cnf->eq7Band[7]) / 3;                     // high tones
 }
 
 CRGB GetEQColor(Config_t *_cnf) {
   CRGB ret;
-  if(_cnf->eq7Volumes[2] <= NOISE_LVL) {   // low tones are green
-    ret.g = 0;
-  } else {
-    ret.g = map(_cnf->eq7Volumes[2], NOISE_LVL, MAX_LVL, 1, 255);
-  }
-  if(_cnf->eq7Volumes[1] <= NOISE_LVL) {   // mid tones are red
-    ret.r = 0;
-  } else {
-    ret.r = map(_cnf->eq7Volumes[1], NOISE_LVL, MAX_LVL, 1, 255);
-  }
-  if(_cnf->eq7Volumes[0] <= NOISE_LVL) {   // high tones are blue
-    ret.b = 0;
-  } else {
-    ret.b = map(_cnf->eq7Volumes[0], NOISE_LVL, MAX_LVL, 1, 255);
-  }
+  ret.g = _cnf->eq7Vol[2];  // high tones are green
+  ret.r = _cnf->eq7Vol[1];  // mid  tones are red
+  ret.b = _cnf->eq7Vol[0];  // low  tones are blue
   return ret;
 }

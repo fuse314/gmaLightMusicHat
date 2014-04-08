@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <FastLED.h>
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 #include "zEffectClass.h"
 
 //uncomment this for debug over serial port

@@ -1,14 +1,12 @@
 #ifndef GMANRFMGT_H
 #define GMANRFMGT_H
 
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 
 struct rf_hat_payload_t {
   uint8_t command;
   uint8_t mode;
-  uint16_t volLow;
-  uint16_t volMid;
-  uint16_t volHigh;
+  uint8_t vol[7];
 };
 
 //extern RF24 radio;

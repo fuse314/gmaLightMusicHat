@@ -2,7 +2,7 @@
 
 #include "Effect_FindMe.h"
 #include "LEDColorMgt.h"
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 
 EffectFindMe::EffectFindMe(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode, _cnf) {
   _cnf->currDelay = DELAY_SLOW;

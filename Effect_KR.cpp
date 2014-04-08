@@ -5,7 +5,7 @@
 
 #include "Effect_KR.h"
 #include "LEDColorMgt.h"
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 
 EffectKR::EffectKR(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode, _cnf) {
   _cnf->currDelay = DELAY_KR;

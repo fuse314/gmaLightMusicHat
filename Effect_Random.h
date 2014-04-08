@@ -1,7 +1,8 @@
 #ifndef EFFECTRANDOM_H
 #define EFFECTRANDOM_H
 
-#include "Arduino.h"
+#include <Arduino.h>
+#include "zEffectClass.h"
 
 class EffectRandom : public EffectClass {
   public:

@@ -1,5 +1,5 @@
 #include "ModeButtonMgt.h"
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 #include "gmaLightMusicHat.h"
 #include "Effect_FindMe.h"
 #include "Effect_KR.h"

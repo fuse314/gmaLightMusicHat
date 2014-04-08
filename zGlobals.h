@@ -1,5 +1,5 @@
-#ifndef GMALIGHTCOMMON_H
-#define GMALIGHTCOMMON_H
+#ifndef ZGLOBALS_H
+#define ZGLOBALS_H
 #include <Arduino.h>
 
 #define NUM_LEDS 114
@@ -19,25 +19,14 @@
 #define DIMSPEED 16     // the higher the faster
 #define DIMSPEED_KR 25
 
-//MSGEQ7 stuff
-#define EQ7STROBE_PIN 7
-#define EQ7RESET_PIN 8
-#define EQ7IN_PIN A1
-#define NOISE_LVL 100     // noise cutoff value
-#define MAX_LVL 1023      // maximum volume value
-
-
 // configuration class to be passed to step() function
 struct Config_t {
   uint16_t currFrame;
   uint8_t  currDelay;
   uint8_t  currMode;
-
-  uint16_t eq7Values[7];
-  // [0], [1], [2],  [3],  [4],  [5],   [6]
-  //  63, 160, 400, 1000, 2500, 6250, 16000 Hz
-  uint16_t eq7Volumes[3];
-  // 0 = low tones, 1 = mid tones, 3 = high tones
+  
+  uint8_t eq7Band[7]; // 63Hz,160Hz,400Hz,1kHz,2.5kHz,6.25kHz,16kHz
+  uint8_t eq7Vol[3];  // low(<=400), mid(1k-2.5k), high(>=6.25k)
 };
 
 #endif

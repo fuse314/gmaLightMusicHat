@@ -9,7 +9,7 @@
 
 #include "Effect_Fire.h"
 #include "LEDColorMgt.h"
-#include "gmaLightCommon.h"
+#include "zGlobals.h"
 
 EffectFire::EffectFire(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
   _cnf->currDelay = DELAY_FIRE;

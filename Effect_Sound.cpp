@@ -53,14 +53,14 @@ void EffectSound::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
         theColor = CRGB(255,0,0); // red bar
       }
       for(uint8_t i=0; i<NUM_ROWS; i++) {
-        if(_cnf->eq7Volumes[i] >= NOISE_LVL) {
+        if(_cnf->eq7Vol[i] > 0) {
           if(_effectMode == 7) {  // color depending on volume from blue(512) to red(767)
-            theColor = Wheel(map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 512, 767));
+            theColor = Wheel(_cnf->eq7Vol[i] + 512);
           }
           if(_effectMode == 8) {  // color depending on volume from green(256) to blue(511)
-            theColor = Wheel(map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 256, 511));
+            theColor = Wheel(_cnf->eq7Vol[i] + 256);
           }
-          uint8_t soundlvl = map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 1, NUM_LEDSPERHALFROW);
+          uint8_t soundlvl = map(_cnf->eq7Vol[i], 1, 255, 1, NUM_LEDSPERHALFROW);
           for(uint8_t j=0; j<soundlvl; j++) {
             if(_effectMode == 2) {
               _ledsrow[j] = Wheel(_cnf->currFrame);
@@ -96,12 +96,12 @@ void EffectSound::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
     case 10:
     case 11:
       for(uint8_t i=0; i<NUM_ROWS; i++) {
-        if(_cnf->eq7Volumes[i] >= NOISE_LVL) {
+        if(_cnf->eq7Vol[i] > 0) {
           if(_effectMode == 10) {
-            theColor = CRGB(map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 0, 255),0,0);  // red, dependent on volume
+            theColor = CRGB(_cnf->eq7Vol[i],0,0);  // red, dependent on volume
           } else {
             if(_effectMode == 11) {            //      from green(256) to blue(511)  , dim from 0-255 depending on volume
-              theColor = Wheel(map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 256, 511)).nscale8(map(_cnf->eq7Volumes[i], NOISE_LVL, MAX_LVL, 0, 255));
+              theColor = Wheel(_cnf->eq7Vol[i] + 256).nscale8(_cnf->eq7Vol[i]);
             }
           }
         } else {

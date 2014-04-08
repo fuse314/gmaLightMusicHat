@@ -27,8 +27,8 @@ to get all variables:
 #include <gmaRGBLight.h>
 #include <SPI.h>
 #include <RF24.h>
-#include "gmaLightCommon.h"
-#include "zEffectClass.h"
+#include "zGlobals.h"
+//#include "zEffectClass.h"
 #include "nRFMgt.h"
 
 RF24 radio(9,10);
@@ -53,9 +53,9 @@ void RF_SoundForEveryone(Config_t *_cnf) {
   rf_hat_payload_t payload;
   payload.command = 1;
   payload.mode = 0;
-  payload.volLow = _cnf->eq7Volumes[0];
-  payload.volMid = _cnf->eq7Volumes[1];
-  payload.volHigh = _cnf->eq7Volumes[2];
+  for(uint8_t i=0; i<7; i++) {
+    payload.vol[i] = _cnf->eq7Band[i];
+  }
   //do not need --radio.stopListening();
   radio.write( &payload, sizeof(payload));
   radio.startListening();
