@@ -11,12 +11,7 @@ EffectRandom::EffectRandom(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
   _cnf->currDelay = DELAY_SLOW;
   RANDOM_WIDTH = 4;
   LEDS.setBrightness(NORMBRIGHT);
-  if(_effectMode == 0) {
-    clearAllLeds();
-  }
-  if(_effectMode == 1) {
-    _currColor = Wheel(random16(768));
-  }
+  _currColor = Wheel(random16(768));  // start with random color
 }
 
 void EffectRandom::step(Config_t *_cnf, CRGB* _leds, CRGB* _rowleds) {
@@ -29,13 +24,13 @@ void EffectRandom::step(Config_t *_cnf, CRGB* _leds, CRGB* _rowleds) {
 
   switch(_effectMode) {
     case 0:
-      dimLeds(DIMSPEED/2,1);
+      dimLeds(DIMSPEED/2,_leds,1);
       if(random8() < 96) {  // the bigger the number (up to 255) the better the chances of placing a pixel
         _leds[random16(NUM_LEDS)] = Wheel(random16(768));
       }
     break;
     case 1:
-      dimLeds(DIMSPEED_KR,1);
+      dimLeds(DIMSPEED_KR,_leds,1);
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         for(uint8_t j=0; j<RANDOM_WIDTH; j++) {
           _leds[getLedIndex(i,_cnf->currFrame+j)] = _currColor;
@@ -43,7 +38,7 @@ void EffectRandom::step(Config_t *_cnf, CRGB* _leds, CRGB* _rowleds) {
       }
     break;
     case 2:
-      dimLeds(DIMSPEED/4,1);
+      dimLeds(DIMSPEED/4,_leds,1);
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         _leds[getLedIndex(i,_cnf->currFrame)] = _currColor;
       }

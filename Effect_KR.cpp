@@ -25,7 +25,7 @@ EffectKR::EffectKR(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode, _cnf) {
 }
 
 void EffectKR::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
-  dimLeds(DIMSPEED_KR , 1);
+  dimLeds(DIMSPEED_KR , _leds, 1);
   if(_effectMode == 3) {
     _currColor = Wheel(_cnf->currFrame);
   }

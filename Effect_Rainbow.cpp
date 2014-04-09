@@ -9,17 +9,16 @@
 EffectRainbow::EffectRainbow(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
   _cnf->currDelay = DELAY_FAST;
   LEDS.setBrightness(NORMBRIGHT);
-  clearAllLeds();
 }
 
 void EffectRainbow::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
   switch(_effectMode) {
     case 0:
       fill_rainbow( &(_ledsrow[0]), NUM_LEDSPERROW, _cnf->currFrame % 256);
-      paintAllRows(_ledsrow);
+      paintAllRows(_ledsrow, _leds);
       break;
     case 1:
-      solidColor(Wheel(_cnf->currFrame));
+      solidColor(Wheel(_cnf->currFrame), _leds, NUM_LEDS);
       break;
     case 2:
       fill_rainbow( &(_leds[0]), NUM_LEDS, _cnf->currFrame % 256);

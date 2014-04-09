@@ -20,18 +20,15 @@
 EffectSound::EffectSound(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
   _cnf->currDelay = DELAY_NORMAL;
   LEDS.setBrightness(NORMBRIGHT);
-  if(_effectMode == 3 || _effectMode == 5) {
-    clearAllLeds();
-  }
 }
 
 void EffectSound::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
   if(_effectMode == 4) {
     fill_rainbow( &(_ledsrow[0]), NUM_LEDSPERROW, _cnf->currFrame % 256);
-    paintAllRows(_ledsrow);
+    paintAllRows(_ledsrow, _leds);
   }
   if(_effectMode == 9) {
-    solidColorLedsRow(CRGB(0,0,128)); // blue base color
+    solidColor(CRGB(0,0,128),_ledsrow,NUM_LEDSPERROW); // blue base color
   }
   
   CRGB theColor;
@@ -43,7 +40,7 @@ void EffectSound::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
     case 8:
     case 9:
       if(_effectMode != 9) {
-        clearRowLeds();
+        clearLeds(_ledsrow, NUM_LEDSPERROW);
       }
       if(_effectMode == 1 || _effectMode == 2 || _effectMode == 4) {
         theColor = GetEQColor(_cnf);
@@ -69,25 +66,25 @@ void EffectSound::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
           }
         }
         if(_effectMode == 4) {
-          showMirrored(i, _ledsrow, 1);  // merge with current line content
+          showMirrored(i, _ledsrow, _leds, 1);  // merge with current line content
         } else {
-          showMirrored(i, _ledsrow, 0);  // overwrite with content
+          showMirrored(i, _ledsrow, _leds, 0);  // overwrite with content
         }
       }
       break;
     case 3:
-      solidColor(GetEQColor(_cnf));
+      solidColor(GetEQColor(_cnf), _leds, NUM_LEDS);
       break;
     case 5:
       theColor = GetEQColor(_cnf);
-      dimLeds(DIMSPEED,1);
+      dimLeds(DIMSPEED,_leds,1);
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         _leds[getLedIndex(i,_cnf->currFrame)] = theColor;
       }
       break;
     case 6:
       theColor = GetEQColor(_cnf);
-      shiftLEDs(1);
+      shiftLeds(1, _leds);
       for(uint8_t i=0; i<NUM_ROWS; i++) {
         _leds[getLedIndex(i,NUM_LEDSPERROW-1)] = theColor;
       }
@@ -106,7 +103,7 @@ void EffectSound::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
         } else {
           theColor = CRGB(0,0,0);
         }
-        solidColorRow(theColor, i);
+        solidColorRow(theColor, i, _leds);
       }
       break;
   }

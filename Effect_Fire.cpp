@@ -13,7 +13,6 @@
 EffectFire::EffectFire(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
   _cnf->currDelay = DELAY_FIRE;
   LEDS.setBrightness(NORMBRIGHT);
-  clearAllLeds();
 
   switch(_effectMode) {
     case 0:

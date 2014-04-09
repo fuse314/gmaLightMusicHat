@@ -1,4 +1,4 @@
-#include "gmaLightMusicHat.h"
+#include "zGlobals.h"
 #include "LEDColorMgt.h"
 
 CRGB Wheel(uint16_t _wheelPos)
@@ -38,7 +38,7 @@ CRGB Wheel(uint16_t _wheelPos)
 }
 
 
-void showMirrored( uint8_t _row, CRGB* _halfleds, uint8_t _merge ) {
+void showMirrored( uint8_t _row, CRGB* _halfleds, CRGB* _leds, uint8_t _merge ) {
   //paint 19 leds mirrored to one row (0,1,2)
   if(_row >= NUM_ROWS)
     _row = NUM_ROWS-1;
@@ -46,68 +46,63 @@ void showMirrored( uint8_t _row, CRGB* _halfleds, uint8_t _merge ) {
   uint16_t endindex = startindex + NUM_LEDSPERROW - 1;
   for(uint8_t i=0; i<NUM_LEDSPERHALFROW; i++) {
     if(_merge == 1) {
-      leds[startindex+i] += _halfleds[NUM_LEDSPERHALFROW-1-i];
-      leds[endindex-i] += _halfleds[NUM_LEDSPERHALFROW-1-i];
+      _leds[startindex+i] += _halfleds[NUM_LEDSPERHALFROW-1-i];
+      _leds[endindex-i] += _halfleds[NUM_LEDSPERHALFROW-1-i];
     } else {
-      leds[startindex+i] = _halfleds[NUM_LEDSPERHALFROW-1-i];
-      leds[endindex-i] = _halfleds[NUM_LEDSPERHALFROW-1-i];
+      _leds[startindex+i] = _halfleds[NUM_LEDSPERHALFROW-1-i];
+      _leds[endindex-i] = _halfleds[NUM_LEDSPERHALFROW-1-i];
     }
   }
 }
 
-void paintAllRows( CRGB* _rowleds ) {
+void paintAllRows( CRGB* _rowleds, CRGB* _leds ) {
   // paint all rows with rowleds
   for(uint8_t i=0; i<NUM_ROWS; i++) {
     uint16_t startindex = NUM_LEDSPERROW * i;
     for(uint16_t j=0; j<NUM_LEDSPERROW; j++) {
       if(i % 2 == 0) {
-        leds[startindex+j] = _rowleds[j];
+        _leds[startindex+j] = _rowleds[j];
       } else {
-        leds[startindex+j] = _rowleds[NUM_LEDSPERROW-j-1];
+        _leds[startindex+j] = _rowleds[NUM_LEDSPERROW-j-1];
       }
     }
   }
 }
 
-void solidColor( CRGB _color) {
+void solidColor( CRGB _color, CRGB* _leds, uint16_t _num_leds) {
   // set all leds to _color
-  for(uint16_t i=0; i<NUM_LEDS; i++) {
-    leds[i] = _color;
-  }
-}
-void solidColorLedsRow( CRGB _color) {
-  for(uint16_t i=0; i<NUM_LEDSPERROW; i++) {
-    ledsrow[i] = _color;
+  for(uint16_t i=0; i<_num_leds; i++) {
+    _leds[i] = _color;
   }
 }
 
-void solidColorRow( CRGB _color, uint8_t _row ) {
+void solidColorRow( CRGB _color, uint8_t _row , CRGB* _leds) {
   // set one row of leds to _color
   if(_row >= NUM_ROWS)
     _row = NUM_ROWS-1;
   uint16_t endIndex = (_row+1)*NUM_LEDSPERROW;
   for(uint16_t i=_row*NUM_LEDSPERROW; i<endIndex; i++) {
-    leds[i] = _color;
+    _leds[i] = _color;
   }
 }
 
-void shiftLEDs( int8_t _distance ) {
+void shiftLeds( int8_t _distance, CRGB* _leds ) {
   // shift content of leds per row in one direction or other (positive / negative number), clear leftover leds
   if(_distance == 0) { return; }  // shift by zero: do nothing.
   for(uint8_t i=0; i<NUM_ROWS; i++) {
     if(_distance > 0) {
       for(uint16_t j=0; j<NUM_LEDSPERROW-_distance; j++) {
-        leds[getLedIndex(i,j)] = leds[getLedIndex(i,j+_distance)];  // higher index to lower index, iterate upwards
+        _leds[getLedIndex(i,j)] = _leds[getLedIndex(i,j+_distance)];  // higher index to lower index, iterate upwards
       }
       for(uint16_t j=NUM_LEDSPERROW-_distance; j<NUM_LEDSPERROW; j++) {
-        leds[getLedIndex(i,j)] = CRGB(0,0,0);  // clear leftover leds
+        _leds[getLedIndex(i,j)] = CRGB(0,0,0);  // clear leftover leds
       }
     } else {
       for(uint16_t j=NUM_LEDSPERROW+NUM_LEDSPERROW+_distance-1; j>=NUM_LEDSPERROW; j--) { // make sure j never goes below 0
-        leds[getLedIndex(i,j)] = leds[getLedIndex(i,j+_distance)];  // lower index to higher index, iterate downwards
+        _leds[getLedIndex(i,j)] = _leds[getLedIndex(i,j+_distance)];  // lower index to higher index, iterate downwards
       }
       for(uint16_t j=0; j<_distance; j++) {
-        leds[getLedIndex(i,j)] = CRGB(0,0,0);  // clear leftover leds
+        _leds[getLedIndex(i,j)] = CRGB(0,0,0);  // clear leftover leds
       }
     }
   }
@@ -135,15 +130,15 @@ uint16_t getKRLedIndex( uint8_t _row, uint16_t _rowindex, uint8_t _width) {
   return getLedIndex(_row, ret);
 }
 
-void dimLeds(uint8_t _dimspeed, uint8_t _random) {
+void dimLeds(uint8_t _dimspeed, CRGB* _leds, uint8_t _random) {
   // dim contents of all leds by _dimspeed
   if(_random == 0) {
     for(uint16_t i=0; i<NUM_LEDS; i++) {
-      leds[i].fadeToBlackBy(_dimspeed);
+      _leds[i].fadeToBlackBy(_dimspeed);
     }
   } else {
     for(uint16_t i=0; i<NUM_LEDS; i++) {
-      leds[i].fadeToBlackBy(random8(_dimspeed,qadd8(_dimspeed,_dimspeed)));
+      _leds[i].fadeToBlackBy(random8(_dimspeed,qadd8(_dimspeed,_dimspeed)));
     }
   }
 }
@@ -199,10 +194,7 @@ CRGB HeatColor( uint8_t _temperature)
 }
 
 
-void clearAllLeds() {
-  memset(leds, 0, NUM_LEDS * sizeof(CRGB));  // clear all leds
+void clearLeds(CRGB* _leds, uint16_t _num_leds) {
+  memset8(_leds, 0, _num_leds * sizeof(CRGB));  // clear all leds
 }
 
-void clearRowLeds() {
-  memset(ledsrow, 0, NUM_LEDSPERROW * sizeof(CRGB));  // clear work row leds
-}
