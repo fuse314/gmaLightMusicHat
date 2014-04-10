@@ -56,8 +56,8 @@ void setup()
 {
   //FastLED library
   LEDS.addLeds<WS2811, LED_PIN, GRB>(leds, NUM_LEDS);
-  clearLeds(&leds, NUM_LEDS);
-  clearLeds(&ledsrow, NUM_LEDSPERROW);
+  clearLeds(&leds[0], NUM_LEDS);
+  clearLeds(&ledsrow[0], NUM_LEDSPERROW);
   LEDS.show();  // push black
   
   //initialize MSGEQ7 chip
