@@ -18,10 +18,10 @@
 extern CRGB leds[NUM_LEDS];
 extern CRGB ledsrow[NUM_LEDSPERROW];  // used for mirrored effects and one-row-for-all effects
 //CRGB currColor;
-#define LED_PIN 11
+#define LED_PIN 4
 
 //button stuff
-#define DEBOUNCE_TIME 150
+#define DEBOUNCE_TIME 300
 #define UPBUTTON_PIN 2  //interrupt 0
 extern volatile uint8_t upButtonPressed;
 extern volatile uint32_t lastUpButtonPressed;
