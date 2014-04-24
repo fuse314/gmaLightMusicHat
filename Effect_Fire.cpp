@@ -51,7 +51,7 @@ void EffectFire::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
    
     // Step 4.  Map from heat cells to LED colors
     for(uint8_t j = 0; j < NUM_LEDSPERHALFROW; j++) {
-      _leds[getLedIndex(row,NUM_LEDSPERHALFROW+j)] = _leds[getLedIndex(row,NUM_LEDSPERHALFROW-j-1)] = HeatColor(_heat[row][j]);
+      _leds[getLedIndex(row,NUM_LEDSPERHALFROW+j)] = _leds[getLedIndex(row,NUM_LEDSPERHALFROW-j-1)] = HeatColor(_heat[row][j],0);
     }
   }
 }

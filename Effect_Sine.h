@@ -9,6 +9,11 @@ class EffectSine : public EffectClass {
   void step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow);
   
   protected:
-  uint8_t sinval[3];
+  uint8_t  _dist[NUM_ROWS][NUM_LEDSPERHALFROW];
+  int8_t   _xoffset;
+  int8_t   _yoffset;
+  uint16_t _freq;
+  uint16_t _speed;
+  uint8_t  _color;
 };
 #endif

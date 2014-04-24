@@ -7,6 +7,7 @@
 #include "Effect_Random.h"
 #include "Effect_Sound.h"
 #include "Effect_Fire.h"
+#include "Effect_Sine.h"
 
 void CheckButton() {
   if(upButtonPressed == 1) {
@@ -129,6 +130,11 @@ void InitCurrMode(Config_t *_cnf) {
     case 24:
       delete currEffect;
       currEffect = new EffectFire(_cnf->currMode-22, _cnf);
+      break;
+    case 25:
+    case 26:
+      delete currEffect;
+      currEffect = new EffectSine(_cnf->currMode-25, _cnf);
       break;
   }
 }

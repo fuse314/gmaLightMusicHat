@@ -157,40 +157,52 @@ void dimLeds(uint8_t _dimspeed, CRGB* _leds, uint8_t _random) {
 // On AVR/Arduino, this typically takes around 70 bytes of program memory,
 // versus 768 bytes for a full 256-entry RGB lookup table.
  
-CRGB HeatColor( uint8_t _temperature)
+CRGB HeatColor( uint8_t _temp, uint8_t _color)
 {
-  CRGB heatcolor;
- 
-  // Scale 'heat' down from 0-255 to 0-191,
-  // which can then be easily divided into three
-  // equal 'thirds' of 64 units each.
-  uint8_t t192 = scale8_video( _temperature, 192);
- 
-  // calculate a value that ramps up from
-  // zero to 255 in each 'third' of the scale.
-  uint8_t heatramp = t192 & 0x3F; // 0..63
-  heatramp <<= 2; // scale up to 0..252
- 
-  // now figure out which third of the spectrum we're in:
-  if( t192 & 0x80) {
-    // we're in the hottest third
-    heatcolor.r = 255; // full red
-    heatcolor.g = 255; // full green
-    heatcolor.b = heatramp; // ramp up blue
+  CRGB ret;
+  if(_color == 0) {
+    // Scale 'heat' down from 0-255 to 0-191,
+    // which can then be easily divided into three
+    // equal 'thirds' of 64 units each.
+    uint8_t t192 = scale8_video( _temp, 192);
    
-  } else if( t192 & 0x40 ) {
-    // we're in the middle third
-    heatcolor.r = 255; // full red
-    heatcolor.g = heatramp; // ramp up green
-    heatcolor.b = 0; // no blue
+    // calculate a value that ramps up from
+    // zero to 255 in each 'third' of the scale.
+    uint8_t heatramp = t192 & 0x3F; // 0..63
+    heatramp <<= 2; // scale up to 0..252
    
+    // now figure out which third of the spectrum we're in:
+    if( t192 & 0x80) {
+      // we're in the hottest third
+      ret.r = 255; // full red
+      ret.g = 255; // full green
+      ret.b = heatramp; // ramp up blue
+     
+    } else if( t192 & 0x40 ) {
+      // we're in the middle third
+      ret.r = 255; // full red
+      ret.g = heatramp; // ramp up green
+      ret.b = 0; // no blue
+     
+    } else {
+      // we're in the coolest third
+      ret.r = heatramp; // ramp up red
+      ret.g = 0; // no green
+      ret.b = 0; // no blue
+    }
   } else {
-    // we're in the coolest third
-    heatcolor.r = heatramp; // ramp up red
-    heatcolor.g = 0; // no green
-    heatcolor.b = 0; // no blue
+    ret.r = 0;
+    ret.g = 0;
+    ret.b = 0;
+    if(_temp < 128) {
+      if(_color == 1 || _color == 3) { ret.r = 255-(_temp * 2); }
+      if(_color == 2 || _color == 3) { ret.g = (_temp * 2); }
+    } else {
+      if(_color == 1 || _color == 3) { ret.r = ((_temp-128) * 2); }
+      if(_color == 2 || _color == 3) { ret.g = 255-((_temp-128) * 2); }
+    }
   }
-  return heatcolor;
+  return ret;
 }
 
 
