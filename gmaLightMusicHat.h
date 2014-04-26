@@ -46,11 +46,11 @@ extern Config_t cnf;
 extern uint8_t findMeMode;
 
 //auto mode change stuff
+// next line controls if auto mode change stays always on
+#define ALWAYSAUTO
 extern uint8_t autoModeChange;  // start in auto mode change mode
 #define AUTOMODE_CHANGE 60000  // change every 60 seconds
 extern uint32_t lastAutoModeChangeTime;
-// next line controls if auto mode change stays always on
-#define ALWAYSAUTO
 
 #ifdef SerialDebug
 int freeRam ();  // function returns distance between stack and heap (available ram)
