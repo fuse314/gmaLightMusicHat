@@ -15,5 +15,6 @@ class EffectSine : public EffectClass {
   uint16_t _freq;
   uint16_t _speed;
   uint8_t  _color;
+  uint16_t _var;
 };
 #endif

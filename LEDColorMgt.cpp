@@ -157,7 +157,7 @@ void dimLeds(uint8_t _dimspeed, CRGB* _leds, uint8_t _random) {
 // On AVR/Arduino, this typically takes around 70 bytes of program memory,
 // versus 768 bytes for a full 256-entry RGB lookup table.
  
-CRGB HeatColor( uint8_t _temp, uint8_t _color)
+CRGB HeatColor( uint8_t _temp, uint8_t _color, uint16_t _var)
 {
   CRGB ret;
   if(_color == 0) {
@@ -194,13 +194,10 @@ CRGB HeatColor( uint8_t _temp, uint8_t _color)
     ret.r = 0;
     ret.g = 0;
     ret.b = 0;
-    if(_temp < 128) {
-      if(_color == 1 || _color == 3) { ret.r = 255-(_temp * 2); }
-      if(_color == 2 || _color == 3) { ret.g = (_temp * 2); }
-    } else {
-      if(_color == 1 || _color == 3) { ret.r = ((_temp-128) * 2); }
-      if(_color == 2 || _color == 3) { ret.g = 255-((_temp-128) * 2); }
-    }
+    if(_color == 1) { ret.r = _temp; }
+    if(_color == 2) { ret.g = _temp; }
+    if(_color == 3) { ret.b = _temp; }
+    if(_color == 4) { ret = Wheel(_var+_temp); ret.fadeToBlackBy(_temp); }
   }
   return ret;
 }

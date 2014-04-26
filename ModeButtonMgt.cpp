@@ -133,6 +133,7 @@ void InitCurrMode(Config_t *_cnf) {
       break;
     case 25:
     case 26:
+    case 27:
       delete currEffect;
       currEffect = new EffectSine(_cnf->currMode-25, _cnf);
       break;
