@@ -98,6 +98,7 @@ void setup()
   Serial.begin(9600);
   Serial << "Setup done" << endl;
   Serial << "ram " << freeRam() << endl;
+  cnf.debug = 1;
   #endif
 }
 
@@ -125,7 +126,7 @@ void loop() {
   
   #ifdef SerialDebug
     if(cnf.currFrame % 200 == 0) {
-      Serial << "m=" << cnf.currMode << " d=" << cnf.currDelay << " r=" << freeRam() << endl;
+      Serial << "m=" << cnf.currMode << " d=" << cnf.currDelay << " r=" << freeRam() << " t=" << cnf.debug << endl;
     }
   #endif
   

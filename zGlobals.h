@@ -27,6 +27,7 @@ struct Config_t {
   
   uint8_t eq7Band[7]; // 63Hz,160Hz,400Hz,1kHz,2.5kHz,6.25kHz,16kHz
   uint8_t eq7Vol[3];  // low(<=400), mid(1k-2.5k), high(>=6.25k)
+  uint32_t debug;
 };
 
 extern uint8_t soundForEveryone;
