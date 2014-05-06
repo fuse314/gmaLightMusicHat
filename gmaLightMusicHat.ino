@@ -91,7 +91,7 @@ void setup()
   findMeMode = 0;
   autoModeChange = 1;
   lastAutoModeChangeTime = 0;
-  cnf.currMode = 25;  // 15; // start with random effect 0
+  cnf.currMode = 26;  // 15; // start with random effect 0
   InitCurrMode(&cnf);
   
   #ifdef SerialDebug

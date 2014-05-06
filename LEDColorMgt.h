@@ -13,7 +13,7 @@ void shiftLeds( int8_t _distance, CRGB* _leds );
 uint16_t getLedIndex( uint8_t _row, uint16_t _rowindex);
 uint16_t getKRLedIndex( uint8_t _row, uint16_t _rowindex, uint8_t _width);
 void dimLeds(uint8_t _dimspeed, CRGB* _leds, uint8_t _random = 0);
-CRGB HeatColor(uint8_t _temperature, uint8_t _color, uint16_t _var);
+CRGB ColorMap(uint8_t _value, uint8_t _color, uint16_t _var);
 void clearLeds(CRGB* _leds, uint16_t _num_leds);
 
 #endif
