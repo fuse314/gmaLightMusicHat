@@ -23,15 +23,13 @@ to get all variables:
 50 get speed, mode, brightness
 
 */
-
-#include <gmaRGBLight.h>
-#include <SPI.h>
-#include <RF24.h>
 #include "zGlobals.h"
-//#include "zEffectClass.h"
 #include "nRFMgt.h"
 
 #ifndef NOWIRELESS
+#include <gmaRGBLight.h>
+#include <RF24.h>
+
 RF24 radio(9,10);
 
 void RF_Init() {

@@ -4,13 +4,15 @@
 #include "zGlobals.h"
 
 #ifndef NOWIRELESS
+#include <RF24.h>
+
 struct rf_hat_payload_t {
   uint8_t command;
   uint8_t mode;
   uint8_t vol[7];
 };
 
-//extern RF24 radio;
+extern RF24 radio;
 
 void RF_Init();
 
