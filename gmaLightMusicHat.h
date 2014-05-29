@@ -17,7 +17,6 @@
 //struct CRGB { unsigned char g; unsigned char r; unsigned char b; };
 extern CRGB leds[NUM_LEDS];
 extern CRGB ledsrow[NUM_LEDSPERROW];  // used for mirrored effects and one-row-for-all effects
-//CRGB currColor;
 #define LED_PIN 4
 
 //button stuff

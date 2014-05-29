@@ -1,7 +1,7 @@
 /*
   Three LED Strips mounted on hat for music festivals
   using MSGEQ7 chip and microphone to react to music
-  (c) 2013 by Gottfried Mayer www.gma.name
+  (c) 2012-2014 by Gottfried Mayer www.gma.name
   
   Uses FastLED to control WS2811 controller chips
   
@@ -12,10 +12,6 @@
   http://hackaday.com/2012/09/11/disco-planet-a-massive-rgbw-led-array-in-a-6-globe/
   
 */
-
-//#include <SPI.h>
-//#include <RF24.h>
-#include <gmaRGBLight.h>
 
 #include "gmaLightMusicHat.h"
 #include "LEDColorMgt.h"
@@ -31,11 +27,8 @@
 #include <Streaming.h>
 #endif
 
-//struct CRGB { unsigned char g; unsigned char r; unsigned char b; };
 CRGB leds[NUM_LEDS];
 CRGB ledsrow[NUM_LEDSPERROW];  // used for mirrored effects and one-row-for-all effects
-//CRGB currColor;
-
 
 volatile uint8_t upButtonPressed;
 volatile uint32_t lastUpButtonPressed;
