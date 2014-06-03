@@ -1,7 +1,6 @@
 //mode 0: red kr effect
-//mode 1: blue kr effect
-//mode 2: green kr effect
-//mode 3: rainbow kr effect 
+//mode 1: rainbow kr effect
+//mode 2: sound reactive kr effect (hue shift)
 
 #include "Effect_KR.h"
 #include "LEDColorMgt.h"
@@ -15,20 +14,21 @@ EffectKR::EffectKR(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode, _cnf) {
     case 0:
       _currColor = CRGB(192,6,0); // red
     break;
-    case 1:
-      _currColor = CRGB(5,32,192); // blue-ish
-    break;
-    case 2:
-      _currColor = CRGB(0,192,0); // green
-    break;
   }
 }
 
 void EffectKR::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
   dimLeds(DIMSPEED_KR , _leds, 1);
-  if(_effectMode == 3) {
-    _currColor = Wheel(_cnf->currFrame);
+  switch(_effectMode) {
+    case 1:
+      _currColor = Wheel(_cnf->currFrame);
+    break;
+    case 2:
+      _currColor = Wheel(520 + _cnf->eq7Vol[1]);
+      _currColor.fadeToBlackBy(128-(_cnf->eq7Vol[1]/2));
+    break;
   }
+  
   for(uint8_t i=0; i<NUM_ROWS; i++) {
     uint16_t startIndex = getKRLedIndex(i, _cnf->currFrame, KR_WIDTH);
     uint16_t endIndex;

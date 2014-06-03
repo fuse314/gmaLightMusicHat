@@ -122,22 +122,21 @@ void InitCurrMode(Config_t *_cnf) {
     case 19:
     case 20:
     case 21:
-    case 22:
       delete currEffect;
       currEffect = new EffectKR(_cnf->currMode-19, _cnf);
       break;
+    case 22:
     case 23:
     case 24:
-    case 25:
       delete currEffect;
-      currEffect = new EffectFire(_cnf->currMode-23, _cnf);
+      currEffect = new EffectFire(_cnf->currMode-22, _cnf);
       break;
+    case 25:
     case 26:
     case 27:
     case 28:
-    case 29:
       delete currEffect;
-      currEffect = new EffectSine(_cnf->currMode-26, _cnf);
+      currEffect = new EffectSine(_cnf->currMode-25, _cnf);
       break;
   }
 }

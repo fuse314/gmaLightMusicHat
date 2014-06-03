@@ -1,9 +1,9 @@
-//mode 1: volume dependent width, eqColor bars
+//mode 1: volume dependent width, eqColor bars  //TODO: too bright
 //mode 2: volume dependent width, rainbow bars
-//mode 3: all leds solid eqColor
-//mode 4: volume dependent width, eqColor bars with rainbow underlay
-//mode 5: rotating eqColor sound graph
-//mode 6: fixed eqColor sound graph with rotating (shift all leds)
+//mode 3: all leds solid eqColor  //TODO: too bright
+//mode 4: volume dependent width, eqColor bars with rainbow underlay //TODO: too bright
+//mode 5: rotating eqColor sound graph //TODO: too bright
+//mode 6: fixed eqColor sound graph with rotating (shift all leds)  // looks the same as mode 5, but rotates the other way around...
 //mode 7: volume dependent width, volume dependent color blue to red bars
 //mode 8: volume dependent width, volume dependent color green to blue bars
 //mode 9: volume dependent width, red bars with blue background
@@ -28,7 +28,7 @@ void EffectSound::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
     paintAllRows(_ledsrow, _leds);
   }
   if(_effectMode == 9) {
-    solidColor(CRGB(0,0,128),_ledsrow,NUM_LEDSPERROW); // blue base color
+    solidColor(CRGB(0,0,100),_ledsrow,NUM_LEDSPERROW); // blue base color
   }
   
   CRGB theColor;

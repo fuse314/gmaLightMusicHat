@@ -84,7 +84,7 @@ void setup()
   findMeMode = 0;
   autoModeChange = 1;
   lastAutoModeChangeTime = 0;
-  cnf.currMode = 26;  // 15; // start with random effect 0
+  cnf.currMode = 25;  // first mode to run
   InitCurrMode(&cnf);
   
   #ifdef SerialDebug
@@ -110,7 +110,8 @@ void loop() {
     random16_add_entropy(analogRead(0));   // re-initialize random numbers
   }
   
-  if((soundForEveryone == 1) || (cnf.currMode <= 11/* sound modes */) || (cnf.currMode >= 22/* fire modes */)) {
+  if((soundForEveryone == 1) || (cnf.currMode <= 11/* sound */) || 
+     (cnf.currMode == 21 /* kr */) || (cnf.currMode == 24/* fire */)) {
     GetEQ7(&cnf);
   }
   
