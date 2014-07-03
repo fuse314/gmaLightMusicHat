@@ -17,7 +17,7 @@
 #define MAXBRIGHT 120  // used for "find me" mode
 
 #define DIMSPEED 16     // the higher the faster
-#define DIMSPEED_KR 25
+#define DIMSPEED_KR 35
 
 // configuration class to be passed to step() function
 struct Config_t {

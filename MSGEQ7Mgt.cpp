@@ -1,6 +1,6 @@
 #include "MSGEQ7Mgt.h"
 #include "zGlobals.h"
-
+#include "LEDColorMgt.h"
 
 void InitEQ7() {
   pinMode(EQ7IN_PIN, INPUT);
@@ -33,8 +33,15 @@ void GetEQ7(Config_t *_cnf) {
 
 CRGB GetEQColor(Config_t *_cnf) {
   CRGB ret;
-  ret.g = _cnf->eq7Vol[2];  // high tones are green
-  ret.r = _cnf->eq7Vol[1];  // mid  tones are red
-  ret.b = _cnf->eq7Vol[0];  // low  tones are blue
+  uint16_t avgVol = _cnf->eq7Vol[0] + _cnf->eq7Vol[1] + _cnf->eq7Vol[2];  // calculate average "loudness"
+  avgVol = avgVol / 3;
+  if(avgVol > EQ7RAINBOW_LVL) {  // overwrite loud noises (usually bright white) with rainbow color
+    ret = Wheel(_cnf->currFrame);
+    ret.fadeToBlackBy(280-avgVol);
+  } else {
+    ret.g = _cnf->eq7Vol[2];  // high tones are green
+    ret.r = _cnf->eq7Vol[1];  // mid  tones are red
+    ret.b = _cnf->eq7Vol[0];  // low  tones are blue
+  }
   return ret;
 }
