@@ -9,14 +9,13 @@ class EffectFire : public EffectClass {
   void step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow);
   
   protected:
+  // _heat holds the 8bit heat map for half of the leds (displayed mirrored)
   uint8_t _heat[NUM_ROWS][NUM_LEDSPERHALFROW];
-  // COOLING: How much does the air cool as it rises?
-  // Less cooling = taller flames.  More cooling = shorter flames.
-  // Default 55, suggested range 20-100
+  // _cooling defines how fast the fire "cools" off (higher value=shorter flames)
   uint8_t _cooling;
-  // SPARKING: What chance (out of 255) is there that a new spark will be lit?
-  // Higher chance = more roaring fire.  Lower chance = more flickery fire.
-  // Default 120, suggested range 50-200.
+  // _sparking defines how often a spark is created at the bottom of the flame
   uint8_t _sparking;
+  // _palette defines the color palette for the effect
+  CRGBPalette16 _palette;
 };
 #endif

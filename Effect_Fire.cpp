@@ -24,14 +24,21 @@ EffectFire::EffectFire(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
       _sparking = 170;
       break;
   }
+  _palette = HeatColors_p;
 }
 
 void EffectFire::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
-
+  if(_effectMode == 1) {
+    uint8_t _hue = _cnf->currFrame % 256;
+    CRGB _darkcolor  = CHSV(_hue,255,192); // pure hue, three-quarters brightness
+    CRGB _lightcolor = CHSV(_hue,128,255); // half 'whitened', full brightness
+    _palette = CRGBPalette16( CRGB::Black, _darkcolor, _lightcolor, CRGB::White);
+  }
   if(_effectMode == 2) {
     _cooling = map(_cnf->eq7Vol[1],0,255, 40,90);
     _sparking = map(_cnf->eq7Vol[1],0,255, 32,100);
   }
+
   for (uint8_t row = 0; row < NUM_ROWS; row++) {
   // Step 1.  Cool down every cell a little
     for(uint8_t i = 0; i < NUM_LEDSPERHALFROW; i++) {
@@ -50,8 +57,10 @@ void EffectFire::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
     }
    
     // Step 4.  Map from heat cells to LED colors
+    uint8_t palIndex;
     for(uint8_t j = 0; j < NUM_LEDSPERHALFROW; j++) {
-      _leds[getLedIndex(row,NUM_LEDSPERHALFROW+j)] = _leds[getLedIndex(row,NUM_LEDSPERHALFROW-j-1)] = ColorMap(_heat[row][j],0,0);
+      palIndex = scale8(_heat[row][j], 240); // scale for better results with palette colors
+      _leds[getLedIndex(row,NUM_LEDSPERHALFROW+j)] = _leds[getLedIndex(row,NUM_LEDSPERHALFROW-j-1)] = ColorFromPalette(_palette, palIndex);
     }
   }
 }
