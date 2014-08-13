@@ -17,7 +17,7 @@ EffectRandom::EffectRandom(uint8_t _mode, Config_t *_cnf) : EffectClass(_mode) {
   if(_mode == 4 || _mode == 5) {
     // initialize random lines
     for(uint8_t i=0; i<RANDOM_NUM_LINES; i++) {
-      initLine(*_rndLines[i]);      
+      initLine(&_rndLines[i]);      
     }
   }
 }
@@ -60,15 +60,16 @@ void EffectRandom::step(Config_t *_cnf, CRGB* _leds, CRGB* _rowleds) {
     case 4:
     case 5:
       uint8_t _bright = 0;
+      clearLeds(_leds, NUM_LEDS);
       for(uint8_t i=0; i<RANDOM_NUM_LINES; i++) {
-        stepLine(*_rndLines[i]);
+        stepLine(&_rndLines[i]);
         if(_effectMode == 4) {
-          _bright = 255-_rndLines[i]->anim_idx;
+          _bright = 255-_rndLines[i].anim_idx;
         } else {
-          _bright = quadwave8(_rndLines[i]->anim_idx);
+          _bright = quadwave8(_rndLines[i].anim_idx);
         }
-        _currColor = CHSV(_rndLines[i]->hue,255,_bright);
-        for(uint16_t j=_rndLines[i]->start; j<(_rndLines[i]->start+_rndLines[i]->length); j++) {
+        _currColor = CHSV(_rndLines[i].hue,255,_bright);
+        for(uint16_t j=_rndLines[i].start; j<(_rndLines[i].start+_rndLines[i].length); j++) {
           _leds[j] += _currColor;
         }
       }
