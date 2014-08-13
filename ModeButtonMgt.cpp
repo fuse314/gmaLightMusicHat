@@ -116,27 +116,29 @@ void InitCurrMode(Config_t *_cnf) {
     case 16:
     case 17:
     case 18:
+    case 19:
+    case 20:
       delete currEffect;
       currEffect = new EffectRandom(_cnf->currMode-15, _cnf);
       break;
-    case 19:
-    case 20:
     case 21:
-      delete currEffect;
-      currEffect = new EffectKR(_cnf->currMode-19, _cnf);
-      break;
     case 22:
     case 23:
-    case 24:
       delete currEffect;
-      currEffect = new EffectFire(_cnf->currMode-22, _cnf);
+      currEffect = new EffectKR(_cnf->currMode-21, _cnf);
       break;
+    case 24:
     case 25:
     case 26:
+      delete currEffect;
+      currEffect = new EffectFire(_cnf->currMode-24, _cnf);
+      break;
     case 27:
     case 28:
+    case 29:
+    case 30:
       delete currEffect;
-      currEffect = new EffectSine(_cnf->currMode-25, _cnf);
+      currEffect = new EffectSine(_cnf->currMode-27, _cnf);
       break;
   }
 }
