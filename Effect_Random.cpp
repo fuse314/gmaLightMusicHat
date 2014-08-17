@@ -78,10 +78,10 @@ void EffectRandom::step(Config_t *_cnf, CRGB* _leds, CRGB* _rowleds) {
 }
 
 void EffectRandom::initLine(rndline_t *_line) {  // initialize line object
-  _line->start = random16(NUM_LEDS);
-  _line->length = random8(NUM_LEDSPERROW);
+  _line->start = random16(NUM_LEDS-1);
+  _line->length = random8(NUM_LEDSPERROW/3);
   if(_line->start+_line->length >= NUM_LEDS) {
-    _line->length = NUM_LEDS-1;
+    _line->length = NUM_LEDS-_line->start-1;
   }
   _line->hue = random8();
   _line->anim_idx = 0;

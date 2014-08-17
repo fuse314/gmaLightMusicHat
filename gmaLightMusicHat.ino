@@ -84,7 +84,7 @@ void setup()
   findMeMode = 0;
   autoModeChange = 1;
   lastAutoModeChangeTime = 0;
-  cnf.currMode = 25;  // first mode to run
+  cnf.currMode = 19;  // first mode to run
   InitCurrMode(&cnf);
   
   #ifdef SerialDebug
@@ -106,7 +106,7 @@ void loop() {
   cnf.currFrame++;
   
   // random modes every 100 frames, fire mode every 20 frames
-  if(((cnf.currMode > 14) && (cnf.currFrame % 100 == 0)) || ((cnf.currMode >= 22) && (cnf.currFrame % 20 == 0))) {
+  if(((cnf.currMode > 14) && (cnf.currFrame % 100 == 0)) || ((cnf.currMode >= 22) && (cnf.currFrame % 13 == 0))) {
     random16_add_entropy(analogRead(0));   // re-initialize random numbers
   }
   

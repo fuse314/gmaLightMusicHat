@@ -5,7 +5,7 @@
 #include "zEffectClass.h"
 
 #define RANDOM_WIDTH 5      // width of random colored band (mode 1)
-#define RANDOM_NUM_LINES 4  // number of random lines (mode x)
+#define RANDOM_NUM_LINES 9  // number of random lines (mode x)
 
 class EffectRandom : public EffectClass {
   public:

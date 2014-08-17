@@ -49,6 +49,12 @@ void EffectFire::step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
     for(uint8_t k= NUM_LEDSPERHALFROW - 1; k > 0; k--) {
       _heat[row][k] = (_heat[row][k - 1] + _heat[row][k - 2] + _heat[row][k - 2] ) / 3;
     }
+    // step 2.5 Heat from each cell drifts 'left' and diffuses a little
+    if(row < (NUM_ROWS-1)) {
+      for(uint8_t m=NUM_LEDSPERHALFROW - 1; m > 0; m--) {
+        _heat[row+1][m] = (_heat[row+1][m] + _heat[row+1][m] + _heat[row+1][m] + _heat[row][m] ) / 4;
+      }
+    }
    
     // Step 3.  Randomly ignite new 'sparks' of heat near the bottom
     if(random8() < _sparking ) {
