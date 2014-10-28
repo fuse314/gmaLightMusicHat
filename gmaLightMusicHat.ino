@@ -15,10 +15,10 @@
 
 #include "gmaLightMusicHat.h"
 #include "LEDColorMgt.h"
-#include "MSGEQ7Mgt.h"
-#include "ModeButtonMgt.h"
-#include "zEffectClass.h"
-#include "nRFMgt.h"
+#include "MSGEQ7Mgt.cpp"
+#include "ModeButtonMgt.cpp"
+#include "zEffectClass.cpp"
+#include "nRFMgt.cpp"
 
 // LED stuff
 #include <FastLED.h>
@@ -45,6 +45,12 @@ uint8_t soundForEveryone;
 
 Config_t cnf;
 
+MSGEQ7Mgt eq;
+ModeButtonMgt modebutton;
+#ifndef NOWIRELESS
+NRFMgt nrfmgt;
+#endif
+
 void setup()
 {
   //FastLED library
@@ -54,12 +60,12 @@ void setup()
   LEDS.show();  // push black
   
   //initialize MSGEQ7 chip
-  InitEQ7();
+  eq.InitEQ7();
   
   soundForEveryone = 0;
   #ifndef NOWIRELESS
   //RF24 stuff
-  RF_Init();
+  nrfmgt.RF_Init();
   #endif
   
   //button stuff
@@ -72,11 +78,11 @@ void setup()
   
   pinMode(UPBUTTON_PIN, INPUT);
   digitalWrite(UPBUTTON_PIN, HIGH);  // pullup resistor
-  attachInterrupt(0, UpButtonInterruptHandler, FALLING);
+  attachInterrupt(0, modebutton.UpButtonInterruptHandler, FALLING);
   #ifndef NOFINDME
     pinMode(FINDMEBUTTON_PIN, INPUT);
     digitalWrite(FINDMEBUTTON_PIN, HIGH);  // pullup resistor
-    attachInterrupt(1, FindMeButtonInterruptHandler, FALLING);
+    attachInterrupt(1, modebutton.FindMeButtonInterruptHandler, FALLING);
   #endif  
 
   //mode stuff
@@ -85,7 +91,8 @@ void setup()
   autoModeChange = 1;
   lastAutoModeChangeTime = 0;
   cnf.currMode = 19;  // first mode to run
-  InitCurrMode(&cnf);
+  //modebutton.setVars(&cnf, currEffect);
+  modebutton.InitCurrMode(&cnf);
   
   #ifdef SerialDebug
   Serial.begin(9600);
@@ -100,6 +107,9 @@ void loop() {
   // call effect loop
   currEffect->step(&cnf, leds, ledsrow);
   //LoopCurrMode();
+  if(LEDS.getBrightness() != cnf.currBright) {  // update global brightness
+    LEDS.setBrightness(cnf.currBright);
+  }
   // push pixels to led strip
   LEDS.show();
   // increment currFrame after effect loop - this variable may roll over
@@ -112,11 +122,11 @@ void loop() {
   
   if((soundForEveryone == 1) || (cnf.currMode <= 11/* sound */) || 
      (cnf.currMode == 21 /* kr */) || (cnf.currMode == 24/* fire */)) {
-    GetEQ7(&cnf);
+    eq.GetEQ7(&cnf);
   }
   
   // check if any buttons have been pressed
-  CheckButton();
+  modebutton.CheckButton();
   
   #ifdef SerialDebug
     if(cnf.currFrame % 200 == 0) {
@@ -126,12 +136,12 @@ void loop() {
   
   #ifndef NOWIRELESS
   //RF24 stuff
-  RF_Read();
+  nrfmgt.RF_Read();
   #endif
   
   // only check random mode change every currDelay*150 milliseconds, default 1050 ms (one second)
   if(autoModeChange == 1 && cnf.currFrame % 150 == 0) {
-    CheckAutoModeChange();
+    modebutton.CheckAutoModeChange();
   }
   FastLED.delay(cnf.currDelay);
 }

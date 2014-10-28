@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <FastLED.h>
 #include "zGlobals.h"
-#include "zEffectClass.h"
+#include "zEffectClass.cpp"
 
 //uncomment this for debug over serial port
 //#define SerialDebug
@@ -35,8 +35,6 @@ extern volatile uint32_t lastUpButtonPressed;
 #endif
 
 //effect stuff
-#include "zEffectClass.h"
-#include "Effect_Random.h"  // only include first effect for setup()
 extern EffectClass *currEffect;
 
 extern Config_t cnf;

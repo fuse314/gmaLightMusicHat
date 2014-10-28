@@ -1,91 +1,23 @@
-#include "ModeButtonMgt.h"
+#ifndef MODEBUTTONMGT_H
+#define MODEBUTTONMGT_H
+
 #include "zGlobals.h"
 #include "gmaLightMusicHat.h"
-#include "Effect_FindMe.h"
-#include "Effect_KR.h"
-#include "Effect_Rainbow.h"
-#include "Effect_Random.h"
-#include "Effect_Sound.h"
-#include "Effect_Fire.h"
-#include "Effect_Sine.h"
+#include "Effect_FindMe.cpp"
+#include "Effect_KR.cpp"
+#include "Effect_Rainbow.cpp"
+#include "Effect_Random.cpp"
+#include "Effect_Sound.cpp"
+#include "Effect_Fire.cpp"
+#include "Effect_Sine.cpp"
 
-void CheckButton() {
-  if(upButtonPressed == 1) {
-    #ifndef ALWAYSAUTO
-    if(autoModeChange == 1) {  // exit auto mode change on button press
-      autoModeChange = 0;
-    }
-    #endif
-    ChangeMode(1);
-    upButtonPressed = 0;
-  }
-  #ifndef NOFINDME
-    if(findMeMode == 1 && millis() - lastFindMeButtonPressed >= 2000) { // check every 2 seconds if we missed a interrupt event and have to disable find me mode...
-      if(digitalRead(FINDMEBUTTON_PIN) == HIGH) {  // active = low
-        InitCurrMode();
-        findMeMode = 0;
-        findMeButtonPressed = 0;
-      }
-      lastFindMeButtonPressed = millis();
-    } else {
-      if(findMeButtonPressed == 1) {
-        if(digitalRead(FINDMEBUTTON_PIN) == LOW) {  // active = low
-          delete currEffect;
-          currEffect = new EffectFindMe(0);
-          findMeMode = 1;
-        } else {
-          InitCurrMode(&cnf);
-          findMeMode = 0;
-        }
-        findMeButtonPressed = 0;
-      }
-    }
-  #endif
-}
+#define MAX_MODE 30       // maximum number of modes
 
-void UpButtonInterruptHandler() {   // interrupt handler function
-  if(millis() - lastUpButtonPressed >= DEBOUNCE_TIME) {
-    upButtonPressed = 1;
-    lastUpButtonPressed = millis();
-  }
-}
+class ModeButtonMgt {
 
-void FindMeButtonInterruptHandler() {   // interrupt handler function
-  #ifndef NOFINDME
-    if(millis() - lastFindMeButtonPressed >= DEBOUNCE_TIME) {
-      findMeButtonPressed = 1;
-      lastFindMeButtonPressed = millis();
-    }
-  #endif
-}
+  public:
 
-void ChangeMode(uint8_t _modeUp) {
-  // change mode up or down, never go to mode 0 (find me), has its own button
-  if(_modeUp == 0) {
-    cnf.currMode--;
-    if(cnf.currMode == 0) {
-      cnf.currMode = MAX_MODE;
-    }
-  } else {
-    cnf.currMode++;
-    if(cnf.currMode > MAX_MODE) {
-      cnf.currMode = 1;
-    }
-  }
-  //currFrame = 0;
-  InitCurrMode(&cnf);
-}
-
-void CheckAutoModeChange() {
-  // auto mode change every AUTOMODE_CHANGE milliseconds, choose random mode
-  if(findMeMode == 0 &&  millis() > AUTOMODE_CHANGE && millis() - lastAutoModeChangeTime > AUTOMODE_CHANGE) {
-    lastAutoModeChangeTime = millis();
-    cnf.currMode = random8(MAX_MODE) + 1; // random number including 0, excluding MAX_MODE
-    InitCurrMode(&cnf);
-  }
-}
-
-void InitCurrMode(Config_t *_cnf) {
+static void InitCurrMode(Config_t *_cnf) {
   // initialize current mode (called on mode change)
   switch(_cnf->currMode) {
     case 0: // find me
@@ -142,3 +74,83 @@ void InitCurrMode(Config_t *_cnf) {
       break;
   }
 }
+
+static void ChangeMode(uint8_t _modeUp) {
+  // change mode up or down, never go to mode 0 (find me), has its own button
+  if(_modeUp == 0) {
+    cnf.currMode--;
+    if(cnf.currMode == 0) {
+      cnf.currMode = MAX_MODE;
+    }
+  } else {
+    cnf.currMode++;
+    if(cnf.currMode > MAX_MODE) {
+      cnf.currMode = 1;
+    }
+  }
+  //currFrame = 0;
+  InitCurrMode(&cnf);
+}
+
+static void CheckButton() {
+  if(upButtonPressed == 1) {
+    #ifndef ALWAYSAUTO
+    if(autoModeChange == 1) {  // exit auto mode change on button press
+      autoModeChange = 0;
+    }
+    #endif
+    ChangeMode(1);
+    upButtonPressed = 0;
+  }
+  #ifndef NOFINDME
+    if(findMeMode == 1 && millis() - lastFindMeButtonPressed >= 2000) { // check every 2 seconds if we missed a interrupt event and have to disable find me mode...
+      if(digitalRead(FINDMEBUTTON_PIN) == HIGH) {  // active = low
+        InitCurrMode();
+        findMeMode = 0;
+        findMeButtonPressed = 0;
+      }
+      lastFindMeButtonPressed = millis();
+    } else {
+      if(findMeButtonPressed == 1) {
+        if(digitalRead(FINDMEBUTTON_PIN) == LOW) {  // active = low
+          delete currEffect;
+          currEffect = new EffectFindMe(0);
+          findMeMode = 1;
+        } else {
+          InitCurrMode(&cnf);
+          findMeMode = 0;
+        }
+        findMeButtonPressed = 0;
+      }
+    }
+  #endif
+}
+
+static void UpButtonInterruptHandler() {   // interrupt handler function
+  if(millis() - lastUpButtonPressed >= DEBOUNCE_TIME) {
+    upButtonPressed = 1;
+    lastUpButtonPressed = millis();
+  }
+}
+
+static void FindMeButtonInterruptHandler() {   // interrupt handler function
+  #ifndef NOFINDME
+    if(millis() - lastFindMeButtonPressed >= DEBOUNCE_TIME) {
+      findMeButtonPressed = 1;
+      lastFindMeButtonPressed = millis();
+    }
+  #endif
+}
+
+static void CheckAutoModeChange() {
+  // auto mode change every AUTOMODE_CHANGE milliseconds, choose random mode
+  if(findMeMode == 0 &&  millis() > AUTOMODE_CHANGE && millis() - lastAutoModeChangeTime > AUTOMODE_CHANGE) {
+    lastAutoModeChangeTime = millis();
+    cnf.currMode = random8(MAX_MODE) + 1; // random number including 0, excluding MAX_MODE
+    InitCurrMode(&cnf);
+  }
+}
+
+};
+#endif
+

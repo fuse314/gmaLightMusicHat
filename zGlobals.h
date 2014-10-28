@@ -17,13 +17,14 @@
 #define MAXBRIGHT 120  // used for "find me" mode
 
 #define DIMSPEED 16     // the higher the faster
-#define DIMSPEED_KR 35
+//#define DIMSPEED_KR 35
 
 // configuration class to be passed to step() function
 struct Config_t {
   uint16_t currFrame;
   uint8_t  currDelay;
   uint8_t  currMode;
+  uint8_t  currBright;
   
   uint8_t eq7Band[7]; // 63Hz,160Hz,400Hz,1kHz,2.5kHz,6.25kHz,16kHz
   uint8_t eq7Vol[3];  // low(<=400), mid(1k-2.5k), high(>=6.25k)
