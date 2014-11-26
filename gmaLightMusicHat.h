@@ -1,7 +1,6 @@
 #ifndef MYCONFIG_H
 #define MYCONFIG_H
 
-#include <Arduino.h>
 #include <FastLED.h>
 #include "zGlobals.h"
 #include "zEffectClass.cpp"

@@ -8,7 +8,6 @@
 
 #ifndef EFFECTFIRE_H
 #define EFFECTFIRE_H
-#include <Arduino.h>
 #include "zEffectClass.cpp"
 #include "LEDColorMgt.h"
 

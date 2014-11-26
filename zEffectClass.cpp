@@ -1,6 +1,6 @@
 #ifndef EFFECTCLASS_H
 #define EFFECTCLASS_H
-#include <Arduino.h>
+
 #include <FastLED.h>
 #include "zGlobals.h"
 

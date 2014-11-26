@@ -8,7 +8,6 @@
 #ifndef EFFECTRANDOM_H
 #define EFFECTRANDOM_H
 
-#include <Arduino.h>
 #include "zEffectClass.cpp"
 #include "LEDColorMgt.h"
 

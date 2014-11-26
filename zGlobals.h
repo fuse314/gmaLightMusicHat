@@ -1,6 +1,6 @@
 #ifndef ZGLOBALS_H
 #define ZGLOBALS_H
-#include <Arduino.h>
+#include <FastLED.h>
 
 #define NUM_LEDS 114
 #define NUM_ROWS 3

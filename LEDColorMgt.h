@@ -1,7 +1,6 @@
 #ifndef LEDCOLORMGT_H
 #define LEDCOLORMGT_H
 
-#include <Arduino.h>
 #include <FastLED.h>
 
 CRGB Wheel(uint16_t _wheelPos);
