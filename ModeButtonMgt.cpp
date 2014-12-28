@@ -3,7 +3,6 @@
 
 #include "zGlobals.h"
 #include "gmaLightMusicHat.h"
-#include "Effect_FindMe.cpp"
 #include "Effect_KR.cpp"
 #include "Effect_Rainbow.cpp"
 #include "Effect_Random.cpp"
@@ -11,7 +10,7 @@
 #include "Effect_Fire.cpp"
 #include "Effect_Sine.cpp"
 
-#define MAX_MODE 30       // maximum number of modes
+#define MAX_MODE 28       // maximum number of modes
 
 class ModeButtonMgt {
 
@@ -20,10 +19,6 @@ class ModeButtonMgt {
 static void InitCurrMode(Config_t *_cnf) {
   // initialize current mode (called on mode change)
   switch(_cnf->currMode) {
-    case 0: // find me
-      delete currEffect;
-      currEffect = new EffectFindMe(0, _cnf);
-      break;
     case 1:
     case 2:
     case 3:
@@ -34,43 +29,41 @@ static void InitCurrMode(Config_t *_cnf) {
     case 8:
     case 9:
     case 10:
-    case 11:
       delete currEffect;
       currEffect = new EffectSound(_cnf->currMode, _cnf);
       break;
+    case 11:
     case 12:
     case 13:
     case 14:
-      delete currEffect;
-      currEffect = new EffectRainbow(_cnf->currMode-12, _cnf);
-      break;
     case 15:
+      delete currEffect;
+      currEffect = new EffectRainbow(_cnf->currMode-11, _cnf);
+      break;
     case 16:
     case 17:
     case 18:
     case 19:
-    case 20:
       delete currEffect;
-      currEffect = new EffectRandom(_cnf->currMode-15, _cnf);
+      currEffect = new EffectRandom(_cnf->currMode-16, _cnf);
       break;
+    case 20:
     case 21:
     case 22:
-    case 23:
       delete currEffect;
-      currEffect = new EffectKR(_cnf->currMode-21, _cnf);
+      currEffect = new EffectKR(_cnf->currMode-20, _cnf);
       break;
+    case 23:
     case 24:
     case 25:
-    case 26:
       delete currEffect;
-      currEffect = new EffectFire(_cnf->currMode-24, _cnf);
+      currEffect = new EffectFire(_cnf->currMode-23, _cnf);
       break;
+    case 26:
     case 27:
     case 28:
-    case 29:
-    case 30:
       delete currEffect;
-      currEffect = new EffectSine(_cnf->currMode-27, _cnf);
+      currEffect = new EffectSine(_cnf->currMode-26, _cnf);
       break;
   }
 }
@@ -92,59 +85,39 @@ static void ChangeMode(uint8_t _modeUp) {
   InitCurrMode(&cnf);
 }
 
-static void CheckButton() {
-  if(upButtonPressed == 1) {
-    #ifndef ALWAYSAUTO
-    if(autoModeChange == 1) {  // exit auto mode change on button press
-      autoModeChange = 0;
-    }
-    #endif
-    ChangeMode(1);
-    upButtonPressed = 0;
+static void ModeButton_Click() {
+  #ifndef ALWAYSAUTO
+  if(autoModeChange == 1) {  // exit auto mode change on button press
+    autoModeChange = 0;
   }
-  #ifndef NOFINDME
-    if(findMeMode == 1 && millis() - lastFindMeButtonPressed >= 2000) { // check every 2 seconds if we missed a interrupt event and have to disable find me mode...
-      if(digitalRead(FINDMEBUTTON_PIN) == HIGH) {  // active = low
-        InitCurrMode();
-        findMeMode = 0;
-        findMeButtonPressed = 0;
-      }
-      lastFindMeButtonPressed = millis();
-    } else {
-      if(findMeButtonPressed == 1) {
-        if(digitalRead(FINDMEBUTTON_PIN) == LOW) {  // active = low
-          delete currEffect;
-          currEffect = new EffectFindMe(0);
-          findMeMode = 1;
-        } else {
-          InitCurrMode(&cnf);
-          findMeMode = 0;
-        }
-        findMeButtonPressed = 0;
-      }
-    }
   #endif
+  ChangeMode(1);
 }
 
-static void UpButtonInterruptHandler() {   // interrupt handler function
-  if(millis() - lastUpButtonPressed >= DEBOUNCE_TIME) {
-    upButtonPressed = 1;
-    lastUpButtonPressed = millis();
+static void ModeButton_DoubleClick() {
+  #ifndef ALWAYSAUTO
+  if(autoModeChange == 1) {  // exit auto mode change on button press
+    autoModeChange = 0;
   }
+  #endif
+  ChangeMode(0);
 }
 
-static void FindMeButtonInterruptHandler() {   // interrupt handler function
-  #ifndef NOFINDME
-    if(millis() - lastFindMeButtonPressed >= DEBOUNCE_TIME) {
-      findMeButtonPressed = 1;
-      lastFindMeButtonPressed = millis();
-    }
-  #endif
+static void ModeButton_Hold() {
+  if(autoModeChange) {
+    autoModeChange = 0;
+    LEDS.showColor(CRGB::Red);
+    delay(150);
+  } else {
+    autoModeChange = 1;
+    LEDS.showColor(CRGB::Green);
+    delay(150);
+  }
 }
 
 static void CheckAutoModeChange() {
   // auto mode change every AUTOMODE_CHANGE milliseconds, choose random mode
-  if(findMeMode == 0 &&  millis() > AUTOMODE_CHANGE && millis() - lastAutoModeChangeTime > AUTOMODE_CHANGE) {
+  if(millis() > AUTOMODE_CHANGE && millis() - lastAutoModeChangeTime > AUTOMODE_CHANGE) {
     lastAutoModeChangeTime = millis();
     cnf.currMode = random8(MAX_MODE) + 1; // random number including 0, excluding MAX_MODE
     InitCurrMode(&cnf);

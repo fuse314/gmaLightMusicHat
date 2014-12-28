@@ -2,9 +2,6 @@
 //mode 1: rainbow kr effect
 //mode 2: sound reactive kr effect (hue shift)
 
-#ifndef EFFECTKR_H
-#define EFFECTKR_H
-
 #include "zEffectClass.cpp"
 #include "LEDColorMgt.h"
 
@@ -24,11 +21,11 @@ class EffectKR : public EffectClass {
     }
   }
   
-  void step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) {
+  void step(Config_t *_cnf, CRGB* _leds) {
     dimLeds(KR_DIMSPEED , _leds, 1);
     switch(_effectMode) {
       case 1:
-        _currColor = Wheel(_cnf->currFrame);
+        _currColor = CHSV(_cnf->currHue,255,255);
       break;
       case 2:
         _currColor = Wheel(520 + _cnf->eq7Vol[1]);
@@ -36,7 +33,7 @@ class EffectKR : public EffectClass {
       break;
     }
     
-    for(uint8_t i=0; i<NUM_ROWS; i++) {
+    for(uint8_t i=0; i<M_HEIGHT; i++) {
       uint16_t startIndex = getKRLedIndex(i, _cnf->currFrame, KR_WIDTH);
       uint16_t endIndex;
       if(i%2==0) {
@@ -58,5 +55,4 @@ class EffectKR : public EffectClass {
     }
   }
 };
-#endif
 

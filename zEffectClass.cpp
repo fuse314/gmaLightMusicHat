@@ -1,8 +1,8 @@
 #ifndef EFFECTCLASS_H
 #define EFFECTCLASS_H
 
-#include <FastLED.h>
 #include "zGlobals.h"
+#include <FastLED.h>
 
 // abstract class EffectClass to be inherited by different Effects
 class EffectClass {
@@ -12,7 +12,7 @@ class EffectClass {
       _effectMode = _mode;
     }
     // step function is called from loop
-    virtual void step(Config_t *_cnf, CRGB* _leds, CRGB* _ledsrow) = 0; 
+    virtual void step(Config_t *_cnf, CRGB* _leds) = 0; 
     
   protected:
     uint8_t _effectMode;
