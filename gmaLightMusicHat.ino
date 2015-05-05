@@ -14,11 +14,18 @@
 */
 
 #include "gmaLightMusicHat.h"
+#include "zGlobals.h"
 #include "LEDColorMgt.h"
-#include "MSGEQ7Mgt.cpp"
-#include "ModeButtonMgt.cpp"
-#include "zEffectClass.cpp"
-#include "nRFMgt.cpp"
+#include "MSGEQ7Mgt.h"
+#include "ModeButtonMgt.h"
+#include "zEffectClass.h"
+#ifndef NOWIRELESS
+#include <SPI.h>
+#include <RF24.h>
+#include <gmaRGBLight.h>
+#include "nRFMgt.h"
+#endif
+
 
 // LED stuff
 #include <FastLED.h>
@@ -42,9 +49,6 @@ Config_t cnf;
 
 MSGEQ7Mgt eq;
 ModeButtonMgt modeMgt;
-#ifndef NOWIRELESS
-NRFMgt nrfmgt;
-#endif
 
 // setup button
 OneButton modeButton(MODEBUTTON_PIN,true);
@@ -63,7 +67,7 @@ void setup()
   soundForEveryone = 0;
   #ifndef NOWIRELESS
   //RF24 stuff
-  nrfmgt.RF_Init();
+  RF_Init();
   #endif
   
   //button stuff
@@ -122,7 +126,12 @@ void loop() {
   
   #ifndef NOWIRELESS
   //RF24 stuff
-  nrfmgt.RF_Read();
+  RF_Read();
+  
+  if(soundForEveryone == 1) {
+    RF_SoundForEveryone(&cnf);
+  }
+  
   #endif
   
   // only check random mode change every currDelay*150 milliseconds, default 1050 ms (one second)

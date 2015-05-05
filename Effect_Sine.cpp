@@ -7,7 +7,7 @@
 #ifndef EFFECTSINE_H
 #define EFFECTSINE_H
 
-#include "zEffectClass.cpp"
+#include "zEffectClass.h"
 #include "LEDColorMgt.h"
 
 class EffectSine : public EffectClass {

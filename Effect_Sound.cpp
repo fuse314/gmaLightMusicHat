@@ -9,9 +9,9 @@
 //mode 9: volume dependent brightness, red solid color per row
 //mode 10: volume dependent brightness, volume dependent color green to blue per row
 
-#include "zEffectClass.cpp"
+#include "zEffectClass.h"
 #include "LEDColorMgt.h"
-#include "MSGEQ7Mgt.cpp"
+#include "MSGEQ7Mgt.h"
 
 class EffectSound : public EffectClass {
   private:

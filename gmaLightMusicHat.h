@@ -3,7 +3,7 @@
 
 #include "zGlobals.h"
 //#include <FastLED.h>
-#include "zEffectClass.cpp"
+#include "zEffectClass.h"
 
 //uncomment this for debug over serial port
 //#define SerialDebug

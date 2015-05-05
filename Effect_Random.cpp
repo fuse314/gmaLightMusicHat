@@ -6,7 +6,7 @@
 #ifndef EFFECTRANDOM_H
 #define EFFECTRANDOM_H
 
-#include "zEffectClass.cpp"
+#include "zEffectClass.h"
 #include "LEDColorMgt.h"
 
 #define RANDOM_NUM_LINES 9  // number of random lines (mode x)

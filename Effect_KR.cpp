@@ -2,7 +2,7 @@
 //mode 1: rainbow kr effect
 //mode 2: sound reactive kr effect (hue shift)
 
-#include "zEffectClass.cpp"
+#include "zEffectClass.h"
 #include "LEDColorMgt.h"
 
 #define KR_WIDTH 7     // width of KR-band

@@ -6,7 +6,7 @@
 //mode 1: fire 2
 //mode 2: sound fire
 
-#include "zEffectClass.cpp"
+#include "zEffectClass.h"
 #include "LEDColorMgt.h"
 
 class EffectFire : public EffectClass {

@@ -45,7 +45,7 @@ class MSGEQ7Mgt {
     
     _cnf->eq7Vol[0] = (_cnf->eq7Band[0] + _cnf->eq7Band[1] + _cnf->eq7Band[2] + _cnf->eq7Band[2]) / 4;  // low tones
     _cnf->eq7Vol[1] = (_cnf->eq7Band[3] + _cnf->eq7Band[4]) / 2;                                        // mid tones
-    _cnf->eq7Vol[2] = (_cnf->eq7Band[5] + _cnf->eq7Band[6] + _cnf->eq7Band[7]) / 3;                     // high tones
+    _cnf->eq7Vol[2] = (_cnf->eq7Band[5] + _cnf->eq7Band[6] + _cnf->eq7Band[6]) / 3;                     // high tones
   }
 
   static CRGB GetEQColor(Config_t *_cnf) {

@@ -38,6 +38,6 @@ struct Config_t {
 extern uint8_t soundForEveryone;
 
 // comment out to get RF24 module working
-#define NOWIRELESS
+//#define NOWIRELESS
 
 #endif

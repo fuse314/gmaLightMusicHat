@@ -4,7 +4,7 @@
 //mode 3: horizontal rain
 //mode 4: slanted bars
 
-#include "zEffectClass.cpp"
+#include "zEffectClass.h"
 #include "LEDColorMgt.h"
 
 class EffectRainbow : public EffectClass {

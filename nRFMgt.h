@@ -5,6 +5,8 @@
 
 #ifndef NOWIRELESS
 #include <RF24.h>
+#include <gmaRGBLight.h>
+#include <gmaSensorNet.h>
 
 struct rf_hat_payload_t {
   uint8_t command;
@@ -13,6 +15,8 @@ struct rf_hat_payload_t {
 };
 
 extern RF24 radio;
+extern uint32_t sound_last_request;
+#define SOUND_REQUEST_INTERVAL 120000  // 2 minutes
 
 void RF_Init();
 
