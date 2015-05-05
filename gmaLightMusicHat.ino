@@ -19,12 +19,6 @@
 #include "MSGEQ7Mgt.h"
 #include "ModeButtonMgt.h"
 #include "zEffectClass.h"
-#ifndef NOWIRELESS
-#include <SPI.h>
-#include <RF24.h>
-#include <gmaRGBLight.h>
-#include "nRFMgt.h"
-#endif
 
 
 // LED stuff
@@ -63,12 +57,6 @@ void setup()
   
   //initialize MSGEQ7 chip
   eq.InitEQ7();
-  
-  soundForEveryone = 0;
-  #ifndef NOWIRELESS
-  //RF24 stuff
-  RF_Init();
-  #endif
   
   //button stuff
   modeButton.setClickTicks(300);
@@ -110,8 +98,7 @@ void loop() {
     random16_add_entropy(analogRead(0));   // re-initialize random numbers
   }
   
-  if((soundForEveryone == 1) || (cnf.currMode <= 11/* sound */) || 
-     (cnf.currMode == 21 /* kr */) || (cnf.currMode == 24/* fire */)) {
+  if((cnf.currMode <= 11/* sound */) || (cnf.currMode == 21 /* kr */) || (cnf.currMode == 24/* fire */)) {
     eq.GetEQ7(&cnf);
   }
   
@@ -122,16 +109,6 @@ void loop() {
     if(cnf.currFrame % 200 == 0) {
       Serial << "m=" << cnf.currMode << " d=" << cnf.currDelay << " r=" << freeRam() << endl;
     }
-  #endif
-  
-  #ifndef NOWIRELESS
-  //RF24 stuff
-  RF_Read();
-  
-  if(soundForEveryone == 1) {
-    RF_SoundForEveryone(&cnf);
-  }
-  
   #endif
   
   // only check random mode change every currDelay*150 milliseconds, default 1050 ms (one second)
