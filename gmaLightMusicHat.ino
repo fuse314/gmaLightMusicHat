@@ -19,12 +19,10 @@
 #include "MSGEQ7Mgt.h"
 #include "ModeButtonMgt.h"
 #include "zEffectClass.h"
-#ifndef NOWIRELESS
 #include <SPI.h>
 #include <RF24.h>
 #include <gmaRGBLight.h>
 #include "nRFMgt.h"
-#endif
 
 
 // LED stuff
@@ -65,10 +63,8 @@ void setup()
   eq.InitEQ7();
   
   soundForEveryone = 0;
-  #ifndef NOWIRELESS
   //RF24 stuff
   RF_Init();
-  #endif
   
   //button stuff
   modeButton.setClickTicks(300);
@@ -124,15 +120,12 @@ void loop() {
     }
   #endif
   
-  #ifndef NOWIRELESS
   //RF24 stuff
   RF_Read();
   
   if(soundForEveryone == 1) {
     RF_SoundForEveryone(&cnf);
   }
-  
-  #endif
   
   // only check random mode change every currDelay*150 milliseconds, default 1050 ms (one second)
   if(autoModeChange == 1 && cnf.currFrame % 150 == 0) {

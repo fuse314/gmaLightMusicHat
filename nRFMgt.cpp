@@ -26,7 +26,6 @@ to get all variables:
 #include "zGlobals.h"
 #include "nRFMgt.h"
 
-#ifndef NOWIRELESS
 #include <gmaRGBLight.h>
 #include <RF24.h>
 
@@ -123,4 +122,3 @@ void RF_RgbLightCommand(rf_hat_payload_t *_command) {
     */
   }
 }
-#endif

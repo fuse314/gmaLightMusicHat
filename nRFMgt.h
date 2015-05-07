@@ -3,10 +3,8 @@
 
 #include "zGlobals.h"
 
-#ifndef NOWIRELESS
 #include <RF24.h>
 #include <gmaRGBLight.h>
-#include <gmaSensorNet.h>
 
 struct rf_hat_payload_t {
   uint8_t command;
@@ -25,5 +23,4 @@ void RF_SoundForEveryone(Config_t *_cnf);
 void RF_Read();
 
 void RF_RgbLightCommand(rf_hat_payload_t *_command);
-#endif
 #endif
